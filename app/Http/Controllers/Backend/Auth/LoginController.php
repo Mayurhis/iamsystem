@@ -23,7 +23,7 @@ class LoginController extends BaseController
 
         try{
            
-            $url = $this->getApiUrl().'api/login';
+            $url = $this->getApiUrl().'/login';
             $result = $this->IAMPostRequest($url, $credentialsOnly);
 
             if(isset($result['code']) && $result['code'] == 200){
@@ -67,7 +67,7 @@ class LoginController extends BaseController
     {
         try {
 
-            $url = $this->getApiUrl().'api/logout';
+            $url = $this->getApiUrl().'/logout';
             $result = $this->IAMGetRequest($url);
           
             if(isset($result['code']) && $result['code'] == 200){

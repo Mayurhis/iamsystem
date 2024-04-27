@@ -83,4 +83,12 @@ const swalWithBootstrapButtons = Swal.mixin({
             confirmButtonColor: "#04a9f5"
         });
     }
+
+    function loaderShow(){
+        $('.loader-div').show();
+    }
+
+    function loaderHide(){
+        $('.loader-div').hide();
+    }
 </script>

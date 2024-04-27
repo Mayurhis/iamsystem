@@ -27,7 +27,7 @@
                 </a>
             </li> --}}
             <li>
-                <a href="{{route('logout')}}" title="{{ trans('cruds.sidebar.logout') }}">
+                <a id="logoutBtn" href="{{route('logout')}}" title="{{ trans('cruds.sidebar.logout') }}">
                     <div class="menu-img"><img src="{{ asset('backend/images/log-out.svg') }}" alt="{{ trans('cruds.sidebar.logout') }}"></div>@lang('cruds.sidebar.logout')
                 </a>
             </li>

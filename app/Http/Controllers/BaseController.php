@@ -145,7 +145,7 @@ class BaseController extends Controller
      * @param  int          $statusCode
      * @return \Illuminate\Http\Response
      */
-    protected function sendSuccessResponse($message, $data, $statusCode = Response::HTTP_OK)
+    protected function sendSuccessResponse($message, $data=[], $statusCode = Response::HTTP_OK)
     {
         return response()->json([
             'success' => true,

@@ -14,7 +14,7 @@ return [
         'message_sent'      => 'Message Successfully sent!',
     ],
 
-    'areYouSure'        =>  'Are you sure you want to delete this record?',
+   
     'areYouSureapprove' =>  'Are you sure you want to Approve this record?',
     'areYouSurerestore' =>  'Are you sure you want to Restore this Database? It will delete your current database.',
     'deletetitle'       =>  'Delete Confirmation',
@@ -55,4 +55,13 @@ return [
 
     'account_deactivate'            => 'Your account has been deactivated. Please contact the admin.',
   
+
+    'areYouSure'        =>  'Are you sure?',
+    'conifrmSweetAlert' => [
+        'logout' =>[
+            'text' => 'You will be logged out!',
+            'confirmButtonText' => 'Yes, log me out!',
+            'cancelButtonText'  => 'No',
+        ]
+    ]
 ];
