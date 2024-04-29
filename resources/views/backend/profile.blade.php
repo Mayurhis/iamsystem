@@ -21,9 +21,16 @@
 
         <div class="card">
             <div class="card-body">
-                <h4>@lang('cruds.profile.fields.email')</h4>
-                <h4>@lang('cruds.profile.fields.username')</h4>
-                <h4>@lang('cruds.profile.fields.status')</h4>
+
+                <p>
+                    <h5>@lang('cruds.profile.fields.email')</h5>  <span>{{ $authUserProfile['email'] ?? null }}</span>
+                </p>
+                <p>
+                    <h5>@lang('cruds.profile.fields.username')</h5>  <span>{{ $authUserProfile['username'] ?? null }}</span>
+                </p>
+                <p>
+                    <h5>@lang('cruds.profile.fields.status')</h5>  <span>{{ $authUserProfile['status'] ? ucfirst($authUserProfile['status']) : null }}</span>
+                </p>
 
             </div>
         </div>

@@ -14,15 +14,17 @@ class UserController extends BaseController
     public function profile()
     {
         try{
-            $authProfile = '';
+            $authUserProfile = null;
 
             $iam = new IAMHttpService();
             $apiResult = $iam->me();
 
-            // dd($apiResult);
-            // if ($apiResult['code'] == 200) {
-            // }
-            return view('backend.profile');
+            if ($apiResult['code'] == 200) {
+                $authUserProfile = $apiResult['response']['data']['user'];
+            }
+
+            return view('backend.profile',compact('authUserProfile'));
+            
         }catch(\Exception $e){
             // dd($e->getMessage().'->'.$e->getLine());
             \Log::channel('iamsystemlog')->error('Error in UserController::profile (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
