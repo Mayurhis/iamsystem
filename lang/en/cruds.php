@@ -30,6 +30,16 @@ return [
         'fields'         => []
     ],
 
+    'profile' =>  [
+        'title'          => 'Profile',
+        'title_singular' => 'Profile',
+        'fields'         => [
+            'email'      => 'Email',
+            'username'   => 'Username',
+            'status'     => 'Status',
+        ]
+    ],
+
 
 
 ];

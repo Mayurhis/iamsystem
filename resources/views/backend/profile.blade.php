@@ -17,6 +17,17 @@
         <div class="dash-title">
             <h2 class="main-title">@lang('global.profile')</h2>
         </div>
+
+
+        <div class="card">
+            <div class="card-body">
+                <h4>@lang('cruds.profile.fields.email')</h4>
+                <h4>@lang('cruds.profile.fields.username')</h4>
+                <h4>@lang('cruds.profile.fields.status')</h4>
+
+            </div>
+        </div>
+
     </div>
 
 @endsection
