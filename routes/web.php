@@ -34,9 +34,5 @@ Route::group(["namespace" => "App\Http\Controllers\Backend",'as' => 'admin.',"pr
     Route::get("profile","UserController@profile")->name("profile");
     Route::post('update-profile',"UserController@updateProfile")->name('updateProfile');
 
-    Route::get("change-password","UserController@changePassword")->name("changePassword");
     Route::post('update-password',"UserController@updatePassword")->name('updatePassword');
-
-
-
 });

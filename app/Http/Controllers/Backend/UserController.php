@@ -38,17 +38,13 @@ class UserController extends BaseController
        dd('working');
     }
 
-    public function changePassword()
-    {
-        return view('backend.change-password');
-    }
 
     public function updatePassword(Request $request)
     {
         $this->validate($request, [
             'current_password'  => ['required', 'string','min:8'],
-            'password'   => ['required', 'string', 'min:8', 'different:current_password',/*'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/'*/],
-            'confirm_password' => ['required','string','min:8','same:password'],
+            'new_password'   => ['required', 'string', 'min:8', 'different:current_password',/*'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/'*/],
+            'confirm_password' => ['required','string','min:8','same:new_password'],
         ]);
 
         try{
@@ -67,12 +63,12 @@ class UserController extends BaseController
             $loginResult = $iam->login($credentials);
 
             if ($loginResult['code'] == 200) {
-                $postData = ['password' => $request->password];
+                $postData = ['password' => $request->new_password];
                 $changePasswordResult = $iam->adminChangePassword($postData);
 
                 if ($changePasswordResult['code'] == 200) {
 
-                    $loggedInUserDetails['password'] = $request->password;
+                    $loggedInUserDetails['password'] = $request->new_password;
                     session()->put('logged_in_user_detail', $loggedInUserDetails);
                     session()->save();
                   
