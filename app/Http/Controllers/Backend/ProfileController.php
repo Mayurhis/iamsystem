@@ -8,7 +8,7 @@ use App\Http\Controllers\BaseController;
 use Symfony\Component\HttpFoundation\Response;
 
 
-class UserController extends BaseController
+class ProfileController extends BaseController
 {
 
     public function profile()
@@ -27,7 +27,7 @@ class UserController extends BaseController
             
         }catch(\Exception $e){
             // dd($e->getMessage().'->'.$e->getLine());
-            \Log::channel('iamsystemlog')->error('Error in UserController::profile (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+            \Log::channel('iamsystemlog')->error('Error in ProfileController::profile (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
 
             return abort(500);
         }
@@ -85,7 +85,7 @@ class UserController extends BaseController
 
         } catch(\Exception $e){
             // dd($e->getMessage().'->'.$e->getLine());
-            \Log::channel('iamsystemlog')->error('Error in UserController::updatePassword (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+            \Log::channel('iamsystemlog')->error('Error in ProfileController::updatePassword (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
 
             return $this->sendErrorResponse(trans('messages.error_message'));
         }

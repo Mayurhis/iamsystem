@@ -19,7 +19,7 @@ return [
     'sidebar'=>[
         'dashboard' => 'Dashboard',
         'brands'    => 'Brands', 
-        'users'     => 'All Users', 
+        'users'     => 'Users', 
         'kyc_request' => 'KYC Request', 
         'logout'      => 'Logout', 
     ],

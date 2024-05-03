@@ -12,8 +12,8 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.profile') }}" title="{{ trans('cruds.sidebar.users') }}" class="{{ request()->is('admin/profile') ? 'active' : '' }}">
-                    <div class="menu-img"><img src="{{ asset('backend/images/profile-white.svg') }}" alt="{{ trans('cruds.sidebar.profile') }}"></div>Profile
+                <a href="javascript:voide(0);" title="{{ trans('cruds.sidebar.users') }}" class="{{ request()->is('admin/users') ? 'active' : '' }}">
+                    <div class="menu-img"><img src="{{ asset('backend/images/profile-white.svg') }}" alt="{{ trans('cruds.sidebar.profile') }}"></div>@lang('cruds.sidebar.users')
                 </a>
             </li>
             {{-- <li>

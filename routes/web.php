@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use  App\Http\Controllers\Backend\Auth\LoginController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,13 +28,16 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 
-Route::group(["namespace" => "App\Http\Controllers\Backend",'as' => 'admin.',"prefix" => "admin" ,'middleware' => ['IsUserLoggedIn','isAccessTokenExpire']],function(){
+Route::group(["namespace" => "App\Http\Controllers\Backend",'as' => 'admin.',"prefix" => "admin" ,'middleware' => ['jwt.verify','IsUserLoggedIn','isAccessTokenExpire']],function(){
 
     Route::get("dashboard","DashboardController@index")->name("dashboard");
 
-    Route::get("profile","UserController@profile")->name("profile");
-    Route::get('user-detail', 'UserController@userDetail')->name('user_detail');
-    Route::post('update-profile',"UserController@updateProfile")->name('updateProfile');
+    Route::get("profile","ProfileController@profile")->name("profile");
+    Route::get('user-detail', 'ProfileController@userDetail')->name('user_detail');
+    Route::post('update-profile',"ProfileController@updateProfile")->name('updateProfile');
 
-    Route::post('update-password',"UserController@updatePassword")->name('updatePassword');
+    Route::post('update-password',"ProfileController@updatePassword")->name('updatePassword');
+
+    Route::resource('users',CustomerController::class);
+
 });
