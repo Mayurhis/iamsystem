@@ -38,6 +38,11 @@ class UserController extends BaseController
        dd('working');
     }
 
+    public function userDetail()
+    {
+        return view('backend.user_detail');
+    }
+
 
     public function updatePassword(Request $request)
     {
