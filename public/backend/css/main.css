@@ -1611,12 +1611,14 @@ div:where(.swal2-icon).swal2-info{
     width: 100%;
     max-width: 460px;
     margin: 0 auto;
-    border: 1px solid #454545;
+    border: 1px solid #454545ad;
     padding: 35px 30px;
-    border-radius: 5px;
-    background-color: #15151a21;
-    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    background-color: #15151a00;
+    backdrop-filter: blur(60px);
     box-shadow: rgb(100 100 111 / 7%) 0px 7px 29px 0px;
+    position: relative;
+    z-index: 99;
 }
 
 .form_wrapper .nextstepbtn{
@@ -2365,6 +2367,36 @@ select {
 .bg-label-danger {
     background-color: #fce5e6 !important;
     color: #ea5455 !important;
+}
+
+.form-box{
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.form-box::before{
+    content: '';
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    position: absolute;
+    right: -40px;
+    top: -40px;
+    background-color: #5e26e7eb;
+    backdrop-filter: blur(1021px);
+}
+
+.form-box::after{
+    content: '';
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: absolute;
+    left: -20px;
+    bottom: -20px;
+    background-color: #8c74eb1f;
 }
 
 /* Profile-end  */
