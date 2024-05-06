@@ -22,7 +22,7 @@ class LoginController extends BaseController
         ]);
 
         try{
-           
+
             $url = $this->getApiUrl().'/login';
             $result = $this->IAMPostRequest($url, $credentialsOnly);
 
@@ -35,10 +35,10 @@ class LoginController extends BaseController
 
                         switch ($userType) {
                             case 'admin':
-                                $url = 'admin.dashboard';
+                                $url = 'admin.users';
                                 break;
                             case 'auditor':
-                                $url = 'admin.dashboard';
+                                $url = 'admin.users';
                                 break;
                             default:
                                 $url = 'admin.dashboard';
@@ -50,7 +50,7 @@ class LoginController extends BaseController
                 }
 
                 return redirect()->route($url)->with('success',trans('auth.messages.login.success'));
-                
+
             }else{
                 return redirect()->route('admin.login')->with('error',trans('auth.failed'));
             }
@@ -69,9 +69,9 @@ class LoginController extends BaseController
 
             $url = $this->getApiUrl().'/logout';
             $result = $this->IAMGetRequest($url);
-          
+
             if(isset($result['code']) && $result['code'] == 200){
-              
+
                 auth()->logout();
                 request()->session()->invalidate();
                 Session::flush();
@@ -79,11 +79,11 @@ class LoginController extends BaseController
                     return redirect()->route('admin.login')->with('error',trans('auth.messages.jwt_token_invalid'));
                 }
                 return redirect()->route('admin.login')->with('success',trans('auth.messages.logout.success'));
-                
+
            }else{
              return abort(500,trans('messages.error_message'));
            }
-            
+
         } catch (\Exception $e) {
             \Log::channel('iamsystemlog')->error('Error in LoginController::logout (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
             return abort(500,trans('messages.error_message'));

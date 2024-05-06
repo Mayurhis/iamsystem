@@ -50,11 +50,11 @@ class VerifyJwtToken
             $userType = null;
 
             if($request->session()->get('logged_in_user_detail')) {
-                
+
                 if(isset($request->session()->get('logged_in_user_detail')['data'])) {
-                
+
                     if(isset($request->session()->get('logged_in_user_detail')['data']['access_token'])) {
-                    
+
                         $accessToken = $request->session()->get('logged_in_user_detail')['data']['access_token'];
 
                         if(isset($request->session()->get('logged_in_user_detail')['data']['user'])){
@@ -66,9 +66,11 @@ class VerifyJwtToken
 
                         }
 
-                    } 
-                } 
-            } 
+                    }
+                }
+            }else{
+                return redirect()->route('admin.login');
+            }
 
             if (!$accessToken) {
                 Log::channel('iamsystemlog')->info('VerifyJwtToken with token: ' . $accessToken);
@@ -86,7 +88,7 @@ class VerifyJwtToken
             $config->validator()->assert($token, ...$config->validationConstraints());
 
             return $next($request);
-            
+
         } catch (Exception $e) {
             Log::channel('iamsystemlog')->error('VerifyJwtToken token error: ' . $e->getMessage());
 
@@ -95,9 +97,9 @@ class VerifyJwtToken
             }else{
                 return abort(401, $e->getMessage());
             }
-            
+
         }
-        
+
     }
 }
 

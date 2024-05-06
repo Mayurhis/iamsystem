@@ -5,14 +5,15 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class CustomerController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        dd('working');
+        // authUserDetail('data.user.type')
+        return view('backend.users.index');
     }
 
     /**
@@ -36,7 +37,7 @@ class CustomerController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return view('backend.users.show');
     }
 
     /**

@@ -15,11 +15,11 @@ class IsUserLoggedIn
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
-    {   
+    {
         if(session()->has("logged_in_user_detail")){
             return $next($request);
         }
-        
+
         return redirect()->route('admin.login');
     }
 }

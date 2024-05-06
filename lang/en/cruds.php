@@ -16,12 +16,18 @@ return [
         'processing'   => 'Processing...',
     ],
 
+    'pageTitles'=>[
+        'dashboard'     => 'Dashboard',
+        'user'          => 'Users',
+        'user_detail'   => 'User Details',
+    ],
+
     'sidebar'=>[
         'dashboard' => 'Dashboard',
-        'brands'    => 'Brands', 
-        'users'     => 'Users', 
-        'kyc_request' => 'KYC Request', 
-        'logout'      => 'Logout', 
+        'brands'    => 'Brands',
+        'users'     => 'Users',
+        'kyc_request' => 'KYC Request',
+        'logout'      => 'Logout',
     ],
 
     'dashboard' =>  [

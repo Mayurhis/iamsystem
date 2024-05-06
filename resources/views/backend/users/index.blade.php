@@ -1,99 +1,12 @@
 @extends('layouts.app')
-@section('title', trans('cruds.pageTitles.dashboard'))
+@section('title', trans('cruds.pageTitles.user'))
 
 @section('custom_CSS')
 @endsection
 
-@section('headerTitle',trans('cruds.pageTitles.dashboard'))
+@section('headerTitle',trans('cruds.pageTitles.user'))
 
 @section('main-content')
-
-    <div class="row mb-3">
-        <div class="col-sm-6 col-lg-3 mb-4">
-            <div class="card card-border-shadow-primary dash-boxes">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-2 pb-1">
-                    <div class="avatar me-2">
-                        <span class="avatar-initial rounded bg-label-primary">
-                            <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19 15.9999C19 14.2583 17.3304 12.7767 15 12.2275M13 16C13 13.7909 10.3137 12 7 12C3.68629 12 1 13.7909 1 16M13 9C15.2091 9 17 7.20914 17 5C17 2.79086 15.2091 1 13 1M7 9C4.79086 9 3 7.20914 3 5C3 2.79086 4.79086 1 7 1C9.20914 1 11 2.79086 11 5C11 7.20914 9.20914 9 7 9Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
-                    </div>
-                    <h4 class="ms-1 mb-0">42</h4>
-                    </div>
-                    <p class="mb-1">orcapay</p>
-                    <p class="mb-0">
-                    <span class="fw-medium me-1">+18.2%</span>
-                    <small class="text-muted">than last week</small>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-lg-3 mb-4">
-            <div class="card card-border-shadow-warning dash-boxes">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-2 pb-1">
-                    <div class="avatar me-2">
-                        <span class="avatar-initial rounded bg-label-warning">
-                            <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19 15.9999C19 14.2583 17.3304 12.7767 15 12.2275M13 16C13 13.7909 10.3137 12 7 12C3.68629 12 1 13.7909 1 16M13 9C15.2091 9 17 7.20914 17 5C17 2.79086 15.2091 1 13 1M7 9C4.79086 9 3 7.20914 3 5C3 2.79086 4.79086 1 7 1C9.20914 1 11 2.79086 11 5C11 7.20914 9.20914 9 7 9Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
-                    </div>
-                    <h4 class="ms-1 mb-0">8</h4>
-                    </div>
-                    <p class="mb-1">canapay</p>
-                    <p class="mb-0">
-                    <span class="fw-medium me-1">-8.7%</span>
-                    <small class="text-muted">than last week</small>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-lg-3 mb-4">
-            <div class="card card-border-shadow-danger dash-boxes">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-2 pb-1">
-                    <div class="avatar me-2">
-                        <span class="avatar-initial rounded bg-label-danger">
-                            <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19 15.9999C19 14.2583 17.3304 12.7767 15 12.2275M13 16C13 13.7909 10.3137 12 7 12C3.68629 12 1 13.7909 1 16M13 9C15.2091 9 17 7.20914 17 5C17 2.79086 15.2091 1 13 1M7 9C4.79086 9 3 7.20914 3 5C3 2.79086 4.79086 1 7 1C9.20914 1 11 2.79086 11 5C11 7.20914 9.20914 9 7 9Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
-                    </div>
-                    <h4 class="ms-1 mb-0">27</h4>
-                    </div>
-                    <p class="mb-1">orcapay</p>
-                    <p class="mb-0">
-                    <span class="fw-medium me-1">+4.3%</span>
-                    <small class="text-muted">than last week</small>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-lg-3 mb-4">
-            <div class="card card-border-shadow-info dash-boxes">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-2 pb-1">
-                    <div class="avatar me-2">
-                        <span class="avatar-initial rounded bg-label-info">
-                            <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19 15.9999C19 14.2583 17.3304 12.7767 15 12.2275M13 16C13 13.7909 10.3137 12 7 12C3.68629 12 1 13.7909 1 16M13 9C15.2091 9 17 7.20914 17 5C17 2.79086 15.2091 1 13 1M7 9C4.79086 9 3 7.20914 3 5C3 2.79086 4.79086 1 7 1C9.20914 1 11 2.79086 11 5C11 7.20914 9.20914 9 7 9Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
-                    </div>
-                    <h4 class="ms-1 mb-0">13</h4>
-                    </div>
-                    <p class="mb-1">canapay</p>
-                    <p class="mb-0">
-                    <span class="fw-medium me-1">-2.5%</span>
-                    <small class="text-muted">than last week</small>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="row">
         <div class="col-12">
@@ -148,7 +61,7 @@
                                         <td><a href="mailto:mayorkelly@gmail.com" title="mayorkelly@gmail.com">mayorkelly@gmail.com</a></td>
                                         <td>
                                             <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.user_detail')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
+                                                <a href="{{route('admin.users.show','1')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -173,7 +86,7 @@
                                         <td><a href="mailto:andrewgarfield@gmail.com" title="andrewgarfield@gmail.com">andrewgarfield@gmail.com</a></td>
                                         <td>
                                             <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.user_detail')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
+                                                <a href="{{route('admin.users.show','2')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -198,7 +111,7 @@
                                         <td><a href="mailto:simoncowel@gmail.com" title="simoncowel@gmail.com">simoncowel@gmail.com</a></td>
                                         <td>
                                             <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.user_detail')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
+                                                <a href="{{route('admin.users.show','3')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -223,7 +136,7 @@
                                         <td><a href="mailto:mirindahers@gmail.com" title="mirindahers@gmail.com">mirindahers@gmail.com</a></td>
                                         <td>
                                             <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.user_detail')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
+                                                <a href="{{route('admin.users.show','4')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -248,7 +161,7 @@
                                         <td><a href="mailto:ryangercia@gmail.com" title="ryangercia@gmail.com">ryangercia@gmail.com</a></td>
                                         <td>
                                             <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.user_detail')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
+                                                <a href="{{route('admin.users.show','5')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -273,7 +186,7 @@
                                         <td><a href="mailto:peterparkour@gmail.com" title="peterparkour@gmail.com">peterparkour@gmail.com</a></td>
                                         <td>
                                             <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.user_detail')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
+                                                <a href="{{route('admin.users.show','6')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -298,7 +211,7 @@
                                         <td><a href="mailto:mirindahers@gmail.com" title="mirindahers@gmail.com">mirindahers@gmail.com</a></td>
                                         <td>
                                             <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.user_detail')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
+                                                <a href="{{route('admin.users.show','7')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -323,7 +236,7 @@
                                         <td><a href="mailto:andrewgarfield@gmail.com" title="andrewgarfield@gmail.com">andrewgarfield@gmail.com</a></td>
                                         <td>
                                             <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.user_detail')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
+                                                <a href="{{route('admin.users.show','8')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -348,7 +261,7 @@
                                         <td><a href="mailto:hrspruko@gmail.com" title="hrspruko@gmail.com">hrspruko@gmail.com</a></td>
                                         <td>
                                             <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.user_detail')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
+                                                <a href="{{route('admin.users.show','9')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
                                             </div>
                                         </td>
                                     </tr>

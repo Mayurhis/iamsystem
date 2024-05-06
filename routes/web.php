@@ -28,7 +28,7 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 
-Route::group(["namespace" => "App\Http\Controllers\Backend",'as' => 'admin.',"prefix" => "admin" ,'middleware' => ['jwt.verify','IsUserLoggedIn','isAccessTokenExpire']],function(){
+Route::group(["namespace" => "App\Http\Controllers\Backend",'as' => 'admin.',"prefix" => "admin" ,'middleware' => ['IsUserLoggedIn','isAccessTokenExpire','jwt.verify']],function(){
 
     Route::get("dashboard","DashboardController@index")->name("dashboard");
 
@@ -38,6 +38,6 @@ Route::group(["namespace" => "App\Http\Controllers\Backend",'as' => 'admin.',"pr
 
     Route::post('update-password',"ProfileController@updatePassword")->name('updatePassword');
 
-    Route::resource('users',CustomerController::class);
+    Route::resource('users',UserController::class);
 
 });
