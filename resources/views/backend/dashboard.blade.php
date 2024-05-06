@@ -113,7 +113,8 @@
                             </div> -->
                         </div>
                         <div class="table-responsive">
-                            <table class="w-100" id="fieldtable">
+                            {{$dataTable->table(['class' => 'table', 'style' => 'width:100%;'])}}
+                            {{-- <table class="w-100" id="fieldtable">
                                 <thead>
                                     <tr>
                                         <th>User Name</th>
@@ -353,7 +354,7 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table>
+                            </table> --}}
                         </div>
                     </div>
                 </div>
@@ -364,4 +365,7 @@
 @endsection
 
 @section('custom_JS')
+@parent
+{!! $dataTable->scripts() !!}
+
 @endsection

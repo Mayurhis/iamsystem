@@ -77,6 +77,20 @@
         </div>
     </section>
 
+    <div class="popup_render_div"></div>
+
+    <div class="pageloader" style="display: none;">
+        <div class="loader">
+            <div class="line-scale">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+
     @include('partials.fscript')
 
     @include('partials.alert')

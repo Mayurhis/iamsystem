@@ -15,258 +15,13 @@
                     <div class="data-fieldtable">
                         <div class="brand-listing d-flex">
                             <h4 class="table-subtitle">Users Listing</h4>
-                            <!-- <div class="select_brand">
-                                <label for="">Select Brands</label>
-                                <select name="" id="">
-                                    <option value="Brand">Brand</option>
-                                    <option value="Brand1">Brand1</option>
-                                    <option value="Brand2">Brand2</option>
-                                    <option value="Brand3">Brand3</option>
-                                </select>
-                            </div> -->
+                            <a href="javascript:void(0)" class="btn btn-primary" id="addUserBtn">
+                               <x-svg-icons icon="add"></x-svg-icons>
+                                @lang('global.add')
+                            </a>
                         </div>
                         <div class="table-responsive">
-                            <table class="w-100" id="fieldtable">
-                                <thead>
-                                    <tr>
-                                        <th>User Name</th>
-                                        <th>ID</th>
-                                        <th>Audience</th>
-                                        <th>Created Date</th>
-                                        <th>Login Date</th>
-                                        <th>Status</th>
-                                        <th>Email</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0)" class="pro-data" title="Mayor Kelly">
-                                                <div class="pro-img"><img src="{{ asset('backend/images/user01.jpg') }}" alt="" class="img-fluid"></div>
-                                                <div class="prodata-content">
-                                                    <h6 class="pb-1">Mayor Kelly</h6>
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            d4AKjfkjfiods9gshd
-                                        </td>
-                                        <td>
-                                            canapay
-                                        </td>
-                                        <td>18/01/2024</td>
-                                        <td>10/11/2023</td>
-                                        <td><span class="badge rounded bg-label-success">Active</span></td>
-                                        <td><a href="mailto:mayorkelly@gmail.com" title="mayorkelly@gmail.com">mayorkelly@gmail.com</a></td>
-                                        <td>
-                                            <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.users.show','1')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0)" class="pro-data" title="Andrew Garfield">
-                                                <div class="pro-img"><img src="{{ asset('backend/images/user011.jpg') }}" alt="" class="img-fluid"></div>
-                                                <div class="prodata-content">
-                                                    <h6 class="pb-1">Andrew Garfield</h6>
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            d4AKjfkjfiods9gshd
-                                        </td>
-                                        <td>
-                                            IdFox
-                                        </td>
-                                        <td>29/01/2024</td>
-                                        <td>15/11/2023</td>
-                                        <td><span class="badge rounded bg-label-success">Active</span></td>
-                                        <td><a href="mailto:andrewgarfield@gmail.com" title="andrewgarfield@gmail.com">andrewgarfield@gmail.com</a></td>
-                                        <td>
-                                            <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.users.show','2')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0)" class="pro-data" title="Simon Cowel">
-                                                <div class="pro-img"><img src="{{ asset('backend/images/user022.jpg') }}" alt="" class="img-fluid"></div>
-                                                <div class="prodata-content">
-                                                    <h6 class="pb-1">Simon Cowel</h6>
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            d4AKjfkjfiods9gshd
-                                        </td>
-                                        <td>
-                                            orcapay
-                                        </td>
-                                        <td>23/01/2024</td>
-                                        <td>17/11/2023</td>
-                                        <td><span class="badge rounded bg-label-success">Active</span></td>
-                                        <td><a href="mailto:simoncowel@gmail.com" title="simoncowel@gmail.com">simoncowel@gmail.com</a></td>
-                                        <td>
-                                            <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.users.show','3')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0)" class="pro-data" title="Mirinda Hers">
-                                                <div class="pro-img"><img src="{{ asset('backend/images/user033.jpg') }}" alt="" class="img-fluid"></div>
-                                                <div class="prodata-content">
-                                                    <h6 class="pb-1">Mirinda Hers</h6>
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            d4AKjfkjfiods9gshd
-                                        </td>
-                                        <td>
-                                            canapay
-                                        </td>
-                                        <td>25/01/2024</td>
-                                        <td>18/11/2023</td>
-                                        <td><span class="badge rounded bg-label-danger">Inactive</span></td>
-                                        <td><a href="mailto:mirindahers@gmail.com" title="mirindahers@gmail.com">mirindahers@gmail.com</a></td>
-                                        <td>
-                                            <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.users.show','4')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0)" class="pro-data" title="Ryan Gercia">
-                                                <div class="pro-img"><img src="{{ asset('backend/images/user04.jpg') }}" alt="" class="img-fluid"></div>
-                                                <div class="prodata-content">
-                                                    <h6 class="pb-1">Ryan Gercia</h6>
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            d4AKjfkjfiods9gshd
-                                        </td>
-                                        <td>
-                                            orcapay
-                                        </td>
-                                        <td>21/01/2024</td>
-                                        <td>19/11/2023</td>
-                                        <td><span class="badge rounded bg-label-success">Active</span></td>
-                                        <td><a href="mailto:ryangercia@gmail.com" title="ryangercia@gmail.com">ryangercia@gmail.com</a></td>
-                                        <td>
-                                            <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.users.show','5')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0)" class="pro-data" title="Peter Parkour">
-                                                <div class="pro-img"><img src="{{ asset('backend/images/user011.jpg') }}" alt="" class="img-fluid"></div>
-                                                <div class="prodata-content">
-                                                    <h6 class="pb-1">Peter Parkour</h6>
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            d4AKjfkjfiods9gshd
-                                        </td>
-                                        <td>
-                                            IdFOx
-                                        </td>
-                                        <td>22/01/2024</td>
-                                        <td>20/11/2023</td>
-                                        <td><span class="badge rounded bg-label-success">Active</span></td>
-                                        <td><a href="mailto:peterparkour@gmail.com" title="peterparkour@gmail.com">peterparkour@gmail.com</a></td>
-                                        <td>
-                                            <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.users.show','6')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0)" class="pro-data" title="Mirinda Hers">
-                                                <div class="pro-img"><img src="{{ asset('backend/images/user02.jpg') }}" alt="" class="img-fluid"></div>
-                                                <div class="prodata-content">
-                                                    <h6 class="pb-1">Mirinda Hers</h6>
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            d4AKjfkjfiods9gshd
-                                        </td>
-                                        <td>
-                                            canapay
-                                        </td>
-                                        <td>24/01/2024</td>
-                                        <td>22/11/2023</td>
-                                        <td><span class="badge rounded bg-label-success">Active</span></td>
-                                        <td><a href="mailto:mirindahers@gmail.com" title="mirindahers@gmail.com">mirindahers@gmail.com</a></td>
-                                        <td>
-                                            <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.users.show','7')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0)" class="pro-data" title="Andrew Garfield">
-                                                <div class="pro-img"><img src="{{ asset('backend/images/user033.jpg') }}" alt="" class="img-fluid"></div>
-                                                <div class="prodata-content">
-                                                    <h6 class="pb-1">Andrew Garfield</h6>
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            d4AKjfkjfiods9gshd
-                                        </td>
-                                        <td>
-                                            orcapay
-                                        </td>
-                                        <td>08/02/2024</td>
-                                        <td>10/12/2023</td>
-                                        <td><span class="badge rounded bg-label-success">Active</span></td>
-                                        <td><a href="mailto:andrewgarfield@gmail.com" title="andrewgarfield@gmail.com">andrewgarfield@gmail.com</a></td>
-                                        <td>
-                                            <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.users.show','8')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0)" class="pro-data" title="Hr-Spruko">
-                                                <div class="pro-img"><img src="{{ asset('backend/images/user04.jpg') }}" alt="" class="img-fluid"></div>
-                                                <div class="prodata-content">
-                                                    <h6 class="pb-1">Hr-Spruko</h6>
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            d4AKjfkjfiods9gshd
-                                        </td>
-                                        <td>
-                                            IDFox
-                                        </td>
-                                        <td>19/02/2024</td>
-                                        <td>17/11/2023</td>
-                                        <td><span class="badge rounded bg-label-success">Active</span></td>
-                                        <td><a href="mailto:hrspruko@gmail.com" title="hrspruko@gmail.com">hrspruko@gmail.com</a></td>
-                                        <td>
-                                            <div class="action-grid d-flex gap-2">
-                                                <a href="{{route('admin.users.show','9')}}" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            {{$dataTable->table(['class' => 'table', 'style' => 'width:100%;'])}}
                         </div>
                     </div>
                 </div>
@@ -277,4 +32,95 @@
 @endsection
 
 @section('custom_JS')
+@parent
+{!! $dataTable->scripts() !!}
+
+<script type="text/javascript">
+
+    // Add User Modal
+    $(document).on('click', '#addUserBtn', function(e){
+        e.preventDefault();
+      
+        $('.pageloader').show();
+
+        $.ajax({
+            type: 'get',
+            url: "{{ route('admin.users.create') }}",
+            dataType: 'json',
+            success: function (response) {
+                if(response.success) {
+                    $('.popup_render_div').html(response.data.htmlView);
+
+                    $('#addUserModal').modal('show');
+                }
+            },
+            error: function (response) {
+                if(response.responseJSON.error_type == 'something_error'){
+                    toasterAlert('error',response.responseJSON.error);
+                } 
+            }, 
+            complete: function(res){
+                $('.pageloader').hide();
+            }
+        })
+    });
+
+    // Submit Add User Form
+    $(document).on('submit', '#addUserForm', function (e) {
+        e.preventDefault();
+        $('.loader-div').show();
+
+        $('.validation-error-block').remove();
+        $(".submitBtn").attr('disabled', true);
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            type: 'post',
+            url: "{{route('admin.users.store')}}",
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (response) {                
+                if(response.success) {
+                    $('#users-table').DataTable().ajax.reload(null, false);
+                    $('#addUserModal').modal('hide');
+                    $('.popup_render_div').html('');
+                    toasterAlert('success',response.message);
+                }
+            },
+            error: function (response) {
+                $(".submitBtn").attr('disabled', false);
+                $('.loader-div').hide();
+                if(response.responseJSON.error_type == 'something_error'){
+                    toasterAlert('error',response.responseJSON.error);
+                } else {                    
+                    var errorLabelTitle = '';
+                    $.each(response.responseJSON.errors, function (key, item) {
+                        errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
+                        if (key.indexOf('sub_admin') !== -1) {
+                            $(".sub_admin_error").html(errorLabelTitle);
+                        } else if (key.indexOf('location_name') !== -1) {
+                            $(".location_name_error").html(errorLabelTitle);
+                        }
+                        else{
+                            $(errorLabelTitle).insertAfter("input[name='"+key+"']");
+                        }                    
+                    });
+                }
+            },
+            complete: function(res){
+                $(".submitBtn").attr('disabled', false);
+                $('.loader-div').hide();
+            }
+        });                    
+    });
+
+
+    $(document).on('click', '#addUserModal .cancel-modal', function(e){
+        $('#addUserModal').modal('hide');
+    });
+
+</script>
 @endsection

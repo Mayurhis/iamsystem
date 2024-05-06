@@ -47,5 +47,27 @@ return [
     ],
 
 
+    'user' =>  [
+        'title'          => 'Users',
+        'title_singular' => 'User',
+        'fields'         => [
+            'name_prefix'   => 'Name Prefix',
+            'first_name'    => 'First Name',
+            'middle_name'   => 'Middle Name',
+            'last_name'     => 'Last Name',
+            'dob'           => 'DOB',
+            'email'         => 'Email',
+            'phone'         => 'Phone',
+            'gender'        => 'Gender',
+            'address_line_one' => 'Address line 1',
+            'address_line_two' => 'Address line 2',
+            'post_code'        => 'Post Code',
+            'city'             => 'City',
+            'region'           => 'Region',
+            'country_of_residence' => 'Country of Residence',
+        ]
+    ],
+
+
 
 ];

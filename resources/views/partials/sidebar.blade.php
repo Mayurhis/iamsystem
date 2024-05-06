@@ -6,16 +6,23 @@
         </a>
         <h6>@lang('global.welcome')</h6>
         <ul class="nav-items">
+
+            {{-- @can('dashboard_access') --}}
             <li>
                 <a href="{{ route('admin.dashboard') }}" title="{{ trans('cruds.sidebar.dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
                     <div class="menu-img"><img src="{{ asset('backend/images/dashaboard.svg') }}" alt="{{ trans('cruds.sidebar.dashboard') }}"></div>@lang('cruds.sidebar.dashboard')
                 </a>
             </li>
+            {{-- @endcan --}}
+
+            {{-- @can('user_access') --}}
             <li>
                 <a href="{{ route('admin.users.index') }}" title="{{ trans('cruds.sidebar.users') }}" class="{{ request()->is('admin/users') ? 'active' : '' }}">
                     <div class="menu-img"><img src="{{ asset('backend/images/profile-white.svg') }}" alt="{{ trans('cruds.sidebar.profile') }}"></div>@lang('cruds.sidebar.users')
                 </a>
             </li>
+            {{-- @endcan --}}
+
             {{-- <li>
                 <a href="javascript:void(0);" title="{{ trans('cruds.sidebar.brands') }}" class="{{ request()->is('admin/brands') ? 'active' : '' }}">
                     <div class="menu-img"><img src="{{ asset('backend/images/brand.svg') }}" alt="{{ trans('cruds.sidebar.brands') }}"></div>@lang('cruds.sidebar.brands')

@@ -2,7 +2,7 @@
 
 return [
 
-    'crud'=>[
+    'curd'=>[
         'add_record'    => 'Successfully Added !',
         'update_record' => 'Successfully Updated !',
         'delete_record' => 'This record has been succesfully deleted!',
