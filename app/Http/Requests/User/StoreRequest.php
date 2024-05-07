@@ -14,6 +14,8 @@ class StoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        abort_if(isRolePermission('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         return true;
     }
 
@@ -64,7 +66,7 @@ class StoreRequest extends FormRequest
         $rules['username']    = [
             'required',
             function ($attribute, $value, $fail) use ($isUsernameExists) {
-                if ($isEmailExists) {
+                if ($isUsernameExists) {
                     $fail('The username has already been taken.');
                 }
             }

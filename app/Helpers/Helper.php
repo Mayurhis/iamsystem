@@ -50,17 +50,19 @@ if (!function_exists('findIndexById')) {
 if (!function_exists('findIndexByFields')) {
 
     function findIndexByFields($array, $field_name, $id=null) {
-        foreach ($array as $index => $element) {
-            if($id){
-                if (isset($element[$field_name]) && $element[$field_name] != $id) {
-                    return $index;
+        if($array){
+            foreach ($array as $index => $element) {
+                if($id){
+                    if (isset($element[$field_name]) && $element[$field_name] != $id) {
+                        return $index;
+                    }
+                }else{
+                    if (isset($element[$field_name])) {
+                        return $index;
+                    }
                 }
-            }else{
-                if (isset($element[$field_name])) {
-                    return $index;
-                }
+            
             }
-           
         }
         return null;
     }

@@ -15,6 +15,8 @@ class UpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        abort_if(isRolePermission('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         return true;
     }
 
