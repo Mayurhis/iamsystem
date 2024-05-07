@@ -27,20 +27,29 @@ class UpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        // dd($this->id);
-
+        
         $filePath = storage_path('app/users.json');
 
         $users = json_decode(file_get_contents($filePath), true);
 
         $isEmailExists = false;
-        // $emailExistsIndex = findIndexByFields($users, 'email');
-        // if(!is_null($emailExistsIndex)){
-        //     $existsRecord = $users[$emailExistsIndex];
-        //     if($existsRecord){
-        //         $isEmailExists = ($existsRecord['email'] == $this->email) ? true : false;
-        //     }
-        // }
+        $emailExistsIndex = findIndexByFields($users, 'email',$this->user_id);
+        if(!is_null($emailExistsIndex)){
+            $existsRecord = $users[$emailExistsIndex];
+            if($existsRecord){
+                $isEmailExists = ($existsRecord['email'] == $this->email) ? true : false;
+            }
+        }
+
+      
+        $isUsernameExists = false;
+        $usernameExistsIndex = findIndexByFields($users, 'username',$this->user_id);
+        if(!is_null($usernameExistsIndex)){
+            $existsRecord = $users[$usernameExistsIndex];
+            if($existsRecord){
+                $isUsernameExists = ($existsRecord['username'] == $this->username) ? true : false;
+            }
+        }
 
         $rules = [];
 
@@ -55,7 +64,14 @@ class UpdateRequest extends FormRequest
                 }
             }
         ];
-        $rules['username']    = ['required'];
+        $rules['username']    = [
+            'required',
+            function ($attribute, $value, $fail) use ($isUsernameExists) {
+                if ($isUsernameExists) {
+                    $fail('The username has already been taken.');
+                }
+            }
+        ];
         $rules['password']    = ['required'];
         $rules['status']      = ['required'];
 

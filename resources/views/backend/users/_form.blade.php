@@ -36,11 +36,7 @@
             @php
               $status = '';
               if(isset($user)){
-                if($user['status'] == 'active'){
-                    $status = $user['status'];
-                }else if($user['status'] == 'deactive'){
-                    $status = $user['status'];
-                }
+                $status = $user['status'];
               }
             @endphp
             <select  class="form-control" name="status" id="status">
@@ -56,6 +52,7 @@
 
 <div class="grid-btn float-end">
     @if(isset($user))
+        <input type="hidden" name="user_id"  value="{{ $user['id'] ?? ''}}">
         <button type="submit" class="btn btn-primary btn-regular submitBtn">Update</button>
     @else
         <button type="submit" class="btn btn-primary btn-regular submitBtn">Save</button>
