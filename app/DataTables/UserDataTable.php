@@ -24,6 +24,12 @@ class UserDataTable extends DataTable
         return datatables()
             ->of($query)
             ->addIndexColumn()
+            ->editColumn('username',function($row){
+                return $row['username'];
+            })
+            ->editColumn('created_at',function($row){
+                return convertDateTimeFormat($row['created_at']);
+            })
             ->addColumn('action', function ($row) {
                 
                 $action = '<div class="action-grid d-flex gap-2">';
@@ -71,8 +77,9 @@ class UserDataTable extends DataTable
     {
         $columns = [];
         $columns[] = Column::make('DT_RowIndex')->title('#')->orderable(false)->searchable(false);
-        $columns[] = Column::make('name')->title('Name');
-        $columns[] = Column::make('email')->title('Email');
+        $columns[] = Column::make('username')->title(trans('cruds.user.fields.username'));
+        $columns[] = Column::make('email')->title(trans('cruds.user.fields.email'));
+        $columns[] = Column::make('created_at')->title(trans('cruds.user.fields.created_at'));
         $columns[] = Column::computed('action')->exportable(false)->printable(false)->addClass('text-center');
 
         return $columns;

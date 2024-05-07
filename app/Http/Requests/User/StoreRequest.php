@@ -26,16 +26,51 @@ class StoreRequest extends FormRequest
     {
         $filePath = storage_path('app/users.json');
 
+        $users = json_decode(file_get_contents($filePath), true);
+
+        $isEmailExists = false;
+        $emailExistsIndex = findIndexByFields($users, 'email');
+        if(!is_null($emailExistsIndex)){
+            $existsRecord = $users[$emailExistsIndex];
+            if($existsRecord){
+                $isEmailExists = ($existsRecord['email'] == $this->email) ? true : false;
+            }
+        }
+
+        $isUsernameExists = false;
+        $usernameExistsIndex = findIndexByFields($users, 'username');
+        if(!is_null($usernameExistsIndex)){
+            $existsRecord = $users[$usernameExistsIndex];
+            if($existsRecord){
+                $isUsernameExists = ($existsRecord['username'] == $this->username) ? true : false;
+            }
+        }
+        
+       
+
         $rules = [];
 
-        $rules['name_prefix']   = ['required'];
-        $rules['first_name']    = ['required'];
-        $rules['middle_name']   = [];
-        $rules['last_name']     = ['required'];
-        $rules['email']         = ['required'];
-        $rules['dob']           = ['required'];
-        $rules['phone']         = ['required'];
-        $rules['gender']        = ['required'];
+        $rules['aud']         = ['required'];
+        $rules['email']       = [
+            'required',
+            'email',
+            'regex:/^(?!.*[\/]).+@(?!.*[\/]).+\.(?!.*[\/]).+$/i',
+            function ($attribute, $value, $fail) use ($isEmailExists) {
+                if ($isEmailExists) {
+                    $fail('The email has already been taken.');
+                }
+            }
+        ];
+        $rules['username']    = [
+            'required',
+            function ($attribute, $value, $fail) use ($isUsernameExists) {
+                if ($isEmailExists) {
+                    $fail('The username has already been taken.');
+                }
+            }
+        ];
+        $rules['password']    = ['required'];
+        $rules['status']      = ['required'];
 
         return $rules;
     }

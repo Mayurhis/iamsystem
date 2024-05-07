@@ -26,7 +26,7 @@
                 </h3>
                 <h3 class="login-title text-left">@lang('auth.forgetPasswordPage.title')</h3>
               </div>          
-              <div class="mb-3">
+              <div class="mb-4">
                 <label for="email" class="form-label">@lang('auth.forgetPasswordPage.fields.email')<span class="mailstar" style="color: red;">*</span></label>
                 <input type="email" name="email" class="form-control" placeholder="{{ trans('auth.forgetPasswordPage.fields.email_placeholder')}}" id="email" aria-describedby="emailHelp">
                 @error('email')

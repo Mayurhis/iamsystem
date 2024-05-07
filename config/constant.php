@@ -26,6 +26,10 @@ return [
         'auditor' => [1,2,6],
     ],
 
+    'date_format'     => 'd-m-Y',
+    'datetime_format' => 'd-m-Y H:i',
+    'time_format'     => 'H:i:s',
+
     'IAMSystemSecret' => env('IAM_SECRET', null),
 
     'IAMSystemIssuer' => env('IAM_ISSUER', null),
@@ -34,5 +38,12 @@ return [
 
     'IAMSystemToken' => env('IAM_SYSTEM_TOKEN', null),
 
+
+    'userStatus'=>[
+        'active',
+        'locked',
+        'deleted',
+        'pending',
+    ],
     
 ];

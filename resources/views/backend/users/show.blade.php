@@ -18,44 +18,39 @@
                 <div class="user_content">
                     <div class="mb-3">
                         <div class="name">
-                            <h4>Name</h4>
-                            <span>{{ $user['name'] ?? '' }}</span>
+                            <h4>@lang('cruds.user.fields.username')</h4>
+                            <span>{{ $user['username'] ?? '' }}</span>
                         </div>
                     </div>
                     <div class="mb-3">
                         <div class="name">
                             <h4>ID</h4>
-                            <span>d4AKjfkjfiods9gshd</span>
+                            <span>{{ $user['id'] ?? '' }}</span>
                         </div>
                     </div>
                     <div class="mb-3">
                         <div class="name">
-                            <h4>Audience</h4>
-                            <span>canapay</span>
+                            <h4>@lang('cruds.user.fields.aud')</h4>
+                            <span>{{ $user['aud'] ?? '' }}</span>
                         </div>
                     </div>
                     <div class="mb-3">
                         <div class="name">
-                            <h4>Created Date</h4>
-                            <span>18/01/2024</span>
+                            <h4>@lang('cruds.user.fields.created_at')</h4>
+                            <span>{{ $user['created_at'] ? convertDateTimeFormat($user['created_at']) : '' }}</span>
                         </div>
                     </div>
+                    
                     <div class="mb-3">
                         <div class="name">
-                            <h4>Login Date</h4>
-                            <span>10/11/2023</span>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="name">
-                            <h4>Email</h4>
+                            <h4>@lang('cruds.user.fields.email')</h4>
                             <span>{{ $user['email'] ?? '' }}</span>
                         </div>
                     </div>
                     <div class="mb-3">
                         <div class="name">
-                            <h4>Status</h4>
-                            <span class="text-success">Complete</span>
+                            <h4>@lang('cruds.user.fields.status')</h4>
+                            <span class="{{ isset($user['status']) && $user['status']=='active' ? 'text-success' : 'text-danger' }} ">{{ isset($user['status']) ? ucwords($user['status']) : '' }}</span>
                         </div>
                     </div>
                 </div>

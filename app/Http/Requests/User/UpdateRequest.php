@@ -25,18 +25,37 @@ class UpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        // dd($this->id);
+
         $filePath = storage_path('app/users.json');
+
+        $users = json_decode(file_get_contents($filePath), true);
+
+        $isEmailExists = false;
+        // $emailExistsIndex = findIndexByFields($users, 'email');
+        // if(!is_null($emailExistsIndex)){
+        //     $existsRecord = $users[$emailExistsIndex];
+        //     if($existsRecord){
+        //         $isEmailExists = ($existsRecord['email'] == $this->email) ? true : false;
+        //     }
+        // }
 
         $rules = [];
 
-        $rules['name_prefix']   = ['required'];
-        $rules['first_name']    = ['required'];
-        $rules['middle_name']   = [];
-        $rules['last_name']     = ['required'];
-        $rules['email']         = ['required'];
-        $rules['dob']           = ['required'];
-        $rules['phone']         = ['required'];
-        $rules['gender']        = ['required'];
+        $rules['aud']         = ['required'];
+        $rules['email']       = [
+            'required',
+            'email',
+            'regex:/^(?!.*[\/]).+@(?!.*[\/]).+\.(?!.*[\/]).+$/i',
+            function ($attribute, $value, $fail) use ($isEmailExists) {
+                if ($isEmailExists) {
+                    $fail('The email has already been taken.');
+                }
+            }
+        ];
+        $rules['username']    = ['required'];
+        $rules['password']    = ['required'];
+        $rules['status']      = ['required'];
 
         return $rules;
     }

@@ -262,13 +262,20 @@ h6{
     appearance: none;
     background-image: url('../images/down-arrow-small.svg');
     background-repeat: no-repeat;
-    background-position: right center;
+    background-position: 98% center;
     background-size: 10px;
 }
 .form-group input:focus,
 .form-group select:focus{
     outline: none;
 }
+
+.card-form .form-group label{
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
 .dob-fields{
     max-width: 500px;
     margin: 0 auto;
@@ -1653,7 +1660,7 @@ div:where(.swal2-icon).swal2-info{
     background-size: cover;
     /* background-position: bottom right; */
     background-repeat: no-repeat;
-    background-color: #16171b;
+    background-color: #00020d;
 }
 
 .login-wrapper .top-content-login img {
@@ -1916,6 +1923,16 @@ div#ui-datepicker-div {
     border-color: #4a05af !important;
 }
 
+.btn-primary:active{
+    color: var(--white-color) !important;
+    background-color: #4a05af !important;
+    border-color: #4a05af !important;
+}
+
+.btn-primary:focus{
+    box-shadow: none;
+}
+
 .btn svg{
     width: 18px;
 }
@@ -2087,7 +2104,12 @@ div#ui-datepicker-div {
 }
 
 .grid-btn .btn-regular {
-    padding: 12px 10px;
+    padding: 12px 40px;
+    font-weight: 700;
+}
+
+.btn-regular {
+    padding: 12px 40px;
     font-weight: 700;
 }
 
@@ -2386,7 +2408,18 @@ select {
     top: -40px;
     background-color: #5e26e7eb;
     backdrop-filter: blur(1021px);
+    animation: rotate 15s linear infinite;
 }
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+  
+    to {
+        transform: rotate(1turn);
+    }
+  }
 
 .form-box::after{
     content: '';
@@ -2411,7 +2444,7 @@ select {
     z-index: 9999;
     width: 100%;
     height: 100%;
-    background-color: #8c0080b3;
+    background-color: #000000f2;
 }
 .pageloader .loader{
     position: absolute;
@@ -2473,6 +2506,19 @@ select {
 }
 
 /* end  */
+
+.forgot-text a{
+    color: var(--white-color);
+    transition: all .4s ease-in-out;
+}
+
+.forgot-text a:hover{
+    color: var(--primary);
+}
+
+.action-grid.d-flex {
+    justify-content: center;
+}
 
 /* Profile-end  */
 

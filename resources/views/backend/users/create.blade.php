@@ -13,8 +13,8 @@
     <div class="col-12 col-md-12">
         <div class="card">
             <div class="card-body">
-                <div class="title">
-                    <h5>
+                <div class="title brand-listing">
+                    <h5 class="table-subtitle">
                         Add User
                     </h5>
                 </div>
@@ -68,15 +68,11 @@
                 } else {                    
                     var errorLabelTitle = '';
                     $.each(response.responseJSON.errors, function (key, item) {
+                        
                         errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
-                        if (key.indexOf('sub_admin') !== -1) {
-                            $(".sub_admin_error").html(errorLabelTitle);
-                        } else if (key.indexOf('location_name') !== -1) {
-                            $(".location_name_error").html(errorLabelTitle);
-                        }
-                        else{
-                            $(errorLabelTitle).insertAfter("input[name='"+key+"']");
-                        }                    
+                       
+                        $(errorLabelTitle).insertAfter("#"+key);
+                                           
                     });
                 }
             },

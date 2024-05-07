@@ -1,31 +1,16 @@
 
 <div class="row">
-    <div class="col-3">
+    <div class="col-6">
         <div class="form-group">
-            <label> @lang('cruds.user.fields.name_prefix')<span class="text-danger">*</span></label>
-            <input type="text" name="name_prefix" id="name_prefix" value="{{ $user['name_prefix'] ?? ''}}" class="form-control valid" placeholder="Enter Name Prefix">
+            <label> @lang('cruds.user.fields.aud')<span class="text-danger">*</span></label>
+            <input type="text" name="aud" id="aud" value="{{ $user['aud'] ?? ''}}" class="form-control valid" placeholder="Enter Aud">
         </div>        
     </div>
 
-    <div class="col-3">
+    <div class="col-6">
         <div class="form-group">
-            <label>@lang('cruds.user.fields.first_name')<span class="text-danger">*</span></label>
-            <input type="text" name="first_name" id="first_name" value="{{ $user['first_name'] ?? ''}}" class="form-control valid" placeholder="Enter First Name">
-        </div>
-    </div>
-
-    
-    <div class="col-3">
-        <div class="form-group">
-            <label>@lang('cruds.user.fields.middle_name')</label>
-            <input type="text" name="middle_name" id="middle_name" value="{{ $user['middle_name'] ?? ''}}" class="form-control valid" placeholder="Enter Middle Name">
-        </div>
-    </div>
-
-    <div class="col-3">
-        <div class="form-group">
-            <label>@lang('cruds.user.fields.last_name')<span class="text-danger">*</span></label>
-            <input type="text" name="last_name" id="last_name" value="{{ $user['last_name'] ?? ''}}" class="form-control valid" placeholder="Enter Last Name">
+            <label>@lang('cruds.user.fields.username')<span class="text-danger">*</span></label>
+            <input type="text" name="username" id="username" value="{{ $user['username'] ?? ''}}" class="form-control valid" placeholder="Enter Username">
         </div>
     </div>
 
@@ -40,24 +25,29 @@
     
     <div class="col-6">
         <div class="form-group">
-            <label>@lang('cruds.user.fields.phone')<span class="text-danger">*</span></label>
-            <input type="text" name="phone" id="phone" value="{{ $user['phone'] ?? ''}}" class="form-control valid" placeholder="Enter Phone number">
+            <label>@lang('cruds.user.fields.password')<span class="text-danger">*</span></label>
+            <input type="password" name="password" id="password" value="{{ $user['password'] ?? ''}}" class="form-control valid" placeholder="Enter Password">
         </div>
     </div>
 
     <div class="col-6">
         <div class="form-group">
-            <label>@lang('cruds.user.fields.dob')<span class="text-danger">*</span></label>
-            <input type="text" name="dob" id="dob" value="{{ $user['dob'] ?? ''}}" class="form-control valid" >
-        </div>
-    </div>
-
-    <div class="col-6">
-        <div class="form-group">
-            <label>@lang('cruds.user.fields.gender')<span class="text-danger">*</span></label>
-            <select name="gender" id="gender" class="form-control">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+            <label>@lang('cruds.user.fields.status')<span class="text-danger">*</span></label>
+            @php
+              $status = '';
+              if(isset($user)){
+                if($user['status'] == 'active'){
+                    $status = $user['status'];
+                }else if($user['status'] == 'deactive'){
+                    $status = $user['status'];
+                }
+              }
+            @endphp
+            <select  class="form-control" name="status" id="status">
+                <option value="">Select Status</option>
+                @foreach(config('constant.userStatus') as $value)
+                    <option value="{{$value}}" {{ $value == $status ? 'selected' : ''}}>{{ ucwords($value) }}</option>
+                @endforeach
             </select>
         </div>
     </div>

@@ -35,7 +35,7 @@
                 </span>
                 @enderror
               </div>
-              <p class="m-0 text-end"><a href="{{ route('admin.showForgotPassword') }}">Forgot Password</a></p>
+              
               <div class="mb-3">
                   <label for="password">@lang('auth.loginPage.fields.password')<span class="mailstar" style="color: red;">*</span></label>
                   <div class="input-password-wrap">
@@ -48,10 +48,15 @@
                   </span>
                   @enderror
               </div>
-              <div class="mb-3 form-check">
-                <input type="checkbox" name="remember_me" class="form-check-input" id="remember_me">
-                <label class="form-check-label" for="remember_me">@lang('global.remember_me')</label>
+
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="mb-3 form-check">
+                  {{-- <input type="checkbox" name="remember_me" class="form-check-input" id="remember_me">
+                  <label class="form-check-label" for="remember_me">@lang('global.remember_me')</label> --}}
+                </div>
+                <p class="m-0 text-end forgot-text"><a href="{{ route('admin.showForgotPassword') }}">Forgot Password</a></p>
               </div>
+              
               <button type="submit" class="nbtn nextstepbtn submitBtn">@lang('global.submit')</button>
           </form>
         </div>

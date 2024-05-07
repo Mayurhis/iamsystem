@@ -63,17 +63,27 @@ class UserController extends BaseController
 
             $newUserId = $lastId + 1;
 
-            $newUser = $request->except('_token');
-            $newUser['id'] = $newUserId;
-
-            if($request->middle_name){
-                $newUser ['name'] = ucwords($request->name_prefix.' '.$request->first_name.' '.$request->middle_name.' '.$request->last_name);
-            }else{
-                $newUser ['name'] = ucwords($request->name_prefix.' '.$request->first_name.' '.$request->last_name);
-            }
-
-            $newUser = array('id' => $newUser['id']) + $newUser;
-
+            $newUser = [
+                'id'            => $newUserId,
+                'aud'           => $request->aud,
+                'role'          => 'customer',
+                'email'         => $request->email,
+                'username'      => $request->username,
+                'password'      => $request->password,
+                'confirmed_at'  => null,
+                'invited_at'    => null,
+                'confirmation_token'         => null,
+                'confirmation_sent_at'       => null,
+                'email_change_token'         => null,
+                'email_change_sent_at'       => null,
+                'last_login_at'              => null,
+                'metadata'                   => null,
+                'status'                     => $request->status,
+                'created_at' => now(),
+                'updated_at' => null,
+                'deleted_at' => null,
+            ];
+            
             $users[] = $newUser;
             
             file_put_contents($this->filePath, json_encode($users));
@@ -144,11 +154,7 @@ class UserController extends BaseController
 
             if ($index !== null) {
 
-                if($request->middle_name){
-                    $input ['name'] = ucwords($request->name_prefix.' '.$request->first_name.' '.$request->middle_name.' '.$request->last_name);
-                }else{
-                    $input ['name'] = ucwords($request->name_prefix.' '.$request->first_name.' '.$request->last_name);
-                }
+                $input['updated_at'] = now();
 
                 $data[$index] = array_merge($data[$index], $input);
                 

@@ -47,6 +47,25 @@ if (!function_exists('findIndexById')) {
     }
 }
 
+if (!function_exists('findIndexByFields')) {
+
+    function findIndexByFields($array, $field_name, $id=null) {
+        foreach ($array as $index => $element) {
+            if($id){
+                if (isset($element[$field_name]) && $element[$field_name] != $id) {
+                    return $index;
+                }
+            }else{
+                if (isset($element[$field_name])) {
+                    return $index;
+                }
+            }
+           
+        }
+        return null;
+    }
+}
+
 if (!function_exists('isRolePermission')) {
 
     function isRolePermission($permissionTitle){
@@ -89,3 +108,28 @@ if (!function_exists('isRolePermission')) {
     }
 }
 
+
+if (!function_exists('convertDateTimeFormat')) {
+	function convertDateTimeFormat($value,$type='date')
+	{
+		$changeFormatValue = Carbon::parse($value);
+
+		$result = null;
+		switch ($type) {
+			case 'time':
+				$result = $changeFormatValue->format(config('constant.time_format'));
+				break;
+
+			case 'datetime':
+				$result = $changeFormatValue->format(config('constant.datetime_format'));
+				break;
+
+			default:
+				$result =  $changeFormatValue->format(config('constant.date_format'));
+				break;
+		}
+
+		return $result;
+
+	}
+}
