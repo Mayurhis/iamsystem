@@ -12,6 +12,8 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 
 class UserDataTable extends DataTable
 {
+    private $filePath;
+    
     public function __construct()
     {
         $this->filePath = storage_path('app/users.json');
@@ -22,15 +24,17 @@ class UserDataTable extends DataTable
         return datatables()
             ->of($query)
             ->addIndexColumn()
-            ->addColumn('action', function ($user) {
+            ->addColumn('action', function ($row) {
+                
                 $action = '<div class="action-grid d-flex gap-2">';
 
-                $action .='<a href="'.route('admin.user_detail').'" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>';
+                if(!isRolePermission('user_view')){
+                    $action .='<a href="'.route('admin.users.show',$row['id']).'" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>';
+                }
 
-                $action .='<a href="javascript:void(0)" class="action-btn bg-primary" title="edit"><i class="fi fi-rr-edit"></i></i></a>';
-
-                $action .='<a href="javascript:void(0)" class="action-btn bg-danger" title="delete"><i class="fi fi-rr-trash"></i></i></a>';
-
+                if(!isRolePermission('user_edit')){
+                    $action .='<a href="'.route('admin.users.edit',$row['id']).'" class="action-btn bg-primary" title="edit"><i class="fi fi-rr-edit"></i></i></a>';
+                }
                 $action .= '</div>';
 
                 return $action;

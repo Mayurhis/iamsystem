@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Backend;
 
-use Gate;
 use Illuminate\Http\Request;
-use App\DataTables\UserDataTable;
 use App\Http\Controllers\BaseController;
 use Symfony\Component\HttpFoundation\Response;
+use \App\DataTables\UserDataTable;
+
+use App\Http\Requests\User\StoreRequest;
+use App\Http\Requests\User\UpdateRequest;
+
 
 class UserController extends BaseController
 {
@@ -14,7 +17,6 @@ class UserController extends BaseController
 
     public function __construct()
     {
-        // Set the path to the JSON file
         $this->filePath = storage_path('app/users.json');
     }
 
@@ -23,8 +25,7 @@ class UserController extends BaseController
      */
     public function index(UserDataTable $dataTable)
     {
-        // abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        // dd(authUserDetail('data.user'));
+        abort_if(isRolePermission('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         try{
 
@@ -39,47 +40,18 @@ class UserController extends BaseController
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create()
     {
-        // abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        if($request->ajax()) {
-            try{                
-               
-                $viewHTML = view('backend.users.create')->render();
-                
-                $data['htmlView'] = $viewHTML;
-                return $this->sendSuccessResponse(trans('messages.record_retrieved_successfully'), $data);
-            } 
-            catch (\Exception $e) {
-                // dd($e);
-                $this->sendErrorResponse(trans('messages.error_message'),500);
-            }
-        }
-        return $this->sendErrorResponse(trans('messages.error_message'),400);
+        abort_if(isRolePermission('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        return view('backend.users.create');     
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $request->validate([
-            'name_prefix'   => ['required'],
-            'first_name'    => ['required'],
-            'middle_name'   => [],
-            'last_name'     => ['required'],
-            'dob'           => ['required'],
-            'email'         => ['required'],
-            'phone'         => ['required'],
-            'gender'        => ['required'],
-            // 'address_line_one' => ['required'],
-            // 'address_line_two' => ['required'],
-            // 'post_code'        => ['required'],
-            // 'city'             => ['required'],
-            // 'region'           => ['required'],
-            // 'country_of_residence' => ['required'],
-        ]);
-
         try{                
 
             $users = json_decode(file_get_contents($this->filePath), true);
@@ -120,23 +92,75 @@ class UserController extends BaseController
      */
     public function show(string $id)
     {
-        return view('backend.users.show');
+        abort_if(isRolePermission('user_view'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        
+        $data = json_decode(file_get_contents($this->filePath), true);
+        
+        $index = findIndexById($data, $id);
+
+        if ($index !== null) {
+
+            $user = $data[$index] ?? null;
+
+            return view('backend.users.show', compact('user'));
+        }else{
+            return abort(404);
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        abort_if(isRolePermission('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $data = json_decode(file_get_contents($this->filePath), true);
+        
+        $index = findIndexById($data, $id);
+
+        if ($index !== null) {
+
+            $user = $data[$index] ?? null;
+
+            return view('backend.users.edit', compact('user'));
+        }else{
+            return abort(404);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, $id)
     {
-        //
+        try{                
+
+            $data = json_decode(file_get_contents($this->filePath), true);
+
+            $input = $request->except(['_token','_method']);            ;
+
+            $index = findIndexById($data, $id);
+
+            if ($index !== null) {
+
+                if($request->middle_name){
+                    $input ['name'] = ucwords($request->name_prefix.' '.$request->first_name.' '.$request->middle_name.' '.$request->last_name);
+                }else{
+                    $input ['name'] = ucwords($request->name_prefix.' '.$request->first_name.' '.$request->last_name);
+                }
+
+                $data[$index] = array_merge($data[$index], $input);
+                
+                file_put_contents($this->filePath, json_encode($data));
+
+                return $this->sendSuccessResponse(trans('messages.curd.update_record'));
+            }
+
+        } catch (\Exception $e) {
+            // dd($e);
+            $this->sendErrorResponse(trans('messages.error_message'),500);
+        }
     }
 
     /**

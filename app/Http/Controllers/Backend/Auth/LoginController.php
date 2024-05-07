@@ -94,4 +94,13 @@ class LoginController extends BaseController
         session()->put('logged_in_user_detail',$result);
         session()->save();
     }
+
+
+    public function showForgotPassword(){
+        return view('backend.auth.forget-password');
+    }
+
+    public function submitForgotPassword(){
+        dd('working');
+    }
 }

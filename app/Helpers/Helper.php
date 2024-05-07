@@ -34,3 +34,58 @@ if (!function_exists('authValues')) {
         }
     }
 }
+
+if (!function_exists('findIndexById')) {
+
+    function findIndexById($array, $id) {
+        foreach ($array as $index => $element) {
+            if (isset($element['id']) && $element['id'] == $id) {
+                return $index;
+            }
+        }
+        return null;
+    }
+}
+
+if (!function_exists('isRolePermission')) {
+
+    function isRolePermission($permissionTitle){
+
+        $authUser = session()->get('logged_in_user_detail');
+
+        if($authUser){
+            $userType = '';
+            $isAudSet =  isset($user['data']['user']['aud']) ? $user['data']['user']['aud'] : '';
+
+            if(isset($authUser['data']['user'])){
+    
+                if(isset($authUser['data']['user']['type'])){
+                   $userType = $authUser['data']['user']['type'];
+                   $userType = in_array($userType,config('constant.user_roles')) ? $userType : null;
+                }
+
+            }
+
+            $roles = config('constant.user_roles');
+            if(in_array($userType,$roles)){
+
+                $rolePermission = ($userType !== 'admin' && $isAudSet)
+                ? config('constant.role_permission_aud.'.$userType)
+                : config('constant.role_permission.'.$userType);
+               
+                $permissions = config('constant.permissions');
+                $permissionId = array_search($permissionTitle, $permissions); 
+
+                if(in_array($permissionId,$rolePermission)){
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+
+
+        }
+      
+    }
+}
+

@@ -64,6 +64,25 @@ return [
             'password_placeholder' => 'Enter Password',
 
         ],
+    ],
+
+    'forgetPasswordPage'=>[
+        'title' => 'Recover Password',
+        'fields' => [
+            'email' => 'Email address',
+            'email_placeholder' => 'Enter Email address',
+        ],
+    ],
+
+    'resetPasswordPage'=>[
+        'title' => 'Reset Password',
+        'fields' => [
+            'new_password' => 'New Password',
+            'new_password_placeholder' => 'Enter New Password',
+
+            'confirm_password' => 'Confirm Password',
+            'confirm_password_placeholder' => 'Enter Confirm Password',
+        ],
     ]
 
 ];

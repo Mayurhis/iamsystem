@@ -17,12 +17,12 @@ return [
     ],
 
     'role_permission'=>[
-        'admin' => [1,2,3,4,5,6],
-        'auditor' => [1,2,3,4,5,6],
+        'admin' => [1,2,3,4,6],
+        'auditor' => [1,2,3,6],
     ],
 
     'role_permission_aud'=>[
-        'admin' => [1,2,3,4,5,6],
+        'admin' => [1,2,3,4,6],
         'auditor' => [1,2,6],
     ],
 

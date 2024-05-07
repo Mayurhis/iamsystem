@@ -19,6 +19,9 @@ return [
     'pageTitles'=>[
         'dashboard'     => 'Dashboard',
         'user'          => 'Users',
+        'add_user'      => 'Add User',
+        'edit_user'     => 'Edit User',
+        'view_user'     => 'Show User',
         'user_detail'   => 'User Details',
     ],
 

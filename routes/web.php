@@ -25,6 +25,9 @@ Route::group(['middleware' => 'guest'], function () {
 
     Route::get("admin/login", [LoginController::class, 'index'])->name("admin.login");
     Route::post('admin/login',[LoginController::class, 'login'])->name('admin.login');
+    Route::get('admin/forgot-password',[LoginController::class, 'showForgotPassword'])->name('admin.showForgotPassword');
+    Route::post('admin/forgot-password',[LoginController::class, 'submitForgotPassword'])->name('admin.submitForgotPassword');
+
 });
 
 
