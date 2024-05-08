@@ -59,20 +59,22 @@ return [
             'email'         => 'Email',
             'username'      => 'Username',
             'password'      => 'Password',
+            'type'          => 'Type',
+            'language'      => 'Language',
+            'is_confirmed'  => 'Confirmed',
             'confirmed_at'  => 'ConfirmedAt',
             'invited_at'    => 'InvitedAt',
             'confirmation_token'         => 'Confirmation Token',
             'confirmation_sent_at'       => 'ConfirmationSentAt',
             'email_change_token'         => 'Email Change Token',
             'email_change_sent_at'       => 'EmailChangeSentAt',
-            'last_login_at'              => 'LoginAt',
+            'last_login_at'              => 'Last Login At',
             'metadata'                   => 'MetaData',
             'status'                     => 'Status',
-            'created_at' => 'createdAt',
-            'updated_at' => 'updatedAt',
-            'deleted_at' => 'deletedAt',
-
-        ]
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'deleted_at' => 'Deleted At',
+        ],
     ],
 
 

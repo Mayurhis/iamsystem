@@ -2,6 +2,8 @@
 
 return [
 
+    'remember_me_expire_time' => env('REMEMBER_ME_EXPIRE_TIME'),
+
     'user_roles'=>[
         'admin',
         'auditor'
@@ -39,11 +41,21 @@ return [
     'IAMSystemToken' => env('IAM_SYSTEM_TOKEN', null),
 
 
+    'password_min_length' => env('PASSWORD_MIN_LENGTH',6),
+    'password_regex'      => "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[$\-_!@#$%&*])[A-Za-z\d$\-_!@#$%&*]+$/",
+
     'userStatus'=>[
         'active',
         'locked',
         'deleted',
         'pending',
+    ],
+
+    'userType'=>[
+        'user',
+        'merchant',
+        'system',
+        'admin',
     ],
     
 ];

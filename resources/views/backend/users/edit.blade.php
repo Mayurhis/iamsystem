@@ -36,27 +36,35 @@
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
 @parent
-
 <script type="text/javascript">
 
-$(document).ready(function () {
+    $(document).ready(function () {
    
        $("#editUserForm").validate({
            errorElement: 'span',
            errorClass: 'error',
            rules: {
                aud: "required",
-               username:"required",
                email: {
                    required: true,
                    email: true
                },
+               username:{
+                usernamePattern :true,
+               },
                password: {
                    required: true,
-                   minlength: 6
+                   minlength: "{{ config('constant.password_min_length') }}",
+                   passwordPattern: true,
+               },
+               type:{
+                   required: true,
                },
                status:{
                    required: true,
+               },
+               confirmed:{
+                required: true,
                }
            },
            messages: {
@@ -65,7 +73,19 @@ $(document).ready(function () {
                    minlength: "Password must be at least 6 characters long"
                }
            },
+           errorPlacement: function(error, element) {
+                if ($(element).attr('type') === 'password') {
+                    error.insertAfter(element.parent('div'));
+                } else {
+                    error.insertAfter(element);
+                }
+            },
        });
+
+       var passwordRegex = {{ config('constant.password_regex') }};
+       $.validator.addMethod("passwordPattern", function(value, element) {
+            return passwordRegex.test(value);
+        }, "{{ trans('messages.password_regex') }}");
    });
 
     // Submit Add User Form
@@ -101,11 +121,17 @@ $(document).ready(function () {
                         toasterAlert('error',response.responseJSON.error);
                     } else {                    
                         var errorLabelTitle = '';
+                        var passwordElements = ['password'];
                         $.each(response.responseJSON.errors, function (key, item) {
 
                             errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
                         
-                            $(errorLabelTitle).insertAfter("#"+key);
+                            if(passwordElements.includes(key)){
+                                var ele = $("#"+key).parent('div');
+                                $(errorLabelTitle).insertAfter(ele);
+                            }else{
+                                $(errorLabelTitle).insertAfter("#"+key);
+                            }
                                             
                         });
                     }
@@ -119,6 +145,23 @@ $(document).ready(function () {
                       
     });
 
+    
 </script>
+<script>
+  
+    document.addEventListener("DOMContentLoaded", () => {
+            const togglePassword = document.querySelector('#togglePassword');
+            const password = document.querySelector('#password');
+            togglePassword.addEventListener('click', function (e) {
+                // toggle the type attribute
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                // toggle the eye slash icon
+                this.classList.toggle('fa-eye');
+            });
+        });
+</script>
+
+@include('backend.users.partials.comman_js')
 
 @endsection

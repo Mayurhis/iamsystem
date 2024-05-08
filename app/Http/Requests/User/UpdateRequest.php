@@ -5,7 +5,7 @@ namespace App\Http\Requests\User;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
-use App\Rules\UniqueJson;
+use App\Rules\ValidUsername;
 
 
 class UpdateRequest extends FormRequest
@@ -51,6 +51,7 @@ class UpdateRequest extends FormRequest
         $rules = [];
 
         $rules['aud']         = ['required'];
+
         $rules['email']       = [
             'required',
             'email',
@@ -61,16 +62,32 @@ class UpdateRequest extends FormRequest
                 }
             }
         ];
+
         $rules['username']    = [
-            'required',
+            'nullable',
             function ($attribute, $value, $fail) use ($isUsernameExists) {
                 if ($isUsernameExists) {
                     $fail('The username has already been taken.');
                 }
-            }
+            },
+            new ValidUsername
         ];
-        $rules['password']    = ['required'];
-        $rules['status']      = ['required'];
+
+        $rules['password']    = [
+            'required',
+            'string',
+            'min:'.config('constant.password_min_length'),
+            'regex:'.config('constant.password_regex')
+        ];
+
+        $usersType = implode(',',config('constant.userType'));
+        $rules['type']        = ['required','in:'.$usersType];
+
+        $userStatus = implode(',',config('constant.userStatus'));
+        $rules['status']      = ['required','in:'.$userStatus];
+
+        $rules['confirmed']   = ['required'];
+        $rules['language']   = ['required'];
 
         return $rules;
     }
@@ -79,6 +96,13 @@ class UpdateRequest extends FormRequest
     {
         return [
            
+        ];
+    }
+
+
+    public function messages(){
+        return[
+            'password.regex' => trans('messages.password_regex'),
         ];
     }
 }

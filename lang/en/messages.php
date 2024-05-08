@@ -63,5 +63,8 @@ return [
             'confirmButtonText' => 'Yes, log me out!',
             'cancelButtonText'  => 'No',
         ]
-    ]
+    ],
+
+    'password_regex' => 'The password must contain uppercase letters A-Z, lowercase letters a-z, digits 0-9 and symbols -_!@#$%&*',
+    'username_regex' => 'The username must only contain letters, numbers, and underscores.'
 ];

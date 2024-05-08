@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Backend\Auth;
 
-use App\Http\Controllers\BaseController;
-use Illuminate\Http\Request;
 use Session;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
+use App\Http\Controllers\BaseController;
+
 
 class LoginController extends BaseController
 {
@@ -32,6 +34,10 @@ class LoginController extends BaseController
                     $userType = $result['response']['data']['user']['type'];
                     if($userType && in_array($userType,config('constant.user_roles'))){
                         $this->saveLoggedInUserDetailInSession(array_merge($result['response'], ['password' => $request->password]));
+
+                        // if ($request->has('remember_me')) {
+                        //     Cookie::queue('remember_token', $result['response']['data']['access_token'], config('constant.remember_me_expire_time')); // 1 year expiration
+                        // }
 
                         switch ($userType) {
                             case 'admin':

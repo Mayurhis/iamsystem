@@ -40,22 +40,35 @@
 
     $(document).ready(function () {
       
+
        $("#addUserForm").validate({
            errorElement: 'span',
            errorClass: 'error',
            rules: {
                aud: "required",
-               username:"required",
                email: {
                    required: true,
                    email: true
                },
+               username:{
+                usernamePattern :true,
+               },
                password: {
                    required: true,
-                   minlength: 6
+                   minlength: "{{ config('constant.password_min_length') }}",
+                   passwordPattern: true,
+               },
+               type:{
+                   required: true,
                },
                status:{
                    required: true,
+               },
+               confirmed:{
+                required: true,
+               },
+               language:{
+                required: true,
                }
            },
            messages: {
@@ -64,7 +77,16 @@
                    minlength: "Password must be at least 6 characters long"
                }
            },
+           errorPlacement: function(error, element) {
+                if ($(element).attr('type') === 'password') {
+                    error.insertAfter(element.parent('div'));
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+    
        });
+
    });
 
     // Submit Add User Form
@@ -100,11 +122,18 @@
                         toasterAlert('error',response.responseJSON.error);
                     } else {                    
                         var errorLabelTitle = '';
+                        var passwordElements = ['password'];
                         $.each(response.responseJSON.errors, function (key, item) {
                             
                             errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
                         
-                            $(errorLabelTitle).insertAfter("#"+key);
+                            if(passwordElements.includes(key)){
+                                var ele = $("#"+key).parent('div');
+                                $(errorLabelTitle).insertAfter(ele);
+                            }else{
+                                $(errorLabelTitle).insertAfter("#"+key);
+                            }
+                           
                                             
                         });
                     }
@@ -118,7 +147,8 @@
         }           
     });
 
-
 </script>
+
+@include('backend.users.partials.comman_js')
 
 @endsection

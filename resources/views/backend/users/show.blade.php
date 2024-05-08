@@ -18,48 +18,89 @@
                 <div class="user_content">
                     <div class="mb-3">
                         <div class="name">
-                            <h4>@lang('cruds.user.fields.username')</h4>
-                            <span>{{ $user['username'] ?? '' }}</span>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="name">
                             <h4>ID</h4>
                             <span>{{ $user['id'] ?? '' }}</span>
                         </div>
                     </div>
+
                     <div class="mb-3">
                         <div class="name">
                             <h4>@lang('cruds.user.fields.aud')</h4>
                             <span>{{ $user['aud'] ?? '' }}</span>
                         </div>
                     </div>
+
                     <div class="mb-3">
                         <div class="name">
-                            <h4>@lang('cruds.user.fields.created_at')</h4>
-                            <span>{{ $user['created_at'] ? convertDateTimeFormat($user['created_at']) : '' }}</span>
+                            <h4>@lang('cruds.user.fields.username')</h4>
+                            <span>{{ $user['username'] ?? '' }}</span>
                         </div>
                     </div>
-                    
+
                     <div class="mb-3">
                         <div class="name">
                             <h4>@lang('cruds.user.fields.email')</h4>
                             <span>{{ $user['email'] ?? '' }}</span>
                         </div>
                     </div>
+
+                    <div class="mb-3">
+                        <div class="name">
+                            <h4>@lang('cruds.user.fields.type')</h4>
+                            <span class="text-dark">{{ isset($user['type']) ? ucwords($user['type']) : '' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="name">
+                            <h4>@lang('cruds.user.fields.is_confirmed')</h4>
+                            <span class="text-dark">{{ isset($user['is_confirmed']) ? $user['is_confirmed'] == 1 ? 'Yes' : 'No' : '' }}</span>
+                        </div>
+                    </div>
+
                     <div class="mb-3">
                         <div class="name">
                             <h4>@lang('cruds.user.fields.status')</h4>
                             <span class="text-dark">{{ isset($user['status']) ? ucwords($user['status']) : '' }}</span>
                         </div>
                     </div>
+
+                    <div class="mb-3">
+                        <div class="name">
+                            <h4>@lang('cruds.user.fields.language')</h4>
+                            <span class="text-dark">{{ isset($user['language']) ? ucwords($user['language']) : '' }}</span>
+                        </div>
+                    </div>
+                  
+                    <div class="mb-3">
+                        <div class="name">
+                            <h4>@lang('cruds.user.fields.last_login_at')</h4>
+                            <span>{{ $user['last_login_at'] ? convertDateTimeFormat($user['last_login_at']) : '' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="name">
+                            <h4>@lang('cruds.user.fields.created_at')</h4>
+                            <span>{{ $user['created_at'] ? convertDateTimeFormat($user['created_at']) : '' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="name">
+                            <h4>@lang('cruds.user.fields.updated_at')</h4>
+                            <span>{{ $user['updated_at'] ? convertDateTimeFormat($user['updated_at']) : '' }}</span>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-12">
-                <a href="{{ route('admin.users.index') }}" class="btn btn-regular btn-secondary float-end">@lang('global.cancel')</a>
+                <a href="{{ route('admin.users.index') }}" class="btn btn-regular btn-secondary float-end">@lang('global.back')</a>
             </div>
         </div> 
     </div>

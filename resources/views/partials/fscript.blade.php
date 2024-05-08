@@ -34,4 +34,20 @@
     });
 
 
+    function generatePassword() {
+        var pattern = {{ config('constant.password_regex') }};
+        var password = '';
+
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$-_!@#$%&*';
+
+        do {
+            password = '';
+            for (var i = 0; i < 12; i++) { 
+                password += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+        } while (!pattern.test(password)); 
+
+        return password;
+    }
+
 </script>
