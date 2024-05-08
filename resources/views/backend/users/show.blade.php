@@ -50,7 +50,7 @@
                     <div class="mb-3">
                         <div class="name">
                             <h4>@lang('cruds.user.fields.status')</h4>
-                            <span class="{{ isset($user['status']) && $user['status']=='active' ? 'text-success' : 'text-danger' }} ">{{ isset($user['status']) ? ucwords($user['status']) : '' }}</span>
+                            <span class="text-dark">{{ isset($user['status']) ? ucwords($user['status']) : '' }}</span>
                         </div>
                     </div>
                 </div>

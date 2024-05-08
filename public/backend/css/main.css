@@ -2432,7 +2432,7 @@ select {
     background-color: #8c74eb1f;
 }
 
-.validation-error-block{
+.error,.validation-error-block{
     color: red;
 }
 

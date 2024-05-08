@@ -32,55 +32,93 @@
 @endsection
 
 @section('custom_JS')
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
 @parent
 
 <script type="text/javascript">
+
+    $(document).ready(function () {
+       
+       $("#addUserForm").validate({
+           errorElement: 'span',
+           errorClass: 'error',
+           rules: {
+               aud: "required",
+               username:"required",
+               email: {
+                   required: true,
+                   email: true
+               },
+               password: {
+                   required: true,
+                   minlength: 6
+               },
+               status:{
+                   required: true,
+               }
+           },
+           messages: {
+               required: "This field is required.",
+               password: {
+                   minlength: "Password must be at least 6 characters long"
+               }
+           },
+           submitHandler: function (form) {
+               form.submit();
+           }
+       });
+   });
 
     // Submit Add User Form
     $(document).on('submit', '#addUserForm', function (e) {
         e.preventDefault();
 
-        $('.pageloader').show();
+        if ($(this).valid()) {
 
-        $('.validation-error-block').remove();
-        $(".submitBtn").attr('disabled', true);
+            $('.pageloader').show();
 
-        var formData = new FormData(this);
+            $('.validation-error-block').remove();
+            $(".submitBtn").attr('disabled', true);
 
-        $.ajax({
-            type: 'post',
-            url: "{{route('admin.users.store')}}",
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            data: formData,
-            success: function (response) {                
-                if(response.success) {
-                    toasterAlert('success',response.message);
-                    window.location.href = "{{ route('admin.users.index') }}";
-                }
-            },
-            error: function (response) {
-                $(".submitBtn").attr('disabled', false);
-                $('.pageloader').hide();
-                if(response.responseJSON.error_type == 'something_error'){
-                    toasterAlert('error',response.responseJSON.error);
-                } else {                    
-                    var errorLabelTitle = '';
-                    $.each(response.responseJSON.errors, function (key, item) {
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: 'post',
+                url: "{{route('admin.users.store')}}",
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {                
+                    if(response.success) {
+                        toasterAlert('success',response.message);
+                        window.location.href = "{{ route('admin.users.index') }}";
+                    }
+                },
+                error: function (response) {
+                    $(".submitBtn").attr('disabled', false);
+                    $('.pageloader').hide();
+                    if(response.responseJSON.error_type == 'something_error'){
+                        toasterAlert('error',response.responseJSON.error);
+                    } else {                    
+                        var errorLabelTitle = '';
+                        $.each(response.responseJSON.errors, function (key, item) {
+                            
+                            errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
                         
-                        errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
-                       
-                        $(errorLabelTitle).insertAfter("#"+key);
-                                           
-                    });
+                            $(errorLabelTitle).insertAfter("#"+key);
+                                            
+                        });
+                    }
+                },
+                complete: function(res){
+                    $(".submitBtn").attr('disabled', false);
+                    $('.pageloader').hide();
                 }
-            },
-            complete: function(res){
-                $(".submitBtn").attr('disabled', false);
-                $('.pageloader').hide();
-            }
-        });                    
+            });         
+
+        }           
     });
 
 </script>

@@ -31,25 +31,18 @@ class StoreRequest extends FormRequest
         $users = json_decode(file_get_contents($filePath), true);
 
         $isEmailExists = false;
-        $emailExistsIndex = findIndexByFields($users, 'email');
-        if(!is_null($emailExistsIndex)){
-            $existsRecord = $users[$emailExistsIndex];
-            if($existsRecord){
-                $isEmailExists = ($existsRecord['email'] == $this->email) ? true : false;
-            }
-        }
-
         $isUsernameExists = false;
-        $usernameExistsIndex = findIndexByFields($users, 'username');
-        if(!is_null($usernameExistsIndex)){
-            $existsRecord = $users[$usernameExistsIndex];
-            if($existsRecord){
-                $isUsernameExists = ($existsRecord['username'] == $this->username) ? true : false;
+        foreach ($users as $user) {
+            if (($user['email'] == $this->email)) {
+                $isEmailExists = true;
+                break;
+            }
+            if (($user['username'] == $this->username)) {
+                $isUsernameExists = true;
+                break;
             }
         }
         
-       
-
         $rules = [];
 
         $rules['aud']         = ['required'];
