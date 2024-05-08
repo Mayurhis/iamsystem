@@ -39,7 +39,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-       
+      
        $("#addUserForm").validate({
            errorElement: 'span',
            errorClass: 'error',
@@ -64,9 +64,6 @@
                    minlength: "Password must be at least 6 characters long"
                }
            },
-           submitHandler: function (form) {
-               form.submit();
-           }
        });
    });
 
@@ -120,6 +117,7 @@
 
         }           
     });
+
 
 </script>
 

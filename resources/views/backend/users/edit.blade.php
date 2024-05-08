@@ -40,7 +40,7 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
-       
+   
        $("#editUserForm").validate({
            errorElement: 'span',
            errorClass: 'error',
@@ -65,9 +65,6 @@ $(document).ready(function () {
                    minlength: "Password must be at least 6 characters long"
                }
            },
-           submitHandler: function (form) {
-               form.submit();
-           }
        });
    });
 

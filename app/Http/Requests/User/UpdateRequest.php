@@ -34,14 +34,16 @@ class UpdateRequest extends FormRequest
 
         $isEmailExists = false;
         $isUsernameExists = false;
-        foreach ($users as $user) {
-            if (($user['id'] != $this->user_id) && ($user['email'] == $this->email)) {
-                $isEmailExists = true;
-                break;
-            }
-            if (($user['id'] != $this->user_id) && ($user['username'] == $this->username)) {
-                $isUsernameExists = true;
-                break;
+        if($users){
+            foreach ($users as $user) {
+                if (($user['id'] != $this->user_id) && ($user['email'] == $this->email)) {
+                    $isEmailExists = true;
+                    break;
+                }
+                if (($user['id'] != $this->user_id) && ($user['username'] == $this->username)) {
+                    $isUsernameExists = true;
+                    break;
+                }
             }
         }
         
