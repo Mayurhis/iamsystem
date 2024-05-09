@@ -12,6 +12,8 @@ use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Validation\Constraint\HasClaimWithValue;
 use Lcobucci\JWT\Validation\Constraint\IssuedBy;
 use Lcobucci\JWT\Validation\Constraint\StrictValidAt;
+use Lcobucci\JWT\Validation\Constraint\SignedWith;
+use Lcobucci\JWT\Validation\Constraint\LooseValidAt;
 
 /**
  * VerifyJwtToken is a class which verifies that an incoming request has a valid IAM Server token.
@@ -27,11 +29,24 @@ class VerifyJwtToken
             new Sha256(),
             InMemory::plainText(config('constant.IAMSystemSecret'))
         );
+
+        // $configuration->setValidationConstraints(
+        //     new IssuedBy(config('constant.IAMSystemIssuer')),
+        //     new StrictValidAt(SystemClock::fromUTC()),
+        //     new HasClaimWithValue('type', $userType),
+        // );
+
+        $currentTime = SystemClock::fromUTC();
+        
+        // Allow for a tolerance of 5 minutes for clock skew
+        $allowedClockSkew = new \DateInterval('PT5M'); // 5 minutes
+    
         $configuration->setValidationConstraints(
             new IssuedBy(config('constant.IAMSystemIssuer')),
-            new StrictValidAt(SystemClock::fromUTC()),
-            new HasClaimWithValue('type', $userType),
+            new LooseValidAt($currentTime, $allowedClockSkew),
+            new HasClaimWithValue('type', $userType)
         );
+    
 
         return $configuration;
     }

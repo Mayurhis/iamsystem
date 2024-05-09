@@ -10,7 +10,10 @@
             @if(!isRolePermission('dashboard_access'))
             <li>
                 <a href="{{ route('admin.dashboard') }}" title="{{ trans('cruds.sidebar.dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
-                    <div class="menu-img"><img src="{{ asset('backend/images/dashaboard.svg') }}" alt="{{ trans('cruds.sidebar.dashboard') }}"></div>@lang('cruds.sidebar.dashboard')
+                    <div class="menu-img">
+                        <img src="{{ asset('backend/images/dashaboard.svg') }}" alt="{{ trans('cruds.sidebar.dashboard') }}" class="normalImg">
+                        <img src="{{ asset('backend/images/dashaboard-hover.svg') }}" alt="{{ trans('cruds.sidebar.dashboard') }}" class="hoverImg">
+                    </div>@lang('cruds.sidebar.dashboard')
                 </a>
             </li>
             @endif
@@ -18,14 +21,20 @@
             @if(!isRolePermission('user_access'))
             <li>
                 <a href="{{ route('admin.users.index') }}" title="{{ trans('cruds.sidebar.users') }}" class="{{ request()->is('admin/users*') ? 'active' : '' }}">
-                    <div class="menu-img"><img src="{{ asset('backend/images/profile-white.svg') }}" alt="{{ trans('cruds.sidebar.profile') }}"></div>@lang('cruds.sidebar.users')
+                    <div class="menu-img">
+                        <img src="{{ asset('backend/images/profile-white.svg') }}" alt="{{ trans('cruds.sidebar.profile') }}" class="normalImg">
+                        <img src="{{ asset('backend/images/profile-white-hover.svg') }}" alt="{{ trans('cruds.sidebar.profile') }}" class="hoverImg">
+                    </div>@lang('cruds.sidebar.users')
                 </a>
             </li>
             @endif
             
             <li>
                 <a id="logoutBtn" href="{{route('logout')}}" title="{{ trans('cruds.sidebar.logout') }}">
-                    <div class="menu-img"><img src="{{ asset('backend/images/log-out.svg') }}" alt="{{ trans('cruds.sidebar.logout') }}"></div>@lang('cruds.sidebar.logout')
+                    <div class="menu-img">
+                        <img src="{{ asset('backend/images/log-out.svg') }}" alt="{{ trans('cruds.sidebar.logout') }}" class="normalImg">
+                        <img src="{{ asset('backend/images/log-out-hover.svg') }}" alt="{{ trans('cruds.sidebar.logout') }}" class="hoverImg">
+                    </div>@lang('cruds.sidebar.logout')
                 </a>
             </li>
         </ul>

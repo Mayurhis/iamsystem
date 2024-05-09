@@ -161,13 +161,21 @@ class BaseController extends Controller
      * @param  int          $statusCode
      * @return \Illuminate\Http\Response
      */
-    protected function sendErrorResponse($message, $statusCode = Response::HTTP_BAD_REQUEST)
+    protected function sendErrorResponse($message, $statusCode = Response::HTTP_BAD_REQUEST,  $error_type='something_error', $errors=[])
     {
-        return response()->json([
-            'success' => false,
-            'error_type' => 'something_error',
-            'error' => $message,
-        ], $statusCode);
+        if ($statusCode == Response::HTTP_UNPROCESSABLE_ENTITY) {
+            return response()->json([
+                'success' => false,
+                'error_type' => $error_type,
+                'errors' => $errors,
+            ], $statusCode);
+        } else {
+            return response()->json([
+                'success' => false,
+                'error_type' => $error_type,
+                'error' => $message,
+            ], $statusCode);
+        }
     }
 
 }

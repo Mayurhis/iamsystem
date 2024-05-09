@@ -51,7 +51,7 @@ class StoreRequest extends FormRequest
         $rules['email']       = [
             'required',
             'email',
-            'regex:/^(?!.*[\/]).+@(?!.*[\/]).+\.(?!.*[\/]).+$/i',
+            'regex:/^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$/i',
             function ($attribute, $value, $fail) use ($isEmailExists) {
                 if ($isEmailExists) {
                     $fail('The email has already been taken.');
@@ -90,7 +90,7 @@ class StoreRequest extends FormRequest
     public function attributes()
     {
         return [
-           
+           'aud'=>'audience'
         ];
     }
 

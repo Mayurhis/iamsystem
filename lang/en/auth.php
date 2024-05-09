@@ -57,8 +57,8 @@ return [
     'loginPage'=>[
         'title' => 'Admin Login',
         'fields' => [
-            'email' => 'Email address',
-            'email_placeholder' => 'Enter Email address',
+            'email' => 'Email Address',
+            'email_placeholder' => 'Enter Email Address',
 
             'password' => 'Password',
             'password_placeholder' => 'Enter Password',
@@ -69,8 +69,8 @@ return [
     'forgetPasswordPage'=>[
         'title' => 'Recover Password',
         'fields' => [
-            'email' => 'Email address',
-            'email_placeholder' => 'Enter Email address',
+            'email' => 'Email Address',
+            'email_placeholder' => 'Enter Email Address',
         ],
     ],
 
@@ -83,6 +83,37 @@ return [
             'confirm_password' => 'Confirm Password',
             'confirm_password_placeholder' => 'Enter Confirm Password',
         ],
-    ]
+    ],
+
+
+    'changePassword'=>[
+        'title' => 'Change Password',
+        'fields' => [
+            'current_password'=> 'Current Password',
+            'current_password_placeholder'=> 'Enter Current Password',
+
+            'new_password' => 'New Password',
+            'new_password_placeholder' => 'Enter New Password',
+
+            'confirm_password' => 'Confirm Password',
+            'confirm_password_placeholder' => 'Enter Confirm Password',
+        ],
+    ],
+
+    'profile' => [
+        'title' => 'Profile',
+        'about' => 'About',
+        'change_email_address' => 'Change Email Address',
+        'change_username' => 'Change Username',
+        'new_email' => 'New Email Address',
+        'new_email_placeholder' => 'Enter New Email Address',
+        'confirm_email' => 'Email address confirmation',
+        'confirm_email_placeholder' => 'Enter Email address confirmation',
+        
+        'new_username' => 'New Username',
+        'new_username_placeholder' => 'Enter New Username',
+        'confirm_username' => 'Username confirmation',
+        'confirm_username_placeholder' => 'Enter Username Confirmation',
+    ],
 
 ];

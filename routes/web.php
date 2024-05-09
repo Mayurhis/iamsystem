@@ -36,10 +36,13 @@ Route::group(["namespace" => "App\Http\Controllers\Backend",'as' => 'admin.',"pr
     Route::get("dashboard","DashboardController@index")->name("dashboard");
 
     Route::get("profile","ProfileController@profile")->name("profile");
-    Route::get('user-detail', 'ProfileController@userDetail')->name('user_detail');
     Route::post('update-profile',"ProfileController@updateProfile")->name('updateProfile');
 
     Route::post('update-password',"ProfileController@updatePassword")->name('updatePassword');
+
+    Route::post('update-email',"ProfileController@updateEmail")->name('updateEmail');
+    
+    Route::post('update-useranme',"ProfileController@updateUsername")->name('updateUsername');
 
     Route::resource('users',UserController::class);
 

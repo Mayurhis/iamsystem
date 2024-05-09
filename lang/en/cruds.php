@@ -19,10 +19,12 @@ return [
     'pageTitles'=>[
         'dashboard'     => 'Dashboard',
         'user'          => 'Users',
-        'add_user'      => 'Add User',
+        'user_list'     => 'User List',
+        'add_user'      => 'Create User',
         'edit_user'     => 'Edit User',
         'view_user'     => 'Show User',
         'user_detail'   => 'User Details',
+        'my_profile'    => 'My Profile',
     ],
 
     'sidebar'=>[
@@ -54,14 +56,14 @@ return [
         'title'          => 'Users',
         'title_singular' => 'User',
         'fields'         => [
-            'aud'           => 'Aud',
+            'aud'           => 'Audience',
             'role'          => 'Role',
             'email'         => 'Email',
             'username'      => 'Username',
             'password'      => 'Password',
             'type'          => 'Type',
             'language'      => 'Language',
-            'is_confirmed'  => 'Confirmed',
+            'is_confirmed'  => 'Is Confirmed',
             'confirmed_at'  => 'ConfirmedAt',
             'invited_at'    => 'InvitedAt',
             'confirmation_token'         => 'Confirmation Token',

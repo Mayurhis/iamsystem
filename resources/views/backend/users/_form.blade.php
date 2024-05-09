@@ -3,7 +3,7 @@
     <div class="col-6">
         <div class="form-group">
             <label> @lang('cruds.user.fields.aud')<span class="text-danger">*</span></label>
-            <input type="text" name="aud" id="aud" value="{{ $user['aud'] ?? ''}}" class="form-control valid" placeholder="Enter Aud" autocomplete="off">
+            <input type="text" name="aud" id="aud" value="{{ $user['aud'] ?? ''}}" class="form-control valid" placeholder="Enter Audience" autocomplete="off">
         </div>        
     </div>
 
@@ -28,8 +28,9 @@
                 <input type="password" name="password" id="password" value="{{ $user['password'] ?? ''}}" class="form-control valid" placeholder="Enter Password" autocomplete="off">
                 <i class="fa fa-eye-slash text-dark" id="togglePassword" style="margin-left: -30px; cursor: pointer;"></i>
             </div>
-            <button type="button" class="btn btn-primary mt-3" id="suggestPassword">Suggest Password</button>
-            
+            <div class="text-end d-flex justify-content-end">
+                <button type="button" class="btn btn-primary mt-3" id="suggestPassword">@lang('global.suggest_password')</button>
+            </div>
         </div>
     </div>
 

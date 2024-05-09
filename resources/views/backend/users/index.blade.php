@@ -14,11 +14,13 @@
                 <div class="card-body">
                     <div class="data-fieldtable">
                         <div class="brand-listing d-flex">
-                            <h4 class="table-subtitle">Users Listing</h4>
+                            <h4 class="table-subtitle">@lang('cruds.pageTitles.user_list')</h4>
+                            @if(authUserDetail('data.user.type') == 'admin')
                             <a href="{{ route('admin.users.create') }}" class="btn btn-primary" id="addUserBtn">
                                <x-svg-icons icon="add"></x-svg-icons>
-                                @lang('global.add')
+                                @lang('cruds.pageTitles.add_user')
                             </a>
+                            @endif
                         </div>
                         <div class="table-responsive">
                             {{$dataTable->table(['class' => 'table', 'style' => 'width:100%;'])}}

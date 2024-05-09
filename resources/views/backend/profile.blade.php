@@ -38,28 +38,33 @@
                 <div class="card-body">
                     <div class="title">
                         <h5>
-                            About
+                            @lang('auth.profile.about')
                         </h5>
                     </div>
                     <div class="list-details">
                         <ul>
                             <li>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                                <span class="fw-medium mx-2 text-heading">@lang('cruds.profile.fields.username'):</span>
+                                <span class="fw-medium mx-2 text-heading">@lang('cruds.user.fields.username'):</span>
                                 <span>{{ $authUserProfile['username'] ?? null }}</span>
                             </li>
                             <li>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                                <span class="fw-medium mx-2 text-heading">@lang('cruds.profile.fields.email'):</span>
+                                <span class="fw-medium mx-2 text-heading">@lang('cruds.user.fields.email'):</span>
                                 <span>{{ $authUserProfile['email'] ?? null }}</span>
+                            </li>
+                            <li>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                <span class="fw-medium mx-2 text-heading">@lang('cruds.user.fields.aud'):</span>
+                                <span>{{ $authUserProfile['aud'] ?? null }}</span>
                             </li>
                             <li>
                                 <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M19.6339 0.366113C20.122 0.854276 20.122 1.64573 19.6339 2.13389L7.75889 14.0089C7.27074 14.497 6.47928 14.497 5.99112 14.0089L0.366113 8.38389C-0.122038 7.89576 -0.122038 7.10426 0.366113 6.61614C0.854276 6.12801 1.64573 6.12801 2.13389 6.61614L6.87501 11.3573L17.8662 0.366113C18.3543 -0.122038 19.1458 -0.122038 19.6339 0.366113Z" fill="#212529"/>
                                 </svg>
                                 </svg>
-                                <span class="fw-medium mx-2 text-heading">@lang('cruds.profile.fields.status'):</span>
-                                <span>{{ $authUserProfile['status'] ? ucfirst($authUserProfile['status']) :  null }}</span>
+                                <span class="fw-medium mx-2 text-heading">@lang('cruds.user.fields.status'):</span>
+                                <span class="{{ $authUserProfile['status'] ? $authUserProfile['status'] == 'active' ? 'text-success' : 'text-dark'  :  '' }}">{{ $authUserProfile['status'] ? ucfirst($authUserProfile['status']) :  null }}</span>
                             </li>
                         </ul>
                     </div>
@@ -69,63 +74,147 @@
         <div class="col-12 col-md-7">
             <div class="card">
                 <div class="card-body">
-                    <form class="card-form mb-3" id="changePasswordForm" method="POST" action="{{ route('admin.updatePassword') }}">
-                        @csrf
-                        <div class="title">
-                            <h5>
-                                Change Password
-                            </h5>
-                        </div>
-                        <div class="card-content">
-                            <div class="form-row">
-                                <div class="password-items">
-                                    <label>Current Password<span class="text-danger">*</span></label>
-                                    <div class="form-group p-0">
-                                        <input type="password" class="form-control" name="current_password" id="log_pass_id" placeholder="Enter current password" autocomplete="off">
-                                        <span toggle="#password-field" class="form-icon-password password_toggle eye-close">
-                                            <img src="{{ asset('backend/images/eye.svg') }}" class="img-fluid" alt="">
-                                        </span>
-                                        @error('current_password')
-                                        <span class="invalid-feedback d-block">
-                                            {{ $message }}
-                                        </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="password-items">
-                                    <label>New Password<span class="text-danger">*</span></label>
-                                    <div class="form-group p-0">
-                                        <input type="password" id="log_pass_id1" name="new_password" class="form-control" placeholder="Enter new password" autocomplete="off"/>
-                                        <span toggle="#password-field" class="form-icon-password password_toggle1 eye-close">
-                                            <img src="{{ asset('backend/images/eye.svg') }}" class="img-fluid" alt="">
-                                        </span>
-                                        @error('password')
-                                        <span class="invalid-feedback d-block">
-                                            {{ $message }}
-                                        </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="password-items">
-                                    <label>Confirm Password<span class="text-danger">*</span></label>
-                                    <div class="form-group p-0">
-                                        <input type="password"   id="log_pass_id2" name="confirm_password" class="form-control" placeholder="Enter confirm password" autocomplete="off"/>
-                                        <span toggle="#password-field" class="form-icon-password password_toggle2 eye-close">
-                                            <img src="{{ asset('backend/images/eye.svg') }}" class="img-fluid" alt="">
-                                        </span>
-                                        @error('confirm_password')
-                                        <span class="invalid-feedback d-block">
-                                            {{ $message }}
-                                        </span>
-                                        @enderror
-                                    </div>
+                    <div class="accordion profileAccordion" id="profileDetails">
+                        <div class="accordion-item">
+                            <div class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#changePassword" aria-expanded="true" aria-controls="changePassword">
+                                    @lang('global.change_password')
+                                </button>
+                            </div>
+                            <div id="changePassword" class="accordion-collapse collapse show" data-bs-parent="#profileDetails">
+                                <div class="accordion-body">
+                                    <form class="card-form mb-3" id="changePasswordForm" method="POST" action="{{ route('admin.updatePassword') }}">
+                                        @csrf
+                                        <div class="card-content">
+                                            <div class="form-row">
+                                                <div class="mb-3">
+                                                    <label for="password">@lang('auth.changePassword.fields.current_password')<span class="mailstar" style="color: red;">*</span></label>
+                                                    <div class="input-password-wrap">
+                                                        <input type="password" name="current_password"  placeholder="{{ trans('auth.changePassword.fields.current_password_placeholder') }}" class="form-control password" id="current_password" autocomplete="off">
+                                                        <i class="togglePassword fa fa-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
+                                                    </div>
+                                                    @error('current_password')
+                                                    <span class="invalid-feedback d-block">
+                                                        {{ $message }}
+                                                    </span>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="password">@lang('auth.changePassword.fields.new_password')<span class="mailstar" style="color: red;">*</span></label>
+                                                    <div class="input-password-wrap">
+                                                        <input type="password" name="new_password"  placeholder="{{ trans('auth.changePassword.fields.new_password_placeholder') }}" class="form-control password" id="new_password" autocomplete="off">
+                                                        <i class="togglePassword fa fa-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
+                                                    </div>
+                                                    <div class="text-end d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-primary mt-3" id="suggestPassword">@lang('global.suggest_password')</button>
+                                                    </div>
+                                                    @error('new_password')
+                                                    <span class="invalid-feedback d-block">
+                                                        {{ $message }}
+                                                    </span>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="password">@lang('auth.changePassword.fields.confirm_password')<span class="mailstar" style="color: red;">*</span></label>
+                                                    <div class="input-password-wrap">
+                                                        <input type="password" name="confirm_password"  placeholder="{{ trans('auth.changePassword.fields.confirm_password_placeholder') }}" class="form-control password" id="confirm_password" autocomplete="off">
+                                                        <i class="togglePassword fa fa-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
+                                                    </div>
+                                                    @error('confirm_password')
+                                                    <span class="invalid-feedback d-block">
+                                                        {{ $message }}
+                                                    </span>
+                                                    @enderror
+                                                </div>
+
+                                            </div>
+                                            <div class="save-delete">
+                                                <button type="submit" class="btn btn-primary btn-small submitBtn">@lang('global.update')</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                            <div class="save-delete">
-                                <button type="submit" class="btn btn-primary btn-small submitBtn">@lang('global.save')</button>
+                        </div>
+
+                        {{-- Change Email Address --}}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#emailUpdate" aria-expanded="false" aria-controls="emailUpdate">
+                                @lang('auth.profile.change_email_address')
+                            </button>
+                            </h2>
+                            <div id="emailUpdate" class="accordion-collapse collapse" data-bs-parent="#profileDetails">
+                                <div class="accordion-body">
+                                    <form class="card-form mb-3" id="changeEmailAddressForm" method="POST" action="{{ route('admin.updateEmail') }}">
+                                        @csrf
+                                        <div class="card-content">
+
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>@lang('auth.profile.new_email')<span class="text-danger">*</span></label>
+                                                    <input type="email" name="new_email" id="new_email" class="form-control valid" placeholder="{{ trans('auth.profile.new_email_placeholder') }}" autocomplete="off">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>@lang('auth.profile.confirm_email')<span class="text-danger">*</span></label>
+                                                    <input type="email" name="confirm_email" id="confirm_email" class="form-control valid" placeholder="{{ trans('auth.profile.confirm_email_placeholder') }}" autocomplete="off">
+                                                </div>
+                                            </div>
+
+                                            <div class="save-delete">
+                                                <button type="submit" class="btn btn-primary btn-small submitChangeEmailBtn">@lang('global.update')</button>
+                                            </div>
+
+                                        </div>
+                                    </form>
+
+                                </div>
                             </div>
                         </div>
-                    </form>
+
+                        {{--  Change Username --}}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#userNameUpdate" aria-expanded="false" aria-controls="userNameUpdate">
+                                @lang('auth.profile.change_username')
+                            </button>
+                            </h2>
+                            <div id="userNameUpdate" class="accordion-collapse collapse" data-bs-parent="#profileDetails">
+                                 <div class="accordion-body">
+                                <form class="card-form mb-3" id="changeUsernameForm" method="POST" action="{{ route('admin.updateUsername') }}">
+                                        @csrf
+                                        <div class="card-content">
+
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>@lang('auth.profile.new_username')<span class="text-danger">*</span></label>
+                                                    <input type="text" name="new_username" id="new_username" class="form-control valid" placeholder="{{ trans('auth.profile.new_username_placeholder') }}" autocomplete="off">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>@lang('auth.profile.confirm_username')<span class="text-danger">*</span></label>
+                                                    <input type="text" name="confirm_username" id="confirm_username" class="form-control valid" placeholder="{{ trans('auth.profile.confirm_username_placeholder') }}" autocomplete="off">
+                                                </div>
+                                            </div>
+
+                                            <div class="save-delete">
+                                                <button type="submit" class="btn btn-primary btn-small submitChangeUsernameBtn">@lang('global.update')</button>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -199,59 +288,304 @@
 
 @endsection
 @section('custom_JS')
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
 <script type="text/javascript">
 
     $(document).ready(function(){
 
+        // Start change password
+        $("#changePasswordForm").validate({
+           errorElement: 'span',
+           errorClass: 'validation-error-block error',
+           rules: {
+               current_password: {
+                   required: true,
+               },
+               new_password: {
+                   required: true,
+                   minlength: "{{ config('constant.password_min_length') }}",
+                   passwordPattern: true,
+               },
+               confirm_password: {
+                   required: true,
+                   equalTo: "#new_password"
+               },
+              
+           },
+           messages: {
+               required: "This field is required.",
+               confirm_password:{
+                equalTo:"The new password & confirm password must match.",
+               }
+             
+           },
+           errorPlacement: function(error, element) {
+                if ($(element).attr('type') === 'password') {
+                    error.insertAfter(element.parent('div'));
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+    
+        });
+
+       var passwordRegex = {{ config('constant.password_regex') }};
+        $.validator.addMethod("passwordPattern", function(value, element) {
+            return passwordRegex.test(value);
+        }, "{{ trans('messages.password_regex') }}");
+        
+
         $(document).on('submit', '#changePasswordForm', function (e) {
             e.preventDefault();
 
-            loaderShow();
+            if($(this).valid()){
+                loaderShow();
 
-            $('.invalid-feedback').remove();
-            $(".submitBtn").attr('disabled', true);
+                $('.validation-error-block').remove();
+                $(".submitBtn").attr('disabled', true);
 
-            var form     = $(this);
-            var formData = new FormData(this);
-            var actionUrl = form.attr('action');
+                var form     = $(this);
+                var formData = new FormData(this);
+                var actionUrl = form.attr('action');
 
-            $.ajax({
-                type: 'post',
-                url: actionUrl,
-                dataType: 'json',
-                contentType: false,
-                processData: false,
-                data: formData,
-                success: function (response) {
-                    if(response.success) {
-                        form[0].reset();
-                        toasterAlert('success',response.message);
+                $.ajax({
+                    type: 'post',
+                    url: actionUrl,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (response) {
+                        if(response.success) {
+                            form[0].reset();
+                            toasterAlert('success',response.message);
+                            setTimeout(function() {
+                                window.location.href = "{{ route('admin.login') }}";
+                            }, 2000);
+                        }
+                    },
+                    error: function (response) {
+                        loaderHide();
+                        $(".submitBtn").attr('disabled', false);
+
+                        if(response.responseJSON.error_type == 'something_error'){
+                            toasterAlert('error',response.responseJSON.error);
+                        } else {
+                            var errorLabelTitle = '';
+                            $.each(response.responseJSON.errors, function (key, item) {
+                                errorLabelTitle = '<span class="validation-error-block error">'+item[0]+'</sapn>';
+                                $(errorLabelTitle).insertAfter("input[name='"+key+"']");
+                            });
+                        }
+                    },
+                    complete: function(res){
+                        // $(".submitBtn").attr('disabled', false);
+                        loaderHide();
                     }
-                },
-                error: function (response) {
-                    loaderHide();
-                    $(".submitBtn").attr('disabled', false);
+                });
+            }
+           
+        });
+        // End change password
 
-                    if(response.responseJSON.error_type == 'something_error'){
-                        toasterAlert('error',response.responseJSON.error);
-                    } else {
-                        var errorLabelTitle = '';
-                        $.each(response.responseJSON.errors, function (key, item) {
-                            errorLabelTitle = '<span class="invalid-feedback d-block">'+item[0]+'</sapn>';
-                            $(errorLabelTitle).insertAfter("input[name='"+key+"']");
-                        });
+        // Start change email
+        $("#changeEmailAddressForm").validate({
+           errorElement: 'span',
+           errorClass: 'validation-error-block error',
+           rules: {
+               new_email: {
+                   required: true,
+                   email: true
+               },
+               confirm_email: {
+                  required: true,
+                  email: true,
+                  equalTo: "#new_email"
+               },
+              
+           },
+           messages: {
+               required: "This field is required.",
+               confirm_email:{
+                equalTo:"The new email & confirm email must match.",
+               }
+           },
+           errorPlacement: function(error, element) {
+               error.insertAfter(element);
+            }
+        });
+
+
+        $(document).on('submit', '#changeEmailAddressForm', function (e) {
+            e.preventDefault();
+
+            if($(this).valid()){
+                loaderShow();
+
+                $('.validation-error-block').remove();
+                $(".submitChangeEmailBtn").attr('disabled', true);
+
+                var form     = $(this);
+                var formData = new FormData(this);
+                var actionUrl = form.attr('action');
+
+                $.ajax({
+                    type: 'post',
+                    url: actionUrl,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (response) {
+                        if(response.success) {
+                            form[0].reset();
+                            toasterAlert('success',response.message);
+                        }
+                    },
+                    error: function (response) {
+                        loaderHide();
+
+                        if(response.responseJSON.error_type == 'something_error'){
+                            toasterAlert('error', response.responseJSON.error);
+                        }else if(response.responseJSON.error_type == 'warning'){
+                            toasterAlert('warning', response.responseJSON.error);
+                        } else {
+
+                            var errorLabelTitle = '';
+                            $.each(response.responseJSON.errors, function (key, item) {
+                                errorLabelTitle = '<span class="validation-error-block error">'+item[0]+'</sapn>';
+                                $(errorLabelTitle).insertAfter("input[name='"+key+"']");
+                            });
+                        }
+                    },
+                    complete: function(res){
+                        $(".submitChangeEmailBtn").attr('disabled', false);
+                        loaderHide();
                     }
-                },
-                complete: function(res){
-                    $(".submitBtn").attr('disabled', false);
-                    loaderHide();
-                }
+                });
+            }
+           
+        });
+        // End change email
+
+       
+       //Start change username
+       
+        $("#changeUsernameForm").validate({
+           errorElement: 'span',
+           errorClass: 'validation-error-block error',
+           rules: {
+                new_username:{
+                 required: true,
+                 usernamePattern :true,
+               },
+               confirm_username: {
+                  required: true,
+                  usernamePattern :true,
+                  equalTo: "#new_username"
+               },
+              
+           },
+           messages: {
+               required: "This field is required.",
+               confirm_email:{
+                equalTo:"The new username & confirm username must match.",
+               }
+           },
+           errorPlacement: function(error, element) {
+               error.insertAfter(element);
+            }
+        });
+
+        $(document).on('submit', '#changeUsernameForm', function (e) {
+            e.preventDefault();
+
+            if($(this).valid()){
+                loaderShow();
+
+                $('.validation-error-block').remove();
+                $(".submitChangeUsernameBtn").attr('disabled', true);
+
+                var form     = $(this);
+                var formData = new FormData(this);
+                var actionUrl = form.attr('action');
+
+                $.ajax({
+                    type: 'post',
+                    url: actionUrl,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (response) {
+                        
+                        if(response.success) {
+                            form[0].reset();
+                            toasterAlert('success',response.message);
+                        }
+                    },
+                    error: function (response) {
+                        loaderHide();
+
+                        if(response.responseJSON.error_type == 'something_error'){
+                            toasterAlert('error', response.responseJSON.error);
+                        }else if(response.responseJSON.error_type == 'warning'){
+                            toasterAlert('warning', response.responseJSON.error);
+                        } else {
+
+                            var errorLabelTitle = '';
+                            $.each(response.responseJSON.errors, function (key, item) {
+                                errorLabelTitle = '<span class="validation-error-block error">'+item[0]+'</sapn>';
+                                $(errorLabelTitle).insertAfter("input[name='"+key+"']");
+                            });
+                        }
+                    },
+                    complete: function(res){
+                        $(".submitChangeUsernameBtn").attr('disabled', false);
+                        loaderHide();
+                    }
+                });
+            }
+           
+        });
+       
+       var usernameRegex = /^[a-zA-Z0-9_]+$/;
+       $.validator.addMethod("usernamePattern", function(value, element) {
+           if(value != ''){
+            return usernameRegex.test(value);
+           }else{
+            return true;
+           }
+       }, "{{ trans('messages.username_regex')}}");
+       
+       //End change username
+    });
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const toggleButtons = document.querySelectorAll('.togglePassword');
+        toggleButtons.forEach(toggleButton => {
+            toggleButton.addEventListener('click', function (e) {
+               
+                const passwordField = this.closest('.input-password-wrap').querySelector('.password');
+             
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+               
+                this.classList.toggle('fa-eye');
             });
-
-
         });
     });
+
+
+    $(document).on('click','#suggestPassword',function(e){
+        e.preventDefault();
+        var suggestPassword = generatePassword();
+        $('#new_password').val(suggestPassword);
+    });
+
+
 
 </script>
 @endsection

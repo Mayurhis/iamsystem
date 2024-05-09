@@ -27,8 +27,29 @@ class UserDataTable extends DataTable
             ->editColumn('username',function($row){
                 return $row['username'];
             })
+            ->editColumn('status',function($row){
+                return ucwords($row['status']);
+            })
+            ->editColumn('is_confirmed',function($row){
+                return $row['is_confirmed'] == 1 ? 'Yes' : 'No';
+            })
+            ->editColumn('language',function($row){
+                return ucwords($row['language']);
+            })
+            ->editColumn('aud',function($row){
+                return $row['aud'];
+            })
+            ->editColumn('type',function($row){
+                return ucwords($row['type']);
+            })
             ->editColumn('created_at',function($row){
                 return convertDateTimeFormat($row['created_at']);
+            })
+            ->editColumn('updated_at',function($row){
+                return $row['last_login_at'] ? convertDateTimeFormat($row['updated_at']) : '';
+            })
+            ->editColumn('last_login_at',function($row){
+                return $row['last_login_at'] ? convertDateTimeFormat($row['last_login_at']) : '';
             })
             ->addColumn('action', function ($row) {
                 
@@ -39,7 +60,7 @@ class UserDataTable extends DataTable
                 }
 
                 if(!isRolePermission('user_edit')){
-                    $action .='<a href="'.route('admin.users.edit',$row['id']).'" class="action-btn bg-primary" title="edit"><i class="fi fi-rr-edit"></i></i></a>';
+                    $action .='<a href="'.route('admin.users.edit',$row['id']).'" class="action-btn bg-primary" title="Edit"><i class="fi fi-rr-edit"></i></i></a>';
                 }
                 $action .= '</div>';
 
@@ -50,6 +71,14 @@ class UserDataTable extends DataTable
     public function query()
     {
         $users = json_decode(file_get_contents($this->filePath), true);
+
+        $audString = authUserDetail('data.user.aud');
+
+        if($audString && authUserDetail('data.user.type') == 'auditor'){
+            $users = array_filter($users, function($user) use ($audString) {
+                return isset($user['aud']) && $user['aud'] == $audString;
+            });
+        }
 
         return collect($users);
     }
@@ -64,11 +93,11 @@ class UserDataTable extends DataTable
                     ->orderBy(1)                    
                     ->selectStyleSingle()
                     ->lengthMenu([
-                        [10, 25, 50, 100, -1],
-                        [10, 25, 50, 100, 'All']
+                        [20, 40, 60, 80, 100],
+                        [20, 40, 60, 80, 100]
                     ]);
     }
-
+  
 
     /**
     * Get the dataTable columns definition.
@@ -77,9 +106,21 @@ class UserDataTable extends DataTable
     {
         $columns = [];
         $columns[] = Column::make('DT_RowIndex')->title('#')->orderable(false)->searchable(false);
-        $columns[] = Column::make('username')->title(trans('cruds.user.fields.username'));
         $columns[] = Column::make('email')->title(trans('cruds.user.fields.email'));
+        $columns[] = Column::make('username')->title(trans('cruds.user.fields.username'));
+        $columns[] = Column::make('status')->title(trans('cruds.user.fields.status'));
+        $columns[] = Column::make('is_confirmed')->title(trans('cruds.user.fields.is_confirmed'));
+        $columns[] = Column::make('language')->title(trans('cruds.user.fields.language'));
+
+        if(authUserDetail('data.user.type') == 'admin'){
+            $columns[] = Column::make('aud')->title(trans('cruds.user.fields.aud'));
+            $columns[] = Column::make('type')->title(trans('cruds.user.fields.type'));
+        }
+      
         $columns[] = Column::make('created_at')->title(trans('cruds.user.fields.created_at'));
+        $columns[] = Column::make('updated_at')->title(trans('cruds.user.fields.updated_at'));
+        $columns[] = Column::make('last_login_at')->title(trans('cruds.user.fields.last_login_at'));
+
         $columns[] = Column::computed('action')->exportable(false)->printable(false)->addClass('text-center');
 
         return $columns;

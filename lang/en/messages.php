@@ -52,6 +52,8 @@ return [
     'record_updated_successfully'   => 'Record updated successfully',
     'record_deleted_successfully'   => 'Record deleted successfully',
     'password_updated_successfully' => 'Password updated successfully',
+    'updated_successfully'          => ':module_name updated successfully',
+
 
     'account_deactivate'            => 'Your account has been deactivated. Please contact the admin.',
   
@@ -66,5 +68,6 @@ return [
     ],
 
     'password_regex' => 'The password must contain uppercase letters A-Z, lowercase letters a-z, digits 0-9 and symbols -_!@#$%&*',
-    'username_regex' => 'The username must only contain letters, numbers, and underscores.'
+    'username_regex' => 'The username must only contain letters, numbers, and underscores.',
+    'dev_working' => 'Thank you for your submission! To proceed, we require access to an API',
 ];

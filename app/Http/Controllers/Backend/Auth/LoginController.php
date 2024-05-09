@@ -19,7 +19,7 @@ class LoginController extends BaseController
     public function login(Request $request)
     {
         $credentialsOnly = $request->validate([
-            'email'    => ['required','email','regex:/^(?!.*[\/]).+@(?!.*[\/]).+\.(?!.*[\/]).+$/i'],
+            'email'    => ['required','email','regex:/^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$/i'],
             'password' => ['required'],
         ]);
 
@@ -41,10 +41,10 @@ class LoginController extends BaseController
 
                         switch ($userType) {
                             case 'admin':
-                                $url = 'admin.users';
+                                $url = 'admin.users.index';
                                 break;
                             case 'auditor':
-                                $url = 'admin.users';
+                                $url = 'admin.users.index';
                                 break;
                             default:
                                 $url = 'admin.dashboard';
@@ -106,7 +106,21 @@ class LoginController extends BaseController
         return view('backend.auth.forget-password');
     }
 
-    public function submitForgotPassword(){
-        dd('working');
+    public function submitForgotPassword(Request $request){
+        $credentialsOnly = $request->validate([
+            'email'    => ['required','email','regex:/^(?!.*[\/]).+@(?!.*[\/]).+\.(?!.*[\/]).+$/i'],
+        ]);
+
+        try{
+            
+            return redirect()->back()->with('warning',trans('messages.dev_working'));
+
+            // return redirect()->back()->with('success',trans('auth.messages.forgot_password.success'));
+
+        } catch(\Exception $e){
+            // dd($e->getMessage().'->'.$e->getLine());
+            \Log::channel('iamsystemlog')->error('Error in LoginController::submitForgotPassword (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+            return redirect()->back()->with('error',trans('messages.error_message'));
+        }
     }
 }

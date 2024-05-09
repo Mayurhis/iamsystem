@@ -238,4 +238,6 @@ return [
     'upload'                                => 'Upload',
     'welcome_to'                            => 'Welcome to',
     'data_not_found'                        => 'Data not found!',
+    'suggest_password'                      => 'Suggest Password',
+
 ];

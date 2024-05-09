@@ -85,10 +85,10 @@ const swalWithBootstrapButtons = Swal.mixin({
     }
 
     function loaderShow(){
-        $('.loader-div').show();
+        $('.pageloader').show();
     }
 
     function loaderHide(){
-        $('.loader-div').hide();
+        $('.pageloader').hide();
     }
 </script>

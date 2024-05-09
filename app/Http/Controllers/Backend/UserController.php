@@ -157,6 +157,9 @@ class UserController extends BaseController
 
             if ($index !== null) {
 
+                $input['is_confirmed'] = $request->confirmed ? 1 : 0;
+                $input['confirmed_at'] = $request->confirmed ? now() : null;
+
                 $input['updated_at'] = now();
 
                 $data[$index] = array_merge($data[$index], $input);

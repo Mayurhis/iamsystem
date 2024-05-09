@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use Session;
 use Illuminate\Http\Request;
 use App\Services\IAMHttpService;
 use App\Http\Controllers\BaseController;
@@ -73,15 +74,29 @@ class ProfileController extends BaseController
 
                 if ($changePasswordResult['code'] == 200) {
 
-                    $loggedInUserDetails['password'] = $request->new_password;
-                    session()->put('logged_in_user_detail', $loggedInUserDetails);
-                    session()->save();
+                    $url = $this->getApiUrl().'/logout';
+                    $result = $this->IAMGetRequest($url);
+        
+                    if(isset($result['code']) && $result['code'] == 200){
+        
+                        auth()->logout();
+                        request()->session()->invalidate();
+                        Session::flush();
+
+                        return  $this->sendSuccessResponse(trans('messages.password_updated_successfully'));
+                    }
+                    return $this->sendErrorResponse(trans('messages.error_message'));
+
+                    // $loggedInUserDetails['password'] = $request->new_password;
+                    // session()->put('logged_in_user_detail', $loggedInUserDetails);
+                    // session()->save();
                   
-                    return $this->sendSuccessResponse(trans('messages.password_updated_successfully'));
+                    // return $this->sendSuccessResponse(trans('messages.password_updated_successfully'));
                 }
             }
 
-            return $this->sendErrorResponse('Incorrect password');
+            $errors['current_password'][] = trans('auth.password'); 
+            return $this->sendErrorResponse('Validation Error', 422, $error_type="validation_error", $errors);
 
         } catch(\Exception $e){
             // dd($e->getMessage().'->'.$e->getLine());
@@ -91,5 +106,52 @@ class ProfileController extends BaseController
         }
     }
     
+
+     public function updateEmail(Request $request){
+        $this->validate($request, [
+            'new_email'    => ['required','email','regex:/^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$/i'],
+            'confirm_email'    => ['required','email','regex:/^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$/i','same:new_email'],
+        ],[],[
+            'new_email'=> strtolower(trans('auth.profile.new_email')),
+            'confirm_email'=> strtolower(trans('auth.profile.confirm_email')),
+        ]);
+
+        try{
+
+            return $this->sendErrorResponse(trans('messages.dev_working'), 500,"warning");
+
+            // return  $this->sendSuccessResponse(trans('messages.updated_successfully',['module_name'=>'Email']));
+
+        } catch(\Exception $e){
+            // dd($e->getMessage().'->'.$e->getLine());
+            \Log::channel('iamsystemlog')->error('Error in ProfileController::updateEmail (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+
+            return $this->sendErrorResponse(trans('messages.error_message'));
+        }
+    }
+    
+    public function updateUsername(Request $request){
+        $this->validate($request, [
+            'new_username'    => ['required','string','regex:/^[a-zA-Z0-9_]+$/'],
+            'confirm_username'    => ['required','string','regex:/^[a-zA-Z0-9_]+$/','same:new_username'],
+        ],[],[
+            'new_username'=> strtolower(trans('auth.profile.new_username')),
+            'confirm_username'=> strtolower(trans('auth.profile.confirm_username')),
+        ]);
+
+        try{
+
+            return $this->sendErrorResponse(trans('messages.dev_working'), 500,"warning");
+
+            // return  $this->sendSuccessResponse(trans('messages.updated_successfully',['module_name'=>'Useranme']));
+
+        } catch(\Exception $e){
+            // dd($e->getMessage().'->'.$e->getLine());
+            \Log::channel('iamsystemlog')->error('Error in ProfileController::updateUsername (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+
+            return $this->sendErrorResponse(trans('messages.error_message'));
+        }
+    }
+
 
 }

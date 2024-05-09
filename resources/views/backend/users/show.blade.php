@@ -23,12 +23,14 @@
                         </div>
                     </div>
 
+                    @if(authUserDetail('data.user.type') == 'admin')
                     <div class="mb-3">
                         <div class="name">
                             <h4>@lang('cruds.user.fields.aud')</h4>
                             <span>{{ $user['aud'] ?? '' }}</span>
                         </div>
                     </div>
+                    @endif
 
                     <div class="mb-3">
                         <div class="name">
@@ -44,12 +46,14 @@
                         </div>
                     </div>
 
+                    @if(authUserDetail('data.user.type') == 'admin')
                     <div class="mb-3">
                         <div class="name">
                             <h4>@lang('cruds.user.fields.type')</h4>
                             <span class="text-dark">{{ isset($user['type']) ? ucwords($user['type']) : '' }}</span>
                         </div>
                     </div>
+                    @endif
 
                     <div class="mb-3">
                         <div class="name">

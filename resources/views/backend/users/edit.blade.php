@@ -42,7 +42,7 @@
    
        $("#editUserForm").validate({
            errorElement: 'span',
-           errorClass: 'error',
+           errorClass: 'validation-error-block error',
            rules: {
                aud: "required",
                email: {
@@ -65,13 +65,18 @@
                },
                confirmed:{
                 required: true,
+               },
+               language:{
+                required: true,
+                minlength: 2,
+                maxlength: 2,
                }
            },
            messages: {
                required: "This field is required.",
                password: {
-                   minlength: "Password must be at least 6 characters long"
-               }
+                   minlength: "Password must be at least {{ config('constant.password_min_length') }} characters long"
+               },
            },
            errorPlacement: function(error, element) {
                 if ($(element).attr('type') === 'password') {
@@ -86,6 +91,7 @@
        $.validator.addMethod("passwordPattern", function(value, element) {
             return passwordRegex.test(value);
         }, "{{ trans('messages.password_regex') }}");
+
    });
 
     // Submit Add User Form
@@ -93,7 +99,7 @@
         e.preventDefault();
 
         if ($(this).valid()) {
-            $('.pageloader').show();
+            loaderShow();
 
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
@@ -111,12 +117,14 @@
                 success: function (response) {                
                     if(response.success) {
                         toasterAlert('success',response.message);
-                        window.location.href = "{{ route('admin.users.index') }}";
+                        setTimeout(function() {
+                            window.location.href = "{{ route('admin.users.index') }}";
+                        }, 2000);
                     }
                 },
                 error: function (response) {
                     $(".submitBtn").attr('disabled', false);
-                    $('.pageloader').hide();
+                    loaderHide();
                     if(response.responseJSON.error_type == 'something_error'){
                         toasterAlert('error',response.responseJSON.error);
                     } else {                    
@@ -124,7 +132,7 @@
                         var passwordElements = ['password'];
                         $.each(response.responseJSON.errors, function (key, item) {
 
-                            errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
+                            errorLabelTitle = '<span class="validation-error-block error">'+item[0]+'</sapn>';
                         
                             if(passwordElements.includes(key)){
                                 var ele = $("#"+key).parent('div');
@@ -137,8 +145,8 @@
                     }
                 },
                 complete: function(res){
-                    $(".submitBtn").attr('disabled', false);
-                    $('.pageloader').hide();
+                    // $(".submitBtn").attr('disabled', false);
+                    loaderHide();
                 }
             });     
         }
@@ -146,20 +154,6 @@
     });
 
     
-</script>
-<script>
-  
-    document.addEventListener("DOMContentLoaded", () => {
-            const togglePassword = document.querySelector('#togglePassword');
-            const password = document.querySelector('#password');
-            togglePassword.addEventListener('click', function (e) {
-                // toggle the type attribute
-                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-                password.setAttribute('type', type);
-                // toggle the eye slash icon
-                this.classList.toggle('fa-eye');
-            });
-        });
 </script>
 
 @include('backend.users.partials.comman_js')
