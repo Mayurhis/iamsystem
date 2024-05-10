@@ -19,7 +19,7 @@
                     <div class="mb-3">
                         <div class="name">
                             <h4>ID</h4>
-                            <span>{{ $user['id'] ?? '' }}</span>
+                            <span>{{ $user['ID'] ?? '' }}</span>
                         </div>
                     </div>
 

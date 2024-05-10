@@ -32,7 +32,7 @@ trait HttpRequestTrait
     public function getRequest($url, $params = '')
     {
         try {
-            $headers = $this->getidFoxHeaders("get");
+            $headers = $this->getiamSystemHeaders("get");
             $client = new Client([
                 'verify' => false,
                 'handler' => $this->createLoggingHandlerStack()
@@ -64,7 +64,7 @@ trait HttpRequestTrait
     public function postRequest($url, $body = null, $params = "", $formType = '', $formData = '')
     {
         try {
-            $headers = $this->getidFoxHeaders("post");
+            $headers = $this->getiamSystemHeaders("post");
             if ($formType !== 'multipart') {
                 $headers['Content-Type'] = 'application/json';
             }
@@ -95,7 +95,7 @@ trait HttpRequestTrait
     public function patchRequest($url, $body = null, $params = "", $formType = '', $formData = '')
     {
         try {
-            $headers = $this->getidFoxHeaders("patch");
+            $headers = $this->getiamSystemHeaders("patch");
             if ($formType !== 'multipart') {
                 $headers['Content-Type'] = 'application/json';
             }
@@ -127,7 +127,7 @@ trait HttpRequestTrait
                 'handler' => $this->createLoggingHandlerStack()
             ]);
             $url = $this->getApiUrl() . $url;
-            $headers = $this->getidFoxHeaders("delete");
+            $headers = $this->getiamSystemHeaders("delete");
             $response = $client->request('DELETE', $url, [
                 'headers' => $headers,
             ]);
@@ -203,7 +203,7 @@ trait HttpRequestTrait
         return $result;
     }
 
-    private function  getidFoxHeaders($requestType){
+    private function  getiamSystemHeaders($requestType){
         $headers = [
             'accept' => 'application/json',
             'content-type'=>'application/json',

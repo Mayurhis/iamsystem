@@ -90,6 +90,14 @@ class UserController extends BaseController
                 'deleted_at' => null,
             ];
             
+
+            // Api
+            // postRequest($url, $body = null, $params = "", $formType = '', $formData = '')
+            // $url = $this->getApiUrl().'/users';
+            // $result = $this->postRequest($url, $newUser);
+
+            // dd($result);
+
             $users[] = $newUser;
             
             file_put_contents($this->filePath, json_encode($users));
@@ -118,7 +126,20 @@ class UserController extends BaseController
 
             $user = $data[$index] ?? null;
 
-            return view('backend.users.show', compact('user'));
+            //Api
+            $url = $this->getApiUrl().'/user/email/'.$user['email'];
+           
+            $apiResponse  = $this->IAMGetRequest($url);
+
+            if($apiResponse['code'] == 200){
+
+                $user = $apiResponse['response']['data']['user'];
+
+                return view('backend.users.show', compact('user'));
+            }else{
+                return abort(404);
+            }
+            
         }else{
             return abort(404);
         }
