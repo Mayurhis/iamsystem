@@ -30,7 +30,7 @@
                                         <i class="fa fa-eye-slash text-dark" id="togglePassword" style="margin-left: -30px; cursor: pointer;"></i>
                                     </div>
                                     <div class="text-end d-flex justify-content-end">
-                                        <button type="button" class="btn btn-primary mt-3" id="suggestPassword">@lang('global.suggest_password')</button>
+                                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#generatePasswordModal">@lang('global.suggest_password')</button>
                                     </div>
                                 </div>
                             </div>
@@ -48,6 +48,8 @@
         </div>
     </div>
 </div>
+
+@include('backend.partials.generate-password-modal')
 
 @endsection
 
@@ -89,6 +91,11 @@
        $.validator.addMethod("passwordPattern", function(value, element) {
             return passwordRegex.test(value);
         }, "{{ trans('messages.password_regex') }}");
+        
+        
+          $("#changeUserPasswordForm input").on("blur", function() {
+            $(this).siblings('.validation-error-block').remove();
+        });
 
    });
 

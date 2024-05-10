@@ -1658,6 +1658,10 @@ div:where(.swal2-icon).swal2-info{
     z-index: 99;
 }
 
+.backLogin{
+    color:var(--primary);
+}
+
 .form_wrapper .nextstepbtn{
     min-width: 100%;
 }
@@ -2651,6 +2655,12 @@ table.dataTable>thead>tr>th, table.dataTable>thead>tr>td{
 
 .clickRow{
     cursor: pointer;
+}
+
+.card-form  input[readonly],
+.card-form select[readonly],
+.card-form textarea[readonly]{
+    opacity: .5;
 }
 
 /* Profile-end  */

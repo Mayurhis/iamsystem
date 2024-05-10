@@ -16,6 +16,15 @@
            }
        }, "{{ trans('messages.username_regex')}}");
        
+       $.validator.addMethod("isValidJSON", function(value, element) {
+            try {
+                JSON.parse(value);
+                return true; 
+            } catch (e) {
+                return false; 
+            }
+        }, "Please enter a valid JSON data.");
+       
     });
     
      $(document).on('change', '#type', function (e) {
@@ -30,11 +39,6 @@
         }
     });
 
-    $(document).on('click','#suggestPassword',function(e){
-        e.preventDefault();
-        var suggestPassword = generatePassword();
-        $('#password').val(suggestPassword);
-    });
 
     document.addEventListener("DOMContentLoaded", () => {
         const togglePassword = document.querySelector('#togglePassword');

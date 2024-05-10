@@ -26,6 +26,7 @@
                 @enderror
               </div>
               <button type="submit" class="nbtn nextstepbtn submitBtn">@lang('global.submit')</button>
+              <a href="{{ route('admin.login') }}" class="mt-5 text-center d-block backLogin">Back To Login</a>
           </form>
         </div>
     </div>

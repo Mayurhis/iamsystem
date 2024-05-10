@@ -40,7 +40,28 @@
 
     $(document).ready(function () {
    
-       
+   
+      $('.editable').prop('disabled', true).removeAttr('placeholder');
+      $(".editable").attr("readonly", true);
+      
+      $(".editBtn").click(function() {
+          $(".editable").removeAttr("readonly");
+          $(".editable").removeAttr("disabled");
+
+          $(".editBtn").hide();
+          $(".submitBtn").show();
+          $(".cancelBtn").show();
+        });
+
+        $(".cancelBtn").click(function() {
+          $(".editable").attr("readonly", true);
+          $(".editable").attr("disabled",true);
+          
+          $(".editBtn").show();
+          $(".submitBtn").hide();
+          $(".cancelBtn").hide();
+        });
+    
         
        $("#editUserForm").validate({
            errorElement: 'span',
@@ -78,6 +99,7 @@
                },
                 metadata:{
                 required: true,
+                isValidJSON: true
                }
            },
            messages: {
@@ -166,6 +188,7 @@
                       
     });
 
+    
     
 </script>
 

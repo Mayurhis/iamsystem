@@ -106,7 +106,7 @@
                                                         <i class="togglePassword fa fa-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
                                                     </div>
                                                     <div class="text-end d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-primary mt-3" id="suggestPassword">@lang('global.suggest_password')</button>
+                                                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#generatePasswordModal">@lang('global.suggest_password')</button>
                                                     </div>
                                                     @error('new_password')
                                                     <span class="validation-error-block error">
@@ -221,6 +221,8 @@
     </div>
 
 
+    @include('backend.partials.generate-password-modal')
+
     <!-- Profile Modal  -->
     <div class="modal fade" id="profileUpdate" tabindex="-1" aria-labelledby="profileUpdateLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -294,6 +296,8 @@
 
     $(document).ready(function(){
 
+        
+        
         // Start change password
         $("#changePasswordForm").validate({
            errorElement: 'span',

@@ -11,6 +11,23 @@
     
     $(document).ready(function(){
 
+        $(document).on('click','#suggestPassword',function(e){
+            e.preventDefault();
+            var suggestPassword = generatePassword();
+            $('#generate_password').val(suggestPassword);
+        });
+        
+        $("#copyButton").click(function(){
+            var input = $("#generate_password");
+            var value = input.val();
+            if(value != ''){
+                copyTextToClipboard(value);
+                toasterAlert('success','Copied Successfully!');
+            }else{
+                 toasterAlert('error','Password is not generated!');
+            }
+        });
+    
         $(document).on('click','#logoutBtn',function(event){
             event.preventDefault();
 
@@ -56,6 +73,16 @@
         password = password.split('').sort(() => Math.random() - 0.5).join('');
 
         return password;
+    }
+
+    function copyTextToClipboard(text) {
+        navigator.clipboard.writeText(text)
+            .then(function() {
+                console.log('Text copied to clipboard');
+            })
+            .catch(function(err) {
+                console.error('Could not copy text: ', err);
+            });
     }
 
 </script>

@@ -53,6 +53,7 @@ class StoreRequest extends FormRequest
         if ($this->type === 'system' || $this === 'machine') {
             $rules['email']       = [
                 'required',
+                 new TypeEmailRule,
                 function ($attribute, $value, $fail) use ($isEmailExists) {
                     if ($isEmailExists) {
                         $fail('The email has already been taken.');

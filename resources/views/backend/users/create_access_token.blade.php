@@ -50,11 +50,11 @@
                         
                         <div class="col-12">
                             <div class="form-group">
-                                <label>Access Token<span class="text-danger">*</span></label>
+                                <label>Access Token</label>
                                 <input type="text" id="accessToken"  class="form-control valid" disabled>
                             </div>
                             <div class="text-end d-flex justify-content-end">
-                                <button type="button" class="btn btn-primary mt-3" id="copyButton">Copy</button>
+                                <button type="button" class="btn btn-primary mt-3" id="copyButtonAccessToken">Copy</button>
                             </div>
                         </div>
                     
@@ -63,7 +63,7 @@
                         
                         <div class="grid-btn float-end">
                             <input type="hidden" name="user_id"  value="{{ $user['id'] ?? ''}}">
-                            <button type="submit" class="btn btn-primary btn-regular submitBtn">@lang('global.update')</button>
+                            <button type="submit" class="btn btn-primary btn-regular submitBtn">Create Access Token</button>
                             <a href="{{ route('admin.users.index') }}" class="btn btn-regular btn-secondary">@lang('global.cancel')</a>
                         </div> 
                         
@@ -85,11 +85,15 @@
 
     $(document).ready(function () {
       
-        $("#copyButton").click(function(){
+        $("#copyButtonAccessToken").click(function(){
             var input = $("#accessToken");
             var value = input.val();
-            copyTextToClipboard(value);
-            toasterAlert('success','Copied Successfully!');
+            if(value != ''){
+                copyTextToClipboard(value);
+                toasterAlert('success','Copied Successfully!');
+            }else{
+                 toasterAlert('error','Access token is empty!');
+            }
         });
 
        $("#createAccessTokenForm").validate({
@@ -188,15 +192,6 @@
         }           
     });
 
-function copyTextToClipboard(text) {
-    navigator.clipboard.writeText(text)
-        .then(function() {
-            console.log('Text copied to clipboard');
-        })
-        .catch(function(err) {
-            console.error('Could not copy text: ', err);
-        });
-}
 
 </script>
 

@@ -29,6 +29,9 @@
     </div>
 </div>
 
+
+@include('backend.partials.generate-password-modal')
+
 @endsection
 
 @section('custom_JS')
@@ -40,7 +43,6 @@
 
     $(document).ready(function () {
       
-
        $("#addUserForm").validate({
            errorElement: 'span',
            errorClass: 'validation-error-block error',
@@ -75,6 +77,7 @@
                },
                 metadata:{
                 required: true,
+                isValidJSON: true
                }
            },
            messages: {
