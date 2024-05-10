@@ -21,6 +21,7 @@
         </div>
     </div>
     
+    @if(request()->route()->getName() == 'admin.users.create')
     <div class="col-6">
         <div class="form-group">
             <label>@lang('cruds.user.fields.password')<span class="text-danger">*</span></label>
@@ -33,6 +34,7 @@
             </div>
         </div>
     </div>
+    @endif
 
     <div class="col-6">
         <div class="form-group">
@@ -89,9 +91,35 @@
     <div class="col-6">
         <div class="form-group">
             <label>@lang('cruds.user.fields.language')<span class="text-danger">*</span></label>
-            <input type="text" name="language" id="language" value="{{ $user['language'] ?? ''}}" class="form-control valid" placeholder="Enter Language">
+            @php
+              $selectedLang = '';
+              if(isset($user)){
+                $selectedLang = $user['language'];
+              }
+            @endphp
+            <select  class="form-control" name="language" id="language">
+                <option value="">Select Language</option>
+                @foreach($languages as $language)
+                    <option value="{{$language->code}}" {{ $language->code == $selectedLang ? 'selected' : ''}}>{{ strtoupper($language->code) }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
+    
+    <div class="col-6">
+        <div class="form-group">
+            <label>@lang('cruds.user.fields.role')<span class="text-danger">*</span></label>
+            <input type="text" name="role" id="role" value="{{ $user['role'] ?? ''}}" class="form-control valid" placeholder="Enter Role" autocomplete="off">
+        </div>
+    </div>
+    
+     <div class="col-6">
+        <div class="form-group">
+            <label>@lang('cruds.user.fields.metadata')<span class="text-danger">*</span></label>
+            <input type="text" name="metadata" id="metadata" value="{{ $user['metadata'] ?? ''}}" class="form-control valid" placeholder="Enter Metadata" autocomplete="off">
+        </div>
+    </div>
+    
 
 </div>
 

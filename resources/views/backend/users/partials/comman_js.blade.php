@@ -17,6 +17,18 @@
        }, "{{ trans('messages.username_regex')}}");
        
     });
+    
+     $(document).on('change', '#type', function (e) {
+        e.preventDefault();
+        
+        var typeVal = $(this).val();
+        
+        if((typeVal == 'system') || (typeVal == 'machine')){
+            $('#email').attr('type','text');
+        }else{
+            $('#email').attr('type','email');
+        }
+    });
 
     $(document).on('click','#suggestPassword',function(e){
         e.preventDefault();
@@ -27,13 +39,16 @@
     document.addEventListener("DOMContentLoaded", () => {
         const togglePassword = document.querySelector('#togglePassword');
         const password = document.querySelector('#password');
-        togglePassword.addEventListener('click', function (e) {
-            // toggle the type attribute
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-            // toggle the eye slash icon
-            this.classList.toggle('fa-eye');
-        });
+        if(togglePassword){
+            togglePassword.addEventListener('click', function (e) {
+                // toggle the type attribute
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                // toggle the eye slash icon
+                this.classList.toggle('fa-eye');
+            });    
+        }
+        
     });
 
 </script>

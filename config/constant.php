@@ -56,6 +56,7 @@ return [
         'merchant',
         'system',
         'admin',
+        'machine'
     ],
     
 ];

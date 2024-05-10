@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use App\Rules\ValidUsername;
-
+use App\Rules\TypeEmailRule;
 
 class UpdateRequest extends FormRequest
 {
@@ -52,16 +52,33 @@ class UpdateRequest extends FormRequest
 
         $rules['aud']         = ['required'];
 
-        $rules['email']       = [
-            'required',
-            'email',
-            'regex:/^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$/i',
-            function ($attribute, $value, $fail) use ($isEmailExists) {
-                if ($isEmailExists) {
-                    $fail('The email has already been taken.');
+        if ($this->type === 'system' || $this === 'machine') {
+            
+            $rules['email']       = [
+                'required',
+                new TypeEmailRule,
+                function ($attribute, $value, $fail) use ($isEmailExists) {
+                    if ($isEmailExists) {
+                        $fail('The email has already been taken.');
+                    }
                 }
-            }
-        ];
+            ];
+            
+        }else{
+            
+            $rules['email']       = [
+                'required',
+                'email',
+                'regex:/^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$/i',
+                function ($attribute, $value, $fail) use ($isEmailExists) {
+                    if ($isEmailExists) {
+                        $fail('The email has already been taken.');
+                    }
+                }
+            ];
+            
+        }
+       
 
         $rules['username']    = [
             'nullable',
@@ -73,13 +90,14 @@ class UpdateRequest extends FormRequest
             new ValidUsername
         ];
 
-        $rules['password']    = [
+      /*  $rules['password']    = [
             'required',
             'string',
             'min:'.config('constant.password_min_length'),
             'regex:'.config('constant.password_regex')
         ];
-
+        */
+        
         $usersType = implode(',',config('constant.userType'));
         $rules['type']        = ['required','in:'.$usersType];
 
@@ -88,6 +106,9 @@ class UpdateRequest extends FormRequest
 
         $rules['confirmed']   = ['required'];
         $rules['language']   = ['required'];
+        
+        $rules['role']   = ['required'];
+        $rules['metadata']   = ['required'];
 
         return $rules;
     }

@@ -1,10 +1,10 @@
 @extends('layouts.app')
-@section('title', trans('cruds.pageTitles.add_user'))
+@section('title', 'Change User Password')
 
 @section('custom_CSS')
 @endsection
 
-@section('headerTitle',trans('cruds.pageTitles.add_user'))
+@section('headerTitle','Change User Password')
 
 @section('main-content')
 
@@ -15,13 +15,33 @@
             <div class="card-body">
                 <div class="title brand-listing">
                     <h5 class="table-subtitle">
-                        @lang('cruds.pageTitles.add_user')
+                        Change User Password
                     </h5>
                 </div>
                 <div class="card-content">
-                    <form class="card-form mb-3" id="addUserForm" method="POST" action="{{route('admin.users.store')}}">
+                    <form class="card-form mb-3" id="changeUserPasswordForm" method="POST" action="{{ route('admin.users.submitChangeUserPassword', $user['id']) }}">
                         @csrf
-                        @include('backend.users._form') 
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>@lang('cruds.user.fields.password')<span class="text-danger">*</span></label>
+                                    <div class="input-password-wrap">
+                                        <input type="password" name="password" id="password" value="{{ $user['password'] ?? ''}}" class="form-control valid" placeholder="Enter Password" autocomplete="off">
+                                        <i class="fa fa-eye-slash text-dark" id="togglePassword" style="margin-left: -30px; cursor: pointer;"></i>
+                                    </div>
+                                    <div class="text-end d-flex justify-content-end">
+                                        <button type="button" class="btn btn-primary mt-3" id="suggestPassword">@lang('global.suggest_password')</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="grid-btn float-end">
+                            <input type="hidden" name="user_id"  value="{{ $user['id'] ?? ''}}">
+                            <button type="submit" class="btn btn-primary btn-regular submitBtn">@lang('global.update')</button>
+                            
+                            <a href="{{ route('admin.users.index') }}" class="btn btn-regular btn-secondary">@lang('global.cancel')</a>
+                        </div> 
                     </form>
                 </div>
             </div>
@@ -35,47 +55,20 @@
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
 @parent
-
 <script type="text/javascript">
 
     $(document).ready(function () {
-      
-
-       $("#addUserForm").validate({
+   
+       $("#changeUserPasswordForm").validate({
            errorElement: 'span',
            errorClass: 'validation-error-block error',
            rules: {
-               aud: "required",
-               email: {
-                   required: true,
-                //   email: true
-               },
-               username:{
-                usernamePattern :true,
-               },
                password: {
                    required: true,
                    minlength: "{{ config('constant.password_min_length') }}",
                    passwordPattern: true,
                },
-               type:{
-                   required: true,
-               },
-               status:{
-                   required: true,
-               },
-               confirmed:{
-                required: true,
-               },
-               language:{
-                required: true,
-               },
-                role:{
-                required: true,
-               },
-                metadata:{
-                required: true,
-               }
+               
            },
            messages: {
                required: "This field is required.",
@@ -89,28 +82,32 @@
                 } else {
                     error.insertAfter(element);
                 }
-            }
-    
+            },
        });
+
+       var passwordRegex = {{ config('constant.password_regex') }};
+       $.validator.addMethod("passwordPattern", function(value, element) {
+            return passwordRegex.test(value);
+        }, "{{ trans('messages.password_regex') }}");
 
    });
 
     // Submit Add User Form
-    $(document).on('submit', '#addUserForm', function (e) {
+    $(document).on('submit', '#changeUserPasswordForm', function (e) {
         e.preventDefault();
 
         if ($(this).valid()) {
-
             loaderShow();
 
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
 
+            var $this = $(this);
             var formData = new FormData(this);
 
             $.ajax({
-                type: 'post',
-                url: "{{route('admin.users.store')}}",
+                type: $this.attr('method'),
+                url: $this.attr('action'),
                 dataType: 'json',
                 contentType: false,
                 processData: false,
@@ -132,7 +129,7 @@
                         var errorLabelTitle = '';
                         var passwordElements = ['password'];
                         $.each(response.responseJSON.errors, function (key, item) {
-                            
+
                             errorLabelTitle = '<span class="validation-error-block error">'+item[0]+'</sapn>';
                         
                             if(passwordElements.includes(key)){
@@ -141,7 +138,6 @@
                             }else{
                                 $(errorLabelTitle).insertAfter("#"+key);
                             }
-                           
                                             
                         });
                     }
@@ -150,11 +146,12 @@
                     // $(".submitBtn").attr('disabled', false);
                     loaderHide();
                 }
-            });         
-
-        }           
+            });     
+        }
+                      
     });
 
+    
 </script>
 
 @include('backend.users.partials.comman_js')

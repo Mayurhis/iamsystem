@@ -34,18 +34,26 @@
     });
 
 
-    function generatePassword() {
-        var pattern = {{ config('constant.password_regex') }};
-        var password = '';
-
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$-_!@#$%&*';
-
-        do {
-            password = '';
-            for (var i = 0; i < 12; i++) { 
-                password += characters.charAt(Math.floor(Math.random() * characters.length));
-            }
-        } while (!pattern.test(password)); 
+    function generatePassword(length=12) {
+        const uppercaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const lowercaseLetters = 'abcdefghijklmnopqrstuvwxyz';
+        const digits = '0123456789';
+        const symbols = '-_!@#$%&*';
+        
+        const allCharacters = uppercaseLetters + lowercaseLetters + digits + symbols;
+        
+        let password = '';
+        password += uppercaseLetters[Math.floor(Math.random() * uppercaseLetters.length)];
+        password += lowercaseLetters[Math.floor(Math.random() * lowercaseLetters.length)];
+        password += digits[Math.floor(Math.random() * digits.length)];
+        password += symbols[Math.floor(Math.random() * symbols.length)];
+        
+        for (let i = 0; i < length-4; i++) {
+            const randomIndex = Math.floor(Math.random() * allCharacters.length);
+            password += allCharacters[randomIndex];
+        }
+        
+        password = password.split('').sort(() => Math.random() - 0.5).join('');
 
         return password;
     }

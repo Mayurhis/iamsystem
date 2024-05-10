@@ -57,8 +57,8 @@ return [
     'loginPage'=>[
         'title' => 'Admin Login',
         'fields' => [
-            'email' => 'Email Address',
-            'email_placeholder' => 'Enter Email Address',
+            'email' => 'Username or Email Address',
+            'email_placeholder' => 'Enter Username or Email Address',
 
             'password' => 'Password',
             'password_placeholder' => 'Enter Password',

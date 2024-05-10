@@ -14,6 +14,14 @@ trait HttpRequestTrait
 {
     public $apiUrl;
 
+    public function getIAMCredentials($request): array
+    {
+        $credential = $request->input('username');
+        $credentialType = filter_var($credential, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $result = [$credentialType => $request->input('username'), 'password' => $request->input('password')];
+        return $result;
+    }
+    
     public function getApiUrl()
     {
         $this->apiUrl = config('constant.IAMSystemApiUrl');

@@ -2504,6 +2504,7 @@ select {
 
 .error,.validation-error-block{
     color: red;
+    font-size: 12px;
 }
 
 /* page Loader */
@@ -2514,7 +2515,7 @@ select {
     z-index: 9999;
     width: 100%;
     height: 100%;
-    background-color: #000000f2;
+    background-color: #000000ba;
 }
 .pageloader .loader{
     position: absolute;
@@ -2598,6 +2599,8 @@ select {
 .profileAccordion .accordion-item {
     padding: 0 0 20px;
     border: none;
+    border-bottom: 1px solid #71717140;
+    margin-bottom: 20px;
 }
 
 .profileAccordion .accordion-item .accordion-button {
@@ -2644,6 +2647,10 @@ table.dataTable>thead>tr>th, table.dataTable>thead>tr>td{
 
 .dataTables_wrapper .dataTables_length select{
     border: 1px solid #e7e7e7;
+}
+
+.clickRow{
+    cursor: pointer;
 }
 
 /* Profile-end  */

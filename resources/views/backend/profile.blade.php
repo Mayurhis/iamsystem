@@ -94,7 +94,7 @@
                                                         <i class="togglePassword fa fa-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
                                                     </div>
                                                     @error('current_password')
-                                                    <span class="invalid-feedback d-block">
+                                                    <span class="validation-error-block error">
                                                         {{ $message }}
                                                     </span>
                                                     @enderror
@@ -109,7 +109,7 @@
                                                         <button type="button" class="btn btn-primary mt-3" id="suggestPassword">@lang('global.suggest_password')</button>
                                                     </div>
                                                     @error('new_password')
-                                                    <span class="invalid-feedback d-block">
+                                                    <span class="validation-error-block error">
                                                         {{ $message }}
                                                     </span>
                                                     @enderror
@@ -122,7 +122,7 @@
                                                         <i class="togglePassword fa fa-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
                                                     </div>
                                                     @error('confirm_password')
-                                                    <span class="invalid-feedback d-block">
+                                                    <span class="validation-error-block error">
                                                         {{ $message }}
                                                     </span>
                                                     @enderror
@@ -489,7 +489,7 @@
            },
            messages: {
                required: "This field is required.",
-               confirm_email:{
+               confirm_username:{
                 equalTo:"The new username & confirm username must match.",
                }
            },

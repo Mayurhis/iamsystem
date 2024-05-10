@@ -40,6 +40,8 @@
 
     $(document).ready(function () {
    
+       
+        
        $("#editUserForm").validate({
            errorElement: 'span',
            errorClass: 'validation-error-block error',
@@ -47,16 +49,18 @@
                aud: "required",
                email: {
                    required: true,
-                   email: true
+                //   email:true,
                },
                username:{
                 usernamePattern :true,
                },
-               password: {
-                   required: true,
-                   minlength: "{{ config('constant.password_min_length') }}",
-                   passwordPattern: true,
-               },
+               
+            //   password: {
+            //       required: true,
+            //       minlength: "{{ config('constant.password_min_length') }}",
+            //       passwordPattern: true,
+            //   },
+               
                type:{
                    required: true,
                },
@@ -68,8 +72,12 @@
                },
                language:{
                 required: true,
-                minlength: 2,
-                maxlength: 2,
+               },
+                role:{
+                required: true,
+               },
+                metadata:{
+                required: true,
                }
            },
            messages: {
@@ -91,6 +99,11 @@
        $.validator.addMethod("passwordPattern", function(value, element) {
             return passwordRegex.test(value);
         }, "{{ trans('messages.password_regex') }}");
+        
+
+        $("#editUserForm input, #editUserForm select").on("blur change", function() {
+            $(this).siblings('.validation-error-block').remove();
+        });
 
    });
 

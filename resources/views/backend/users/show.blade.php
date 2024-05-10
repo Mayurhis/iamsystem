@@ -57,6 +57,13 @@
 
                     <div class="mb-3">
                         <div class="name">
+                            <h4>@lang('cruds.user.fields.role')</h4>
+                            <span class="text-dark">{{ isset($user['role']) ? ucwords($user['role']) : '' }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="name">
                             <h4>@lang('cruds.user.fields.is_confirmed')</h4>
                             <span class="text-dark">{{ isset($user['is_confirmed']) ? $user['is_confirmed'] == 1 ? 'Yes' : 'No' : '' }}</span>
                         </div>
@@ -73,6 +80,13 @@
                         <div class="name">
                             <h4>@lang('cruds.user.fields.language')</h4>
                             <span class="text-dark">{{ isset($user['language']) ? ucwords($user['language']) : '' }}</span>
+                        </div>
+                    </div>
+                    
+                     <div class="mb-3">
+                        <div class="name">
+                            <h4>@lang('cruds.user.fields.metadata')</h4>
+                            <span class="text-dark">{{ isset($user['metadata']) ? $user['metadata'] : '' }}</span>
                         </div>
                     </div>
                   

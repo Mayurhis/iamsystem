@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use App\Rules\ValidUsername;
+use App\Rules\TypeEmailRule;
 
 class StoreRequest extends FormRequest
 {
@@ -48,16 +49,29 @@ class StoreRequest extends FormRequest
         $rules = [];
 
         $rules['aud']         = ['required'];
-        $rules['email']       = [
-            'required',
-            'email',
-            'regex:/^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$/i',
-            function ($attribute, $value, $fail) use ($isEmailExists) {
-                if ($isEmailExists) {
-                    $fail('The email has already been taken.');
+        
+        if ($this->type === 'system' || $this === 'machine') {
+            $rules['email']       = [
+                'required',
+                function ($attribute, $value, $fail) use ($isEmailExists) {
+                    if ($isEmailExists) {
+                        $fail('The email has already been taken.');
+                    }
                 }
-            }
-        ];
+            ];
+        }else{
+             $rules['email']       = [
+                'required',
+                'email',
+                'regex:/^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$/i',
+                function ($attribute, $value, $fail) use ($isEmailExists) {
+                    if ($isEmailExists) {
+                        $fail('The email has already been taken.');
+                    }
+                }
+            ];
+        }
+       
         $rules['username']    = [
             'nullable',
             function ($attribute, $value, $fail) use ($isUsernameExists) {
@@ -83,6 +97,9 @@ class StoreRequest extends FormRequest
 
         $rules['confirmed']   = ['required'];
         $rules['language']   = ['required'];
+        
+        $rules['role']   = ['required'];
+        $rules['metadata']   = ['required'];
 
         return $rules;
     }

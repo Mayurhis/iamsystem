@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Gate;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-
+use Illuminate\Support\Str;
 
 class UserDataTable extends DataTable
 {
@@ -23,6 +23,12 @@ class UserDataTable extends DataTable
     {
         return datatables()
             ->of($query)
+            ->setRowClass(function ($row) {
+                return 'clickRow';
+            })
+            ->setRowId(function ($row) {
+                return $row['id'];
+            })
             ->addIndexColumn()
             ->editColumn('username',function($row){
                 return $row['username'];
@@ -34,7 +40,7 @@ class UserDataTable extends DataTable
                 return $row['is_confirmed'] == 1 ? 'Yes' : 'No';
             })
             ->editColumn('language',function($row){
-                return ucwords($row['language']);
+                return strtoupper($row['language']);
             })
             ->editColumn('aud',function($row){
                 return $row['aud'];
@@ -42,22 +48,34 @@ class UserDataTable extends DataTable
             ->editColumn('type',function($row){
                 return ucwords($row['type']);
             })
+            
+            ->editColumn('metadata',function($row){
+                return  $row['metadata'] ? Str::limit($row['metadata'], 50) : '';
+            })
             ->editColumn('created_at',function($row){
                 return convertDateTimeFormat($row['created_at']);
             })
             ->editColumn('updated_at',function($row){
-                return $row['last_login_at'] ? convertDateTimeFormat($row['updated_at']) : '';
+                return $row['updated_at'] ? convertDateTimeFormat($row['updated_at']) : '';
             })
             ->editColumn('last_login_at',function($row){
                 return $row['last_login_at'] ? convertDateTimeFormat($row['last_login_at']) : '';
             })
+            
+           
+            
             ->addColumn('action', function ($row) {
                 
                 $action = '<div class="action-grid d-flex gap-2">';
 
-                if(!isRolePermission('user_view')){
-                    $action .='<a href="'.route('admin.users.show',$row['id']).'" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>';
+                if(authUserDetail('data.user.type') == 'admin'){
+                    $action .='<a href="'.route('admin.users.showCreateAccessToken',$row['id']).'" class="action-btn bg-dark" title="Create Access Token"><i class="fa fa-unlock" aria-hidden="true"></i></a>';
+                    $action .='<a href="'.route('admin.users.changeUserPassword',$row['id']).'" class="action-btn bg-dark" title="Change User Password"><i class="fa fa-lock" aria-hidden="true"></i></a>';
                 }
+                
+                /*if(!isRolePermission('user_view')){
+                    $action .='<a href="'.route('admin.users.show',$row['id']).'" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>';
+                }*/
 
                 if(!isRolePermission('user_edit')){
                     $action .='<a href="'.route('admin.users.edit',$row['id']).'" class="action-btn bg-primary" title="Edit"><i class="fi fi-rr-edit"></i></i></a>';
@@ -67,6 +85,7 @@ class UserDataTable extends DataTable
                 return $action;
             });
     }
+    
 
     public function query()
     {
@@ -116,12 +135,17 @@ class UserDataTable extends DataTable
             $columns[] = Column::make('aud')->title(trans('cruds.user.fields.aud'));
             $columns[] = Column::make('type')->title(trans('cruds.user.fields.type'));
         }
-      
+        
+        
+        $columns[] = Column::make('metadata')->title(trans('cruds.user.fields.metadata'));
+        
         $columns[] = Column::make('created_at')->title(trans('cruds.user.fields.created_at'));
         $columns[] = Column::make('updated_at')->title(trans('cruds.user.fields.updated_at'));
         $columns[] = Column::make('last_login_at')->title(trans('cruds.user.fields.last_login_at'));
 
-        $columns[] = Column::computed('action')->exportable(false)->printable(false)->addClass('text-center');
+        if(authUserDetail('data.user.type') == 'admin'){
+            $columns[] = Column::computed('action')->exportable(false)->printable(false)->addClass('text-center');
+        }
 
         return $columns;
     }

@@ -16,12 +16,19 @@ class LoginController extends BaseController
         return view('backend.auth.login');
     }
 
+
     public function login(Request $request)
     {
         $credentialsOnly = $request->validate([
-            'email'    => ['required','email','regex:/^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$/i'],
+            // 'email'    => ['required','email','regex:/^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$/i'],
+            'username'    => ['required'],
             'password' => ['required'],
+        ],[],
+        [
+          'username'=>'username or email'
         ]);
+        
+        $credentialsOnly = $this->getIAMCredentials($request);
 
         try{
 
@@ -35,9 +42,6 @@ class LoginController extends BaseController
                     if($userType && in_array($userType,config('constant.user_roles'))){
                         $this->saveLoggedInUserDetailInSession(array_merge($result['response'], ['password' => $request->password]));
 
-                        // if ($request->has('remember_me')) {
-                        //     Cookie::queue('remember_token', $result['response']['data']['access_token'], config('constant.remember_me_expire_time')); // 1 year expiration
-                        // }
 
                         switch ($userType) {
                             case 'admin':

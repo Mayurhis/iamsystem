@@ -19,8 +19,8 @@
               </div>          
               <div class="mb-3">
                 <label for="email" class="form-label">@lang('auth.loginPage.fields.email')<span class="mailstar" style="color: red;">*</span></label>
-                <input type="email" name="email" class="form-control" placeholder="{{ trans('auth.loginPage.fields.email_placeholder')}}" id="email" aria-describedby="emailHelp">
-                @error('email')
+                <input type="text" name="username" class="form-control" placeholder="{{ trans('auth.loginPage.fields.email_placeholder')}}" id="email" aria-describedby="emailHelp">
+                @error('username')
                 <span class="invalid-feedback d-block">
                     {{ $message }}
                 </span>

@@ -118,4 +118,26 @@
 @parent
 {!! $dataTable->scripts() !!}
 
+<script type="text/javascript">
+    
+    @if(!isRolePermission('user_view'))
+    $(document).on('click','.clickRow',function(e){
+        if ($(e.target).closest('td .action-grid').length) {
+            return;
+        }
+        
+        e.preventDefault();
+        var rowId = $(this).attr('id');
+        
+        //  console.log('hello',rowId);
+         
+        var url = "{{ route('admin.users.show', ':rowId') }}";
+        url = url.replace(':rowId', rowId);
+        
+        window.location.href = url;
+       
+    });
+    @endif
+    
+</script>
 @endsection

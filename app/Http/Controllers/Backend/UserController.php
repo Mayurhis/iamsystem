@@ -44,7 +44,10 @@ class UserController extends BaseController
     {
         abort_if(isRolePermission('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('backend.users.create');     
+        $languageJson = storage_path('app/languages.json');
+        $languages = json_decode(file_get_contents($languageJson));
+        
+        return view('backend.users.create',compact('languages'));     
     }
 
     /**
@@ -66,7 +69,7 @@ class UserController extends BaseController
             $newUser = [
                 'id'            => $newUserId,
                 'aud'           => $request->aud,
-                'role'          => 'customer',
+                'role'          => $request->role ?? null,
                 'email'         => $request->email,
                 'username'      => $request->username,
                 'password'      => $request->password,
@@ -80,7 +83,7 @@ class UserController extends BaseController
                 'email_change_token'         => null,
                 'email_change_sent_at'       => null,
                 'last_login_at'              => null,
-                'metadata'                   => null,
+                'metadata'                   => $request->metadata ?? null,
                 'status'                     => $request->status,
                 'created_at' => now(),
                 'updated_at' => null,
@@ -135,8 +138,11 @@ class UserController extends BaseController
         if ($index !== null) {
 
             $user = $data[$index] ?? null;
+            
+            $languageJson = storage_path('app/languages.json');
+            $languages = json_decode(file_get_contents($languageJson));
 
-            return view('backend.users.edit', compact('user'));
+            return view('backend.users.edit', compact('user','languages'));
         }else{
             return abort(404);
         }
@@ -151,7 +157,7 @@ class UserController extends BaseController
 
             $data = json_decode(file_get_contents($this->filePath), true);
 
-            $input = $request->except(['_token','_method']);            ;
+            $input = $request->except(['_token','_method','user_id']);
 
             $index = findIndexById($data, $id);
 
@@ -181,5 +187,109 @@ class UserController extends BaseController
     public function destroy(string $id)
     {
         //
+    }
+    
+    public function changeUserPassword($id){
+        
+        $data = json_decode(file_get_contents($this->filePath), true);
+        
+        $index = findIndexById($data, $id);
+
+        if ($index !== null) {
+
+            $user = $data[$index] ?? null;
+            
+            $languageJson = storage_path('app/languages.json');
+            $languages = json_decode(file_get_contents($languageJson));
+
+            return view('backend.users.change-user-password', compact('user'));
+        }else{
+            return abort(404);
+        }
+    }
+    
+    public function submitChangeUserPassword(Request $request,$id){
+        $request->validate([
+            'password'=>[
+                'required',
+                'string',
+                'min:'.config('constant.password_min_length'),
+                'regex:'.config('constant.password_regex')
+            ]
+        ],[
+            'password.regex' => trans('messages.password_regex'),
+        ]);
+        
+        try{                
+
+            $data = json_decode(file_get_contents($this->filePath), true);
+
+            $input = $request->except(['_token','_method','user_id']);
+
+            $index = findIndexById($data, $id);
+
+            if ($index !== null) {
+
+                $input['password'] = $request->password;
+
+                $input['updated_at'] = now();
+
+                $data[$index] = array_merge($data[$index], $input);
+                
+                file_put_contents($this->filePath, json_encode($data));
+
+                return $this->sendSuccessResponse('User Password Updated Successfully!');
+            }
+
+        } catch (\Exception $e) {
+            // dd($e);
+            $this->sendErrorResponse(trans('messages.error_message'),500);
+        }
+    }
+    
+    
+    public function showCreateAccessToken($id){
+        $data = json_decode(file_get_contents($this->filePath), true);
+        
+        $index = findIndexById($data, $id);
+
+        if ($index !== null) {
+
+            $user = $data[$index] ?? null;
+
+            return view('backend.users.create_access_token', compact('user'));
+        }else{
+            return abort(404);
+        }
+    }
+    
+    public function submitAccessToken(Request $request, $id){
+        
+        
+        $credentialsOnly = $request->validate([
+            'email'    => ['required','email','regex:/^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$/i'],
+            'password' => ['required'],
+        ]);
+        
+         
+        try{                
+
+            $url = $this->getApiUrl().'/login';
+            $result = $this->IAMPostRequest($url, $credentialsOnly);
+
+            if(isset($result['code']) && $result['code'] == 200){
+                
+                if($result['response']){
+                    $access_token = $result['response']['data']['access_token'];
+                    return $this->sendSuccessResponse('Access Token Generated Successfully!',['access_token'=>$access_token]);
+                }
+            }
+            
+           return $this->sendErrorResponse('Invalid Credentials',500);
+        
+        } catch (\Exception $e) {
+            // dd($e);
+            return $this->sendErrorResponse(trans('messages.error_message'),500);
+        }
     }
 }
