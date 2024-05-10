@@ -190,6 +190,7 @@ class UserController extends BaseController
     }
     
     public function changeUserPassword($id){
+        abort_if(isRolePermission('user_change_password'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         
         $data = json_decode(file_get_contents($this->filePath), true);
         
@@ -249,6 +250,7 @@ class UserController extends BaseController
     
     
     public function showCreateAccessToken($id){
+        abort_if(isRolePermission('user_create_access_token'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $data = json_decode(file_get_contents($this->filePath), true);
         
         $index = findIndexById($data, $id);

@@ -16,10 +16,12 @@ return [
        4 => 'user_edit',
        5 => 'user_delete',
        6 => 'user_view',
+       7 => 'user_change_password',
+       8 => 'user_create_access_token',
     ],
 
     'role_permission'=>[
-        'admin' => [1,2,3,4,6],
+        'admin' => [1,2,3,4,6,7,8],
         'auditor' => [1,2,3,6],
     ],
 
