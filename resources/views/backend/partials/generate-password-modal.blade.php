@@ -12,9 +12,9 @@
 
                    
                     <div class="form-fields-item d-flex mb-4 gap-3">
-                        <input type="text" name="generate_password" id="generate_password" value="" class="form-control valid" >
+                        <input type="text" name="generate_password" id="generate_password" value="" class="form-control valid" disabled>
                          <div class="text-end d-flex justify-content-end">
-                            <button type="button" class="btn btn-primary ml-2" id="copyButton">Copy</button>
+                            <button type="button" class="btn btn-primary ml-2" id="copyButton" disabled>Copy</button>
                         </div>
                     </div>
                     

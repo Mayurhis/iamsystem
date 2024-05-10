@@ -14,6 +14,14 @@
         $(document).on('click','#suggestPassword',function(e){
             e.preventDefault();
             var suggestPassword = generatePassword();
+            
+            if(suggestPassword != ''){
+                $('#copyButton').prop('disabled', false);
+            }else{
+                $('#copyButton').prop('disabled', true);
+            }
+            
+            
             $('#generate_password').val(suggestPassword);
         });
         
@@ -22,9 +30,9 @@
             var value = input.val();
             if(value != ''){
                 copyTextToClipboard(value);
-                toasterAlert('success','Copied Successfully!');
+                //toasterAlert('success','Copied Successfully!');
             }else{
-                 toasterAlert('error','Password is not generated!');
+                 //toasterAlert('error','Password is not generated!');
             }
         });
     
