@@ -55,7 +55,7 @@ class LoginController extends BaseController
                                 break;
                         }
                     }else{
-                        return redirect()->route('admin.login')->with('error',trans('auth.failed'));
+                        return redirect()->route('admin.login')->with('error',trans('auth.failed_unauthorised'));
                     }
                 }
 

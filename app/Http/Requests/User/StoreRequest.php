@@ -50,7 +50,7 @@ class StoreRequest extends FormRequest
 
         $rules['aud']         = ['required'];
         
-        if ($this->type === 'system' || $this === 'machine') {
+        if ($this->type === 'system' || $this->type === 'machine') {
             $rules['email']       = [
                 'required',
                  new TypeEmailRule,
