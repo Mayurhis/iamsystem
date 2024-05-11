@@ -3,13 +3,22 @@
 namespace App\Http\Controllers\Backend\Auth;
 
 use Session;
+
 use Illuminate\Http\Request;
+use App\Services\IAMHttpService;
 use Illuminate\Support\Facades\Cookie;
 use App\Http\Controllers\BaseController;
 
 
 class LoginController extends BaseController
 {
+
+    public $iam;
+
+    public function __construct()
+    {
+        $this->iam = new IAMHttpService();
+    }
 
     public function index()
     {
@@ -28,12 +37,10 @@ class LoginController extends BaseController
           'username'=>'username or email'
         ]);
         
-        $credentialsOnly = $this->getIAMCredentials($request);
+        $credentialsOnly = $this->iam->checkLoginRequestCredentials($request);
 
         try{
-
-            $url = $this->getApiUrl().'/login';
-            $result = $this->IAMPostRequest($url, $credentialsOnly);
+            $result = $this->iam->login($credentialsOnly);
 
             if(isset($result['code']) && $result['code'] == 200){
                 $url = null;
@@ -77,8 +84,7 @@ class LoginController extends BaseController
     {
         try {
 
-            $url = $this->getApiUrl().'/logout';
-            $result = $this->IAMGetRequest($url);
+            $result = $this->iam->logout();
 
             if(isset($result['code']) && $result['code'] == 200){
 

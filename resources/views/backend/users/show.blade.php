@@ -58,7 +58,7 @@
                     <div class="mb-3">
                         <div class="name">
                             <h4>@lang('cruds.user.fields.role')</h4>
-                            <span class="text-dark">{{ isset($user['role']) ? ucwords($user['role']) : '' }}</span>
+                            <span class="text-dark">{{ isset($user['role']) ? ucwords(str_replace(',', ', ', $user['role'])) : '' }}</span>
                         </div>
                     </div>
                     
@@ -79,21 +79,14 @@
                     <div class="mb-3">
                         <div class="name">
                             <h4>@lang('cruds.user.fields.language')</h4>
-                            <span class="text-dark">{{ isset($user['language']) ? ucwords($user['language']) : '' }}</span>
+                            <span class="text-dark">{{ isset($user['language']) ? strtoupper(($user['language'])) : '' }}</span>
                         </div>
                     </div>
                     
-                     <div class="mb-3">
-                        <div class="name">
-                            <h4>@lang('cruds.user.fields.metadata')</h4>
-                            <span class="text-dark">{{ isset($user['metadata']) ? $user['metadata'] : '' }}</span>
-                        </div>
-                    </div>
-                  
                     <div class="mb-3">
                         <div class="name">
                             <h4>@lang('cruds.user.fields.last_login_at')</h4>
-                            <span>{{ $user['last_login_at'] ? convertDateTimeFormat($user['last_login_at']) : '' }}</span>
+                            <span>{{ isset($user['last_login_at']) && (!is_null($user['last_login_at'])) ? convertDateTimeFormat($user['last_login_at']) : '' }}</span>
                         </div>
                     </div>
 
@@ -108,6 +101,13 @@
                         <div class="name">
                             <h4>@lang('cruds.user.fields.updated_at')</h4>
                             <span>{{ $user['updated_at'] ? convertDateTimeFormat($user['updated_at']) : '' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="name">
+                            <h4>@lang('cruds.user.fields.metadata')</h4>
+                            <span class="text-dark">{{ isset($user['metadata']) ? json_encode($user['metadata']) : '' }}</span>
                         </div>
                     </div>
 

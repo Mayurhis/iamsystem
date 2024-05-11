@@ -1,4 +1,4 @@
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('backend/js/assets/sweetalert2@11.js') }}"></script>
 <script>
 
 const swalWithBootstrapButtons = Swal.mixin({

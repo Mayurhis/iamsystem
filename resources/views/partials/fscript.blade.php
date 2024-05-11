@@ -1,9 +1,9 @@
 <!-- Jquery Library -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="{{ asset('backend/js/assets/jquery-3.7.1.min.js') }}"></script>
 <!-- Bootstrap Js -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('backend/js/assets/bootstrap.bundle.min.js') }}"></script>
 <!-- Data table  -->
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="{{ asset('backend/js/assets/jquery.dataTables.min.js') }}"></script>
 <!-- Custom Js -->
 <script src="{{ asset('backend/js/custom.js') }}"></script>
 
@@ -30,9 +30,7 @@
             var value = input.val();
             if(value != ''){
                 copyTextToClipboard(value);
-                //toasterAlert('success','Copied Successfully!');
-            }else{
-                 //toasterAlert('error','Password is not generated!');
+                toasterAlert('success','Copied Successfully!');
             }
         });
     

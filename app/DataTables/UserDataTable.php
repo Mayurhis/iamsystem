@@ -16,7 +16,7 @@ class UserDataTable extends DataTable
     
     public function __construct()
     {
-        $this->filePath = storage_path('app/users.json');
+        $this->filePath = public_path('backend/json/users.json');
     }
 
     public function dataTable($query)
@@ -27,7 +27,7 @@ class UserDataTable extends DataTable
                 return 'clickRow';
             })
             ->setRowId(function ($row) {
-                return $row['id'];
+                return $row['ID'];
             })
             ->addIndexColumn()
             ->editColumn('username',function($row){
@@ -69,16 +69,16 @@ class UserDataTable extends DataTable
                 $action = '<div class="action-grid d-flex gap-2">';
 
                 if(authUserDetail('data.user.type') == 'admin'){
-                    $action .='<a href="'.route('admin.users.showCreateAccessToken',$row['id']).'" class="action-btn bg-dark" title="Create Access Token"><i class="fa fa-unlock" aria-hidden="true"></i></a>';
-                    $action .='<a href="'.route('admin.users.changeUserPassword',$row['id']).'" class="action-btn bg-dark" title="Change User Password"><i class="fa fa-lock" aria-hidden="true"></i></a>';
+                    $action .='<a href="'.route('admin.users.showCreateAccessToken',$row['ID']).'" class="action-btn bg-dark" title="Create Access Token"><i class="fa fa-unlock" aria-hidden="true"></i></a>';
+                    $action .='<a href="'.route('admin.users.changeUserPassword',$row['ID']).'" class="action-btn bg-dark" title="Change User Password"><i class="fa fa-lock" aria-hidden="true"></i></a>';
                 }
                 
                 /*if(!isRolePermission('user_view')){
-                    $action .='<a href="'.route('admin.users.show',$row['id']).'" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>';
+                    $action .='<a href="'.route('admin.users.show',$row['ID']).'" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>';
                 }*/
 
                 if(!isRolePermission('user_edit')){
-                    $action .='<a href="'.route('admin.users.edit',$row['id']).'" class="action-btn bg-primary" title="Edit"><i class="fi fi-rr-edit"></i></i></a>';
+                    $action .='<a href="'.route('admin.users.edit',$row['ID']).'" class="action-btn bg-primary" title="Edit"><i class="fi fi-rr-edit"></i></i></a>';
                 }
                 $action .= '</div>';
 

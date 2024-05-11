@@ -2,6 +2,7 @@
 @section('title', trans('cruds.pageTitles.edit_user'))
 
 @section('custom_CSS')
+<link rel="stylesheet" type="text/css" href="{{ asset('backend/css/select2.min.css') }}" async>
 @endsection
 
 @section('headerTitle',trans('cruds.pageTitles.edit_user'))
@@ -19,7 +20,7 @@
                     </h5>
                 </div>
                 <div class="card-content">
-                    <form class="card-form mb-3" id="editUserForm" method="POST" action="{{ route('admin.users.update', $user['id']) }}">
+                    <form class="card-form mb-3" id="editUserForm" method="POST" action="{{ route('admin.users.update', $user['ID']) }}">
                         @csrf
                         @method('PUT')
                         @include('backend.users._form') 
@@ -33,7 +34,8 @@
 @endsection
 
 @section('custom_JS')
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="{{ asset('backend/js/assets/jquery.validate.min.js') }}"></script>
+<script src="{{ asset('backend/js/assets/select2.full.min.js') }}"></script>
 
 @parent
 <script type="text/javascript">
@@ -96,6 +98,7 @@
                },
                 role:{
                 required: true,
+                // rolePattern: true,
                },
                 metadata:{
                 required: true,
@@ -162,6 +165,9 @@
                     loaderHide();
                     if(response.responseJSON.error_type == 'something_error'){
                         toasterAlert('error',response.responseJSON.error);
+                    }else if(response.responseJSON.error_type == 'unauthorized'){
+                        toasterAlert('error',response.responseJSON.error);
+                        window.location.href = "{{ route('admin.login') }}";
                     } else {                    
                         var errorLabelTitle = '';
                         var passwordElements = ['password'];

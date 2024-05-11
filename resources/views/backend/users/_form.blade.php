@@ -16,7 +16,15 @@
     <div class="col-6">
         <div class="form-group">
             <label>@lang('cruds.user.fields.email')<span class="text-danger">*</span></label>
-            <input type="email" name="email" id="email" value="{{ $user['email'] ?? ''}}" class="form-control valid editable" placeholder="Enter Email Address" autocomplete="off">
+            @php
+              $inputType = 'email';
+              if($user){
+                if( in_array($user['type'],array('system','machine')) ){
+                    $inputType = 'text';
+                }
+              }
+            @endphp
+            <input type="{{ $inputType }}" name="email" id="email" value="{{ $user['email'] ?? ''}}" class="form-control valid editable" placeholder="Enter Email Address" autocomplete="off">
         </div>
     </div>
     
@@ -108,14 +116,29 @@
     <div class="col-6">
         <div class="form-group">
             <label>@lang('cruds.user.fields.role')<span class="text-danger">*</span></label>
-            <input type="text" name="role" id="role" value="{{ $user['role'] ?? ''}}" class="form-control valid editable" placeholder="Enter Role" autocomplete="off">
+            <select  class="form-control editable" name="role[]" id="role" multiple="multiple">
+                @if($user)
+                    @foreach(explode(',',$user['role']) as $role)
+                        <option value="{{$role}}" selected>{{ ucwords($role) }}</option>
+                    @endforeach
+                @endif
+            </select>
+            {{-- <input type="text" name="role" id="role" value="{{ $user['role'] ?? ''}}" class="form-control valid editable" placeholder="Enter Role" autocomplete="off"> --}}
         </div>
     </div>
     
      <div class="col-12">
         <div class="form-group">
+             @php
+               $metadata = '';
+               if($user){
+                 if($user['metadata']){
+                    $metadata = json_encode($user['metadata']);
+                 }
+               }
+             @endphp
             <label>@lang('cruds.user.fields.metadata')<span class="text-danger">*</span></label>
-            <textarea type="text" name="metadata" id="metadata" class="form-control valid editable" row="4" placeholder="Enter Metadata" autocomplete="off">{{ $user['metadata'] ?? ''}}</textarea>
+            <textarea type="text" name="metadata" id="metadata" class="form-control valid editable" row="4" placeholder="Enter Metadata" autocomplete="off">{{ $metadata ?? ''}}</textarea>
         </div>
     </div>
     
@@ -124,7 +147,7 @@
 
 <div class="grid-btn float-end">
     @if(isset($user))
-        <input type="hidden" name="user_id"  value="{{ $user['id'] ?? ''}}">
+        <input type="hidden" name="user_id"  value="{{ $user['ID'] ?? ''}}">
         <button type="button" class="btn btn-dark btn-regular text-white editBtn">@lang('global.edit')</button>
         <button type="submit" class="btn btn-primary btn-regular submitBtn" style="display:none;">@lang('global.update')</button>
     @else

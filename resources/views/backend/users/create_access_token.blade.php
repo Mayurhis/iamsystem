@@ -19,7 +19,7 @@
                     </h5>
                 </div>
                 <div class="card-content">
-                    <form class="card-form mb-3" id="createAccessTokenForm" method="POST" action="{{route('admin.users.submitAccessToken',$user['id'])}}">
+                    <form class="card-form mb-3" id="createAccessTokenForm" method="POST" action="{{route('admin.users.submitAccessToken',$user['ID'])}}">
                         @csrf
                         
                     <div class="row">
@@ -62,7 +62,7 @@
                         
                         
                         <div class="grid-btn float-end">
-                            <input type="hidden" name="user_id"  value="{{ $user['id'] ?? ''}}">
+                            <input type="hidden" name="user_id"  value="{{ $user['ID'] ?? ''}}">
                             <button type="submit" class="btn btn-primary btn-regular submitBtn">Create Access Token</button>
                             <a href="{{ route('admin.users.index') }}" class="btn btn-regular btn-secondary">@lang('global.cancel')</a>
                         </div> 
@@ -91,8 +91,6 @@
             if(value != ''){
                 copyTextToClipboard(value);
                 toasterAlert('success','Copied Successfully!');
-            }else{
-                 toasterAlert('error','Access token is empty!');
             }
         });
 
@@ -165,7 +163,10 @@
                     loaderHide();
                     if(response.responseJSON.error_type == 'something_error'){
                         toasterAlert('error',response.responseJSON.error);
-                    } else {                    
+                    } else if(response.responseJSON.error_type == 'unauthorized'){
+                        toasterAlert('error',response.responseJSON.error);
+                        window.location.href = "{{ route('admin.login') }}";
+                    }else {                    
                         var errorLabelTitle = '';
                         var passwordElements = ['password'];
                         $.each(response.responseJSON.errors, function (key, item) {

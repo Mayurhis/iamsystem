@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Traits\HttpRequestTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response as IlluminateResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BaseController extends Controller
 {
-    use HttpRequestTrait;
     
     /**
      * default status code.

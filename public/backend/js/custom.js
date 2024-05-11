@@ -10,7 +10,7 @@ $(document).ready(function(){
 	});
 
 	// data tables 
-	let table = new DataTable('#fieldtable');
+	// let table = new DataTable('#fieldtable');
 
 });
 

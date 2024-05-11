@@ -36,11 +36,11 @@ class UpdateRequest extends FormRequest
         $isUsernameExists = false;
         if($users){
             foreach ($users as $user) {
-                if (($user['id'] != $this->user_id) && ($user['email'] == $this->email)) {
+                if (($user['ID'] != $this->user_id) && ($user['email'] == $this->email)) {
                     $isEmailExists = true;
                     break;
                 }
-                if (($user['id'] != $this->user_id) && ($user['username'] == $this->username)) {
+                if (($user['ID'] != $this->user_id) && ($user['username'] == $this->username)) {
                     $isUsernameExists = true;
                     break;
                 }
@@ -107,7 +107,11 @@ class UpdateRequest extends FormRequest
         $rules['confirmed']   = ['required'];
         $rules['language']   = ['required'];
         
-        $rules['role']   = ['required'];
+        $rules['role.*']   = [
+            'required',
+            'regex:/^[a-zA-Z0-9_]+$/'
+        ];
+        
         $rules['metadata']   = ['required'];
 
         return $rules;

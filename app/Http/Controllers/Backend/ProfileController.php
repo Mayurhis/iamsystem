@@ -12,13 +12,19 @@ use Symfony\Component\HttpFoundation\Response;
 class ProfileController extends BaseController
 {
 
+    public $iam;
+
+    public function __construct()
+    {
+        $this->iam = new IAMHttpService();
+    }
+
     public function profile()
     {
         try{
             $authUserProfile = null;
 
-            $iam = new IAMHttpService();
-            $apiResult = $iam->me();
+            $apiResult = $this->iam->me();
 
             if ($apiResult['code'] == 200) {
                 $authUserProfile = $apiResult['response']['data']['user'];
@@ -64,18 +70,15 @@ class ProfileController extends BaseController
                 'password' => $request->current_password
             ];
         
-
-            $iam = new IAMHttpService();
-            $loginResult = $iam->login($credentials);
+            $loginResult = $this->iam->login($credentials);
 
             if ($loginResult['code'] == 200) {
                 $postData = ['password' => $request->new_password];
-                $changePasswordResult = $iam->adminChangePassword($postData);
+                $changePasswordResult = $this->iam->adminChangePassword($postData);
 
                 if ($changePasswordResult['code'] == 200) {
 
-                    $url = $this->getApiUrl().'/logout';
-                    $result = $this->IAMGetRequest($url);
+                    $result = $this->iam->logout();
         
                     if(isset($result['code']) && $result['code'] == 200){
         
@@ -86,12 +89,6 @@ class ProfileController extends BaseController
                         return  $this->sendSuccessResponse(trans('messages.password_updated_successfully'));
                     }
                     return $this->sendErrorResponse(trans('messages.error_message'));
-
-                    // $loggedInUserDetails['password'] = $request->new_password;
-                    // session()->put('logged_in_user_detail', $loggedInUserDetails);
-                    // session()->save();
-                  
-                    // return $this->sendSuccessResponse(trans('messages.password_updated_successfully'));
                 }
             }
 

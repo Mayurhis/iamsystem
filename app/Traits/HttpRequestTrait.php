@@ -14,6 +14,13 @@ trait HttpRequestTrait
 {
     public $apiUrl;
 
+    public function getApiUrl()
+    {
+        $this->apiUrl = config('constant.IAMSystemApiUrl');
+        Log::channel('iamsystemlog')->info('API_BASE_URL = ' . $this->apiUrl);
+        return $this->apiUrl;
+    }
+
     public function getIAMCredentials($request): array
     {
         $credential = $request->input('username');
@@ -22,13 +29,6 @@ trait HttpRequestTrait
         return $result;
     }
     
-    public function getApiUrl()
-    {
-        $this->apiUrl = config('constant.IAMSystemApiUrl');
-        Log::channel('iamsystemlog')->info('API_BASE_URL = ' . $this->apiUrl);
-        return $this->apiUrl;
-    }
-
     public function getRequest($url, $params = '')
     {
         try {

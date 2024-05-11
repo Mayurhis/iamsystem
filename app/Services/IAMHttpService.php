@@ -9,6 +9,10 @@ class IAMHttpService
 {
     use IAMRequestTrait;
 
+    public function checkLoginRequestCredentials($request){
+        return $this->getIAMCredentials($request);
+    }
+
     public function login($credentials): array
     {
         return $this->IAMPostRequestWithAccessToken('/login', $credentials);
@@ -47,16 +51,39 @@ class IAMHttpService
             }
         }
 
-        return $this->IAMPutRequestWithAccessToken('/user/' . $userId . '/password', $jsonData, config('constant.IAMSystemToken'));
+        return $this->IAMPutRequest('/user/' . $userId . '/password', $jsonData);
     }
 
     public function adminFindUserByEmail($email): array
     {
-        return $this->IAMGetRequestWithAccessToken('/user/email/' . $email, config('constant.IAMSystemToken'));
+        return $this->IAMGetRequest('/user/email/' . $email);
+    }
+
+    public function adminFindUserById($userId): array
+    {
+        return $this->IAMGetRequest('/user/' . $userId);
     }
 
     public function adminCreateUser($formData): array
     {
-        return $this->IAMPostRequestWithAccessToken('/users', $formData, config('constant.IAMSystemToken'));
+        return $this->IAMPostRequest('/users', $formData);
+    }
+
+    public function adminUpdateUserMetadata($userId,$formData): array
+    {
+        $apiUrl = '/user/'.$userId.'/metadata/wallets';
+        return $this->IAMPutRequest($apiUrl ,$formData);
+    }
+
+    public function adminUpdateUserRole($userId,$roleName): array
+    {
+        $apiUrl = '/user/'.$userId.'/roles/'.$roleName;
+        return $this->IAMPutRequest($apiUrl ,$roleName);
+    }
+
+    public function adminUpdateUserStatus($userId,$status): array
+    {
+        $apiUrl = '/user/'.$userId.'/status/'.$status;
+        return $this->IAMPutRequest($apiUrl ,$status);
     }
 }

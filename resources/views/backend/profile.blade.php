@@ -375,7 +375,10 @@
 
                         if(response.responseJSON.error_type == 'something_error'){
                             toasterAlert('error',response.responseJSON.error);
-                        } else {
+                        } else if(response.responseJSON.error_type == 'unauthorized'){
+                            toasterAlert('error',response.responseJSON.error);
+                            window.location.href = "{{ route('admin.login') }}";
+                        }else {
                             var errorLabelTitle = '';
                             $.each(response.responseJSON.errors, function (key, item) {
                                 errorLabelTitle = '<span class="validation-error-block error">'+item[0]+'</sapn>';
@@ -454,7 +457,10 @@
                             toasterAlert('error', response.responseJSON.error);
                         }else if(response.responseJSON.error_type == 'warning'){
                             toasterAlert('warning', response.responseJSON.error);
-                        } else {
+                        }else if(response.responseJSON.error_type == 'unauthorized'){
+                            toasterAlert('error',response.responseJSON.error);
+                            window.location.href = "{{ route('admin.login') }}";
+                        }else {
 
                             var errorLabelTitle = '';
                             $.each(response.responseJSON.errors, function (key, item) {
@@ -536,7 +542,10 @@
                             toasterAlert('error', response.responseJSON.error);
                         }else if(response.responseJSON.error_type == 'warning'){
                             toasterAlert('warning', response.responseJSON.error);
-                        } else {
+                        }else if(response.responseJSON.error_type == 'unauthorized'){
+                            toasterAlert('error',response.responseJSON.error);
+                            window.location.href = "{{ route('admin.login') }}";
+                        }else {
 
                             var errorLabelTitle = '';
                             $.each(response.responseJSON.errors, function (key, item) {

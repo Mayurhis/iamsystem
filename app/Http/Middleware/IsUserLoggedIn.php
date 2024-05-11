@@ -20,6 +20,15 @@ class IsUserLoggedIn
             return $next($request);
         }
 
-        return redirect()->route('admin.login');
+        if($request->ajax()){
+            return response()->json([
+                'success' => false,
+                'error_type' => 'unauthorized',
+                'error' => trans('auth.unauthorize'),
+            ], 401);
+        }else{
+            return redirect()->route('admin.login');
+        }
+        
     }
 }

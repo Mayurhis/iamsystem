@@ -39,7 +39,7 @@ if (!function_exists('findIndexById')) {
 
     function findIndexById($array, $id) {
         foreach ($array as $index => $element) {
-            if (isset($element['id']) && $element['id'] == $id) {
+            if (isset($element['ID']) && $element['ID'] == $id) {
                 return $index;
             }
         }

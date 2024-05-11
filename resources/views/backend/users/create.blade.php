@@ -2,6 +2,8 @@
 @section('title', trans('cruds.pageTitles.add_user'))
 
 @section('custom_CSS')
+<link rel="stylesheet" type="text/css" href="{{ asset('backend/css/select2.min.css') }}" async>
+
 @endsection
 
 @section('headerTitle',trans('cruds.pageTitles.add_user'))
@@ -35,7 +37,9 @@
 @endsection
 
 @section('custom_JS')
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+<script src="{{ asset('backend/js/assets/jquery.validate.min.js') }}"></script>
+<script src="{{ asset('backend/js/assets/select2.full.min.js') }}"></script>
 
 @parent
 
@@ -74,6 +78,7 @@
                },
                 role:{
                 required: true,
+                // rolePattern: true,
                },
                 metadata:{
                 required: true,
@@ -131,6 +136,9 @@
                     loaderHide();
                     if(response.responseJSON.error_type == 'something_error'){
                         toasterAlert('error',response.responseJSON.error);
+                    }else if(response.responseJSON.error_type == 'unauthorized'){
+                        toasterAlert('error',response.responseJSON.error);
+                        window.location.href = "{{ route('admin.login') }}";
                     } else {                    
                         var errorLabelTitle = '';
                         var passwordElements = ['password'];
