@@ -18,7 +18,7 @@
             <label>@lang('cruds.user.fields.email')<span class="text-danger">*</span></label>
             @php
               $inputType = 'email';
-              if($user){
+              if(isset($user)){
                 if( in_array($user['type'],array('system','machine')) ){
                     $inputType = 'text';
                 }
@@ -117,7 +117,7 @@
         <div class="form-group">
             <label>@lang('cruds.user.fields.role')<span class="text-danger">*</span></label>
             <select  class="form-control editable" name="role[]" id="role" multiple="multiple">
-                @if($user)
+                @if(isset($user))
                     @foreach(explode(',',$user['role']) as $role)
                         <option value="{{$role}}" selected>{{ ucwords($role) }}</option>
                     @endforeach
@@ -131,7 +131,7 @@
         <div class="form-group">
              @php
                $metadata = '';
-               if($user){
+               if(isset($user)){
                  if($user['metadata']){
                     $metadata = json_encode($user['metadata']);
                  }
