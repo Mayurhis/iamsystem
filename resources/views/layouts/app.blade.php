@@ -7,6 +7,8 @@
 </head>
 <body class="admin-dashboard">
 
+    @include('partials.sleep_mode')
+
 	<section class="dash-section">
         <div class="dashboard-blog">
 
@@ -20,7 +22,7 @@
                     <div class="humberger-mobile d-flex">
                         <div class="dropdown user-dropdown">
                             <div class="dropdown-toggle ms-auto p-0" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <div class="img-user"><img src="{{ asset('backend/images/user.jpg') }}" class="img-fluid" id="userImg" alt="user"></div>
+                                <div class="img-user"><img src="{{ asset(config('constant.default.user_image')) }}" class="img-fluid" id="userImg" alt="user"></div>
                                 <div class="name-dta d-flex align-items-end">
                                     <div class="welcome-user">
                                     <span class="welcome">@lang('global.welcome')</span>

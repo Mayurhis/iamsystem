@@ -86,4 +86,10 @@ class IAMHttpService
         $apiUrl = '/user/'.$userId.'/status/'.$status;
         return $this->IAMPutRequest($apiUrl ,$status);
     }
+
+    public function adminUpdateUserPassword($userId,$updatePassword): array
+    {
+        $apiUrl = '/user/'.$userId.'/password/';
+        return $this->IAMPutRequest($apiUrl ,$updatePassword);
+    }
 }

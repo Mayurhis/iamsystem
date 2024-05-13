@@ -99,10 +99,13 @@ class StoreRequest extends FormRequest
         $rules['confirmed']   = ['required'];
         $rules['language']   = ['required'];
         
-        $rules['role.*']   = [
+        
+        $rules['role']   = [
             'required',
-            'regex:/^[a-zA-Z0-9_]+$/'
+            'array',
         ];
+
+        $rules['role.*']   = ['string','regex:/^[a-zA-Z0-9_]+$/'];
         
         $rules['metadata']   = ['required'];
 

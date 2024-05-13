@@ -9,9 +9,6 @@ $(document).ready(function(){
 		$(".dash-section").toggleClass("sidebar-open");
 	});
 
-	// data tables 
-	// let table = new DataTable('#fieldtable');
-
 });
 
 $(document).on('change', "#uploadidPic .input-file",function(e){

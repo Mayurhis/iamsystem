@@ -92,3 +92,74 @@
     }
 
 </script>
+
+{{-- Start Activity Timeout Js --}}
+<script type="text/javascript">
+
+    var timeoutTime = "{{ config('constant.timeout_time') }}";
+    const TIMEOUT_DURATION = parseInt(timeoutTime) * 60 * 1000; // 5 minutes
+
+    let logoutTimer; 
+
+    function startLogoutTimer() {
+        clearTimeout(logoutTimer);
+    }
+
+    function resetLogoutTimer() {
+        startLogoutTimer();
+    }
+
+    function logout() {
+        window.location.href = "{{ route('logout') }}";
+    }
+
+    // Add event listeners for user activity
+    /*
+        document.addEventListener('mousemove', resetLogoutTimer);
+        document.addEventListener('mousedown', resetLogoutTimer);
+        document.addEventListener('keypress', resetLogoutTimer);
+        document.addEventListener('touchstart', resetLogoutTimer);
+    */
+
+    // Function to display timeout screen
+    function showTimeoutScreen() {
+        document.getElementById('timeout-screen').style.display = 'flex';
+    }
+
+    // Function to update countdown on timeout screen
+    function updateCountdown(seconds) {
+        document.getElementById('countdown').textContent = seconds;
+    }
+
+    // Function to hide timeout screen
+    function hideTimeoutScreen() {
+     document.getElementById('timeout-screen').style.display = 'none';
+    }
+
+    // Initialize the timer
+    startLogoutTimer();
+
+    // Show timeout screen and start countdown when timer expires
+    logoutTimer = setTimeout(() => {
+        showTimeoutScreen();
+        let countdown = TIMEOUT_DURATION / 1000; // Convert milliseconds to seconds
+        updateCountdown(countdown);
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            updateCountdown(countdown);
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                logout();
+            }
+        }, 1000);
+    }, TIMEOUT_DURATION);
+
+
+    $(document).on('click','.sleep__button',function(event){
+        event.preventDefault();
+        resetLogoutTimer();
+        window.location.reload();
+    });
+
+</script>
+{{-- Start Activity Timeout Js--}}

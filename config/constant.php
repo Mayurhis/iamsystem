@@ -34,6 +34,12 @@ return [
     'datetime_format' => 'd-m-Y H:i',
     'time_format'     => 'H:i:s',
 
+    'default'=>[
+        'user_image'=>'backend/images/user.jpg',
+    ],
+
+    'timeout_time' => env('TIMEOUT_DURATION_IN_MINUTES',5),
+
     'IAMSystemSecret' => env('IAM_SECRET', null),
 
     'IAMSystemIssuer' => env('IAM_ISSUER', null),

@@ -61,6 +61,7 @@ class UserController extends BaseController
      */
     public function store(StoreRequest $request)
     {
+        
         try{                
             $users = json_decode(file_get_contents($this->filePath), true);
 
@@ -70,13 +71,13 @@ class UserController extends BaseController
 
             $insertRecords = [
                 'aud'           => $request->aud,
-                'role'          => $request->role,
+                'role'          => implode(',',$request->role),
                 'email'         => $request->email,
                 'password'      => $request->password,
                 'language'      => strtolower($request->language),
                 'is_confirmed'  => $request->confirmed ? true : false,
                 'type'          => $request->type,
-                'metadata'      => $request->metadata,
+                'metadata'      => json_decode($request->metadata,true),
             ];
 
             if($request->username){
@@ -106,13 +107,19 @@ class UserController extends BaseController
                     'deleted_at' => $apiResponse['response']['data']['user']['deleted_at'],
                 ];
 
-                $isUserCreated =true;
+                $isUserCreated = true;
+                $createdUserId = $apiResponse['response']['data']['user']['ID'];
                 
             }else if($apiResponse['code'] == 400){
                 return $this->sendErrorResponse(ucwords($apiResponse['message']),400);
             }
 
             if($isUserCreated){
+
+                $updatedFields = $this->updateFormFields($createdUserId,$request->status,$request->role,$request->metadata);
+                $newUser['status'] = $updatedFields['status'] ?? null;
+                $newUser['role'] = $updatedFields['role'] ?? null;
+                $newUser['metadata'] = $updatedFields['metadata'] ?? null;
 
                 $users[] = $newUser;
             
@@ -210,33 +217,9 @@ class UserController extends BaseController
 
             if ($index !== null) {
 
-                $updateRecords = [];
+                $getUserObject = $data[$index];
+                $updateRecords = $this->updateFormFields($id,$request->status,$request->role,$request->metadata);
 
-                //Start Update Metadata 
-                 $status = $request->status;
-                 $status_ApiResponse = $this->iam->adminUpdateUserStatus($id,$status);
-                 if($status_ApiResponse['code'] == 200){
-                    $updateRecords['status']   = $input['status'];
-                 }
-                 
-                //End Update Metadata
-
-                //Start Update Role
-                $userRole = implode(',',$request->role);
-                $role_ApiResponse = $this->iam->adminUpdateUserRole($id,$userRole);
-                if($role_ApiResponse['code'] == 200){
-                    $updateRecords['role']     = $input['role'];
-                }
-                //End Update Role
-
-                //Start Update Metadata 
-                $metaData = json_decode($request->metadata,true);
-                $metaData_ApiResponse = $this->iam->adminUpdateUserMetadata($id,$metaData);
-                if($metaData_ApiResponse['code'] == 200){
-                    $updateRecords['metadata'] = $input['metadata'];
-                }
-                //End Update Metadata
-               
                 if(count($updateRecords) > 0){
                     $data[$index] = array_merge($data[$index], $updateRecords);
                 
@@ -302,19 +285,29 @@ class UserController extends BaseController
 
             if ($index !== null) {
 
-                $input['password'] = $request->password;
+                //Start Update Password 
+                $updatePassword['password'] = $request->password;
+                $apiResponse = $this->iam->adminUpdateUserPassword($id,$updatePassword);
 
-                $input['updated_at'] = now();
+                if($apiResponse['code'] == 200){
+                    $input['password']   = $updatePassword['password'];
 
-                $data[$index] = array_merge($data[$index], $input);
+                    $data[$index] = array_merge($data[$index], $input);
                 
-                file_put_contents($this->filePath, json_encode($data));
+                    file_put_contents($this->filePath, json_encode($data));
+    
+                    return $this->sendSuccessResponse('User Password Updated Successfully!');
+                }
+               //End Update Password
 
-                return $this->sendSuccessResponse('User Password Updated Successfully!');
+               return $this->sendErrorResponse(trans('messages.error_message'),500);
+             
             }
 
         } catch (\Exception $e) {
-            // dd($e);
+               //   dd('Error in UserController::submitChangeUserPassword (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+
+            \Log::channel('iamsystemlog')->error('Error in UserController::submitChangeUserPassword (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
             return $this->sendErrorResponse(trans('messages.error_message'),500);
         }
     }
@@ -361,8 +354,58 @@ class UserController extends BaseController
            return $this->sendErrorResponse('Invalid Credentials',500);
         
         } catch (\Exception $e) {
-            // dd($e);
+            //   dd('Error in UserController::submitChangeUserPassword (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+
+            \Log::channel('iamsystemlog')->error('Error in UserController::submitAccessToken (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
             return $this->sendErrorResponse(trans('messages.error_message'),500);
         }
+    }
+
+    public function updateFormFields($userId,$status,$role,$metaDataJson){
+        $updateRecords = [];
+
+        //Start Update status 
+        $status_ApiResponse = $this->iam->adminUpdateUserStatus($userId,$status);
+        if($status_ApiResponse['code'] == 200){
+           $updateRecords['status']   = $status;
+        }else if(isset($status_ApiResponse['json_error'])){
+
+           if(isset($status_ApiResponse['json_error']['message'])){
+               $errors['status'][] = ucfirst($status_ApiResponse['json_error']['message']); 
+               return $this->sendErrorResponse('Validation Error', 422, "validation_error", $errors);
+           }
+       }
+       //End Update status
+
+       //Start Update Role
+       $userRole = implode(',',$role);
+       $role_ApiResponse = $this->iam->adminUpdateUserRole($userId,$userRole);
+       if($role_ApiResponse['code'] == 200){
+           $updateRecords['role']     = $userRole;
+       }else if(isset($role_ApiResponse['json_error'])){
+
+           if(isset($role_ApiResponse['json_error']['message'])){
+               $errors['role'][] = ucfirst($role_ApiResponse['json_error']['message']); 
+               return $this->sendErrorResponse('Validation Error', 422, "validation_error", $errors);
+           }
+       }
+       //End Update Role
+
+       //Start Update Metadata 
+       $metaData = json_decode($metaDataJson,true);
+       $metaData_ApiResponse = $this->iam->adminUpdateUserMetadata($userId,$metaData);
+       if($metaData_ApiResponse['code'] == 200){
+           $updateRecords['metadata'] = $metaDataJson;
+       }else if(isset($metaData_ApiResponse['json_error'])){
+
+           if(isset($metaData_ApiResponse['json_error']['message'])){
+               $errors['metadata'][] = ucfirst($metaData_ApiResponse['json_error']['message']); 
+               return $this->sendErrorResponse('Validation Error', 422, "validation_error", $errors);
+           }
+       }
+       //End Update Metadata
+
+
+       return $updateRecords;
     }
 }

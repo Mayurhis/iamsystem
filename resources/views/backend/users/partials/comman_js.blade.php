@@ -4,12 +4,11 @@
 
         $('#role').select2({
             theme:'classic',
-            selectOnClose: true,
+            // selectOnClose: true,
             placeholder:'Please Select Role',
             multiple: true,
             tags: true,
             tokenSeparators: [',', ' '],
-
             // minimumResultsForSearch: Infinity
         });
 
@@ -27,24 +26,6 @@
            }
        }, "{{ trans('messages.username_regex')}}");
        
-
-       var nowhitespaceRegex = /^\S+$/i;
-       $.validator.addMethod("rolePattern", function(value, element) {
-            if ($.isArray(value)) {
-                for (var i = 0; i < value.length; i++) {
-                    if (nowhitespaceRegex.test(value[i])) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-
-           if(value != ''){
-            return !nowhitespaceRegex.test(value);
-           }else{
-            return true;
-           }
-       }, 'Spaces are not allowed.');
 
        $.validator.addMethod("isValidJSON", function(value, element) {
             try {

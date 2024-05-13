@@ -119,11 +119,12 @@
             <select  class="form-control editable" name="role[]" id="role" multiple="multiple">
                 @if(isset($user))
                     @foreach(explode(',',$user['role']) as $role)
+                    @if(!empty($role))
                         <option value="{{$role}}" selected>{{ ucwords($role) }}</option>
+                    @endif
                     @endforeach
                 @endif
             </select>
-            {{-- <input type="text" name="role" id="role" value="{{ $user['role'] ?? ''}}" class="form-control valid editable" placeholder="Enter Role" autocomplete="off"> --}}
         </div>
     </div>
     
@@ -133,7 +134,7 @@
                $metadata = '';
                if(isset($user)){
                  if($user['metadata']){
-                    $metadata = json_encode($user['metadata']);
+                    $metadata = isset($user['metadata']['wallets']) ? json_encode($user['metadata']['wallets']) :json_encode($user['metadata']);
                  }
                }
              @endphp
@@ -149,9 +150,17 @@
     @if(isset($user))
         <input type="hidden" name="user_id"  value="{{ $user['ID'] ?? ''}}">
         <button type="button" class="btn btn-dark btn-regular text-white editBtn">@lang('global.edit')</button>
+        <a href="{{ route('admin.users.index') }}" class="btn btn-regular btn-secondary backBtn">@lang('global.back')</a>
+        
         <button type="submit" class="btn btn-primary btn-regular submitBtn" style="display:none;">@lang('global.update')</button>
     @else
         <button type="submit" class="btn btn-primary btn-regular submitBtn">@lang('global.save')</button>
     @endif
-    <a href="{{ route('admin.users.index') }}" class="btn btn-regular btn-secondary cancelBtn" style="{{ request()->route()->getName() == 'admin.users.edit' ? 'display:none;' : ''}}">@lang('global.cancel')</a>
+
+    @if(request()->route()->getName() == 'admin.users.create')
+        <a href="{{ route('admin.users.index') }}" class="btn btn-regular btn-secondary cancelBtn">@lang('global.cancel')</a>
+    @else
+        <button type="button" class="btn btn-regular btn-secondary cancelBtn" style="{{ request()->route()->getName() == 'admin.users.edit' ? 'display:none;' : ''}}">@lang('global.cancel')</button>
+    @endif
+   
 </div> 

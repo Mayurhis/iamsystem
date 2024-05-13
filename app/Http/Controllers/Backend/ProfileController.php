@@ -93,7 +93,7 @@ class ProfileController extends BaseController
             }
 
             $errors['current_password'][] = trans('auth.password'); 
-            return $this->sendErrorResponse('Validation Error', 422, $error_type="validation_error", $errors);
+            return $this->sendErrorResponse('Validation Error', 422, "validation_error", $errors);
 
         } catch(\Exception $e){
             // dd($e->getMessage().'->'.$e->getLine());

@@ -51,6 +51,7 @@
           $(".editable").removeAttr("disabled");
 
           $(".editBtn").hide();
+          $(".backBtn").hide();
           $(".submitBtn").show();
           $(".cancelBtn").show();
         });
@@ -60,6 +61,7 @@
           $(".editable").attr("disabled",true);
           
           $(".editBtn").show();
+          $(".backBtn").show();
           $(".submitBtn").hide();
           $(".cancelBtn").hide();
         });
@@ -69,12 +71,12 @@
            errorElement: 'span',
            errorClass: 'validation-error-block error',
            rules: {
-               aud: "required",
-               email: {
+               'aud': "required",
+               'email': {
                    required: true,
                 //   email:true,
                },
-               username:{
+               'username':{
                 usernamePattern :true,
                },
                
@@ -84,23 +86,22 @@
             //       passwordPattern: true,
             //   },
                
-               type:{
+               'type':{
                    required: true,
                },
-               status:{
+               'status':{
                    required: true,
                },
-               confirmed:{
+               'confirmed':{
                 required: true,
                },
-               language:{
+               'language':{
                 required: true,
                },
-                role:{
+                'role[]':{
                 required: true,
-                // rolePattern: true,
                },
-                metadata:{
+                'metadata':{
                 required: true,
                 isValidJSON: true
                }
@@ -112,8 +113,14 @@
                },
            },
            errorPlacement: function(error, element) {
-                if ($(element).attr('type') === 'password') {
+                if ($(element).hasClass('select2-hidden-accessible')) {
+
+                     error.insertAfter(element.next('.select2-container'));
+
+                } else if ($(element).attr('type') === 'password') {
+
                     error.insertAfter(element.parent('div'));
+
                 } else {
                     error.insertAfter(element);
                 }
@@ -175,11 +182,19 @@
 
                             errorLabelTitle = '<span class="validation-error-block error">'+item[0]+'</sapn>';
                         
-                            if(passwordElements.includes(key)){
+                            if ($('#'+key).hasClass('select2-hidden-accessible')) {
+
+                                 $(errorLabelTitle).insertAfter($('#'+key).next('.select2-container'));
+
+                            }else if(passwordElements.includes(key)){
+
                                 var ele = $("#"+key).parent('div');
                                 $(errorLabelTitle).insertAfter(ele);
+
                             }else{
+
                                 $(errorLabelTitle).insertAfter("#"+key);
+                                
                             }
                                             
                         });

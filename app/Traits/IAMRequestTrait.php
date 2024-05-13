@@ -119,7 +119,19 @@ trait IAMRequestTrait
             $body = $response->getBody()->__toString() ?? '{}';
             $response = ['status' => true, 'code' => 200, 'message' => 'successful', 'response' => json_decode($body, true)];
         } catch (ConnectException|ClientException|Exception $e) {
-            $response = ['status' => false, 'code' => $e->getCode(), 'message' => $e->getMessage(), 'data' => []];
+            $messageString = $e->getMessage();
+
+
+            //Json available in string
+            $jsonError = [];
+            $pattern = '/\{(?:[^{}]|(?R))*\}/';
+            if (preg_match($pattern, $messageString, $matches)) {
+                $json = $matches[0];
+                $data = json_decode($json, true);
+                $jsonError = $data;
+            } 
+
+            $response = ['status' => false, 'code' => $e->getCode(), 'message' => $e->getMessage(), 'data' => [],'json_error'=>$jsonError];
         }
         Log::channel('iamsystemlog')->info('IAMPutRequest result = ' . print_r($response, true));
         return $response;
