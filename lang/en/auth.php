@@ -51,6 +51,11 @@ return [
             ],
             'status' => 'Ok',
         ],
+
+        // '2fa_success' => 'A verification code has been sent to your email. Please check your inbox and enter the code below to complete the login process.',
+        '2fa_success' => 'Welcome! To complete your login, please enter the verification code sent to email. Verification Code: :verification_code',
+        '2fa_failed' => 'Invalid verification code. Please try again.',
+
     ],
 
     'unauthorize'  => 'You are not authorized to perform this action.',
@@ -115,6 +120,15 @@ return [
         'new_username_placeholder' => 'Enter New Username',
         'confirm_username' => 'Username confirmation',
         'confirm_username_placeholder' => 'Enter Username Confirmation',
+    ],
+
+    
+    '2faPage'=>[
+        'title' => 'Two-Factor Authentication',
+        'fields' => [
+            'code' => 'Verification Code',
+            'code_placeholder' => 'Enter Verification Code',
+        ],
     ],
 
 ];

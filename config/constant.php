@@ -52,6 +52,8 @@ return [
     'password_min_length' => env('PASSWORD_MIN_LENGTH',6),
     'password_regex'      => "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[$\-_!@#$%&*])[A-Za-z\d$\-_!@#$%&*]+$/",
 
+    'two_factor_auth_code_length' => env('TWO_FACTOR_AUTH_CODE_LENGTH',6),
+
     'userStatus'=>[
         'active',
         'locked',

@@ -6,7 +6,6 @@ use Session;
 
 use Illuminate\Http\Request;
 use App\Services\IAMHttpService;
-use Illuminate\Support\Facades\Cookie;
 use App\Http\Controllers\BaseController;
 
 
@@ -22,6 +21,17 @@ class LoginController extends BaseController
 
     public function index()
     {
+        $twoFactorAuthStatus = authUserDetail('data.2fa_status');
+        if( ( !is_null($twoFactorAuthStatus) ) && ( !$twoFactorAuthStatus ) ){
+            $result = $this->iam->logout();
+            if(isset($result['code']) && $result['code'] == 200){
+
+                auth()->logout();
+                request()->session()->invalidate();
+                Session::flush();
+            }
+        }
+
         return view('backend.auth.login');
     }
 
@@ -42,20 +52,29 @@ class LoginController extends BaseController
         try{
             $result = $this->iam->login($credentialsOnly);
 
+            $verificationCode = '';
             if(isset($result['code']) && $result['code'] == 200){
                 $url = null;
                 if($result['response']){
                     $userType = $result['response']['data']['user']['type'];
                     if($userType && in_array($userType,config('constant.user_roles'))){
-                        $this->saveLoggedInUserDetailInSession(array_merge($result['response'], ['password' => $request->password]));
 
+                        $verificationCode = generateRandomString(config('constant.two_factor_auth_code_length'));
+
+                        $result['response']['data']['2fa_status'] = false;
+                        $result['response']['data']['2fa_code'] = encrypt($verificationCode);
+                        
+        
+                        $this->saveLoggedInUserDetailInSession(array_merge($result['response'], ['password' => $request->password]));
 
                         switch ($userType) {
                             case 'admin':
-                                $url = 'admin.users.index';
+                                // $url = 'admin.users.index';
+                                $url = 'admin.2fa';
                                 break;
                             case 'auditor':
-                                $url = 'admin.users.index';
+                                // $url = 'admin.users.index';
+                                $url = 'admin.2fa';
                                 break;
                             default:
                                 $url = 'admin.dashboard';
@@ -66,7 +85,10 @@ class LoginController extends BaseController
                     }
                 }
 
-                return redirect()->route($url)->with('success',trans('auth.messages.login.success'));
+                // return redirect()->route($url)->with('success',trans('auth.messages.login.success'));
+
+              
+                return redirect()->route($url)->with('fireSuccess', ['title'=>'Two-Factor Authentication','message'=>trans('auth.messages.2fa_success',['verification_code'=>$verificationCode])]);
 
             }else{
                 return redirect()->route('admin.login')->with('error',trans('auth.failed'));

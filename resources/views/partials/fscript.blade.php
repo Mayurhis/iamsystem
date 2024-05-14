@@ -113,14 +113,6 @@
         window.location.href = "{{ route('logout') }}";
     }
 
-    // Add event listeners for user activity
-    /*
-        document.addEventListener('mousemove', resetLogoutTimer);
-        document.addEventListener('mousedown', resetLogoutTimer);
-        document.addEventListener('keypress', resetLogoutTimer);
-        document.addEventListener('touchstart', resetLogoutTimer);
-    */
-
     // Function to display timeout screen
     function showTimeoutScreen() {
         document.getElementById('timeout-screen').style.display = 'flex';
@@ -128,7 +120,14 @@
 
     // Function to update countdown on timeout screen
     function updateCountdown(seconds) {
-        document.getElementById('countdown').textContent = seconds;
+
+        var currentTime = new Date();
+
+        currentTime.setSeconds(seconds);
+
+        var formattedTime = formatTime(currentTime);
+
+        document.getElementById('countdown').textContent = formattedTime;
     }
 
     // Function to hide timeout screen
@@ -142,7 +141,7 @@
     // Show timeout screen and start countdown when timer expires
     logoutTimer = setTimeout(() => {
         showTimeoutScreen();
-        let countdown = TIMEOUT_DURATION / 1000; // Convert milliseconds to seconds
+        let countdown = TIMEOUT_DURATION / 1000;
         updateCountdown(countdown);
         const countdownInterval = setInterval(() => {
             countdown--;
@@ -160,6 +159,29 @@
         resetLogoutTimer();
         window.location.reload();
     });
+
+
+    function formatTime(date) {
+        // Get hours, minutes, and seconds
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var seconds = date.getSeconds();
+
+        // Determine AM/PM
+        var amOrPm = hours >= 12 ? 'PM' : 'AM';
+
+        // Convert hours to 12-hour format
+        hours = hours % 12;
+        hours = hours ? hours : 12; // 0 should be converted to 12
+
+        // Format with leading zeros
+        var formattedTime = 
+            (hours < 10 ? "0" + hours : hours) + ":" +
+            (minutes < 10 ? "0" + minutes : minutes) + ":" +
+            (seconds < 10 ? "0" + seconds : seconds) + " " + amOrPm;
+
+    return formattedTime;
+}
 
 </script>
 {{-- Start Activity Timeout Js--}}

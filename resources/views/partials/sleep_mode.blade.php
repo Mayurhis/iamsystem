@@ -13,7 +13,7 @@
    </form>
    <div class="sleep-bottom">
       <div class="sleep-bottom__time">
-         <div id="clockDisplay" class="clock"></div>
+         <div id="countdown" class="clock"></div>
       </div>
       <div class="sleep-bottom__menu btn-group dropup">
          <button type="button" class="sleep-bottom-menu__button dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

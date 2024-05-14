@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
@@ -32,6 +33,8 @@ if (!function_exists('authValues')) {
 
             return $loggedInUserDetails;
         }
+
+        return null;
     }
 }
 
@@ -115,3 +118,13 @@ if (!function_exists('convertDateTimeFormat')) {
 
 	}
 }
+
+if (!function_exists('generateRandomString')) {
+
+    function generateRandomString($length = 6){
+        $randomString = Str::random($length);
+
+        return $randomString;
+    }
+}
+

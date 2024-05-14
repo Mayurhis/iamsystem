@@ -66,5 +66,8 @@ class Kernel extends HttpKernel
         'isAccessTokenExpire' => \App\Http\Middleware\IsAccessTokenExpire::class,
         "IsUserLoggedIn" => \App\Http\Middleware\IsUserLoggedIn::class,
         'jwt.verify' => \App\Http\Middleware\VerifyJwtToken::class,
+        'auth.2fa' => \App\Http\Middleware\EnsureTwoFactorAuthenticated::class,
+        'check2fa.status' => \App\Http\Middleware\Check2FAStatus::class,
+        
     ];
 }

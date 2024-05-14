@@ -24,7 +24,7 @@ class RedirectIfAuthenticated
             //     return redirect(RouteServiceProvider::HOME);
             // }
 
-            if(session()->has("logged_in_user_detail")){
+            if(session()->has("logged_in_user_detail") && session()->get("logged_in_user_detail")['data']['2fa_status']){
                 return redirect(RouteServiceProvider::HOME);
             }
         }

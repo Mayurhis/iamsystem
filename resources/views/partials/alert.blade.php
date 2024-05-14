@@ -28,6 +28,10 @@ const swalWithBootstrapButtons = Swal.mixin({
     @if (session()->has('info'))
         toasterAlert('info',"{{ session()->get('info') }}");
     @endif
+
+    @if (session()->has('fireSuccess'))
+        fireSuccessSwal("{{ session()->get('fireSuccess')['title'] }}","{{ session()->get('fireSuccess')['message'] }}");
+    @endif
     
     function toasterAlert(status, message) {
 

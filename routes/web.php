@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use  App\Http\Controllers\Backend\Auth\LoginController;
+use  App\Http\Controllers\Backend\Auth\TwoFactorAuthController;
 
 
 /*
@@ -30,8 +31,18 @@ Route::group(['middleware' => 'guest'], function () {
 
 });
 
+Route::group(['middleware' => ['check2fa.status']], function () {
 
-Route::group(["namespace" => "App\Http\Controllers\Backend",'as' => 'admin.',"prefix" => "admin" ,'middleware' => ['IsUserLoggedIn','isAccessTokenExpire','jwt.verify']],function(){
+    Route::get("admin/2fa/verify", [TwoFactorAuthController::class, 'index'])->name("admin.2fa");
+    Route::post("admin/2fa/verify", [TwoFactorAuthController::class, 'verify'])->name("admin.2fa.verify");
+
+    Route::post("admin/2fa/resend-code", [TwoFactorAuthController::class, 'resendVerificationCode'])->name("admin.2fa.resendcode");
+
+});
+
+    
+
+Route::group(["namespace" => "App\Http\Controllers\Backend",'as' => 'admin.',"prefix" => "admin" ,'middleware' => ['IsUserLoggedIn','isAccessTokenExpire','jwt.verify','auth.2fa']],function(){
 
     Route::get("dashboard","DashboardController@index")->name("dashboard");
 
