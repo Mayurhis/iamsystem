@@ -165,27 +165,10 @@ class UserController extends BaseController
 
     /**
      * Show the form for editing the specified resource.
-     */
+    */
     public function edit($id)
     {
         abort_if(isRolePermission('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-       /* $data = json_decode(file_get_contents($this->filePath), true);
-        
-        $index = findIndexById($data, $id);
-
-        if ($index !== null) {
-
-            $user = $data[$index] ?? null;
-            
-            $languageJson = public_path('backend/json/languages.json');
-            $languages = json_decode(file_get_contents($languageJson));
-
-            return view('backend.users.edit', compact('user','languages'));
-        }else{
-            return abort(404);
-        }*/
-
 
         $apiResponse =  $this->iam->adminFindUserById($id);
 
@@ -249,14 +232,12 @@ class UserController extends BaseController
     public function changeUserPassword($id){
         abort_if(isRolePermission('user_change_password'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         
-        $data = json_decode(file_get_contents($this->filePath), true);
-        
-        $index = findIndexById($data, $id);
+        $apiResponse =  $this->iam->adminFindUserById($id);
 
-        if ($index !== null) {
+        if($apiResponse['code'] == 200){
 
-            $user = $data[$index] ?? null;
-            
+            $user = $apiResponse['response']['data']['user'];
+
             return view('backend.users.change-user-password', compact('user'));
         }else{
             return abort(404);
@@ -337,11 +318,11 @@ class UserController extends BaseController
             'password' => ['required'],
         ]);
         
+        $credentialsOnly = $this->iam->checkLoginRequestCredentials($request);
          
         try{                
 
-            $url = $this->getApiUrl().'/login';
-            $result = $this->IAMPostRequest($url, $credentialsOnly);
+            $result = $this->iam->login($credentialsOnly);
 
             if(isset($result['code']) && $result['code'] == 200){
                 
@@ -354,7 +335,7 @@ class UserController extends BaseController
            return $this->sendErrorResponse('Invalid Credentials',500);
         
         } catch (\Exception $e) {
-            //   dd('Error in UserController::submitChangeUserPassword (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+              dd('Error in UserController::submitChangeUserPassword (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
 
             \Log::channel('iamsystemlog')->error('Error in UserController::submitAccessToken (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
             return $this->sendErrorResponse(trans('messages.error_message'),500);
@@ -407,5 +388,72 @@ class UserController extends BaseController
 
 
        return $updateRecords;
+    }
+
+
+    public function showMetaDataEditor($id){
+        abort_if(isRolePermission('user_metadata_editor'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        
+        $apiResponse =  $this->iam->adminFindUserById($id);
+
+        if($apiResponse['code'] == 200){
+
+            $user = $apiResponse['response']['data']['user'];
+
+            return view('backend.users.metadata_editor', compact('user'));
+        }else{
+            return abort(404);
+        }
+    }
+
+    public function submitMetaDataEditor(Request $request, $id){
+
+        $request->validate([
+            'metadata' =>['required']
+        ]);
+
+        try{
+
+            $data = json_decode(file_get_contents($this->filePath), true);
+
+            $input = $request->except(['_token','_method','user_id']);
+    
+            $index = findIndexById($data, $id);
+    
+            if ($index !== null) {
+    
+                $getUserObject = $data[$index];
+                $updateRecords = [];
+
+                //Start Update Metadata 
+                $metaDataJson = $request->metadata;
+                $metaData = json_decode($metaDataJson,true);
+                $metaData_ApiResponse = $this->iam->adminUpdateUserMetadata($userId,$metaData);
+                if($metaData_ApiResponse['code'] == 200){
+                    $updateRecords['metadata'] = $metaDataJson;
+                }else if(isset($metaData_ApiResponse['json_error'])){
+
+                    if(isset($metaData_ApiResponse['json_error']['message'])){
+                        $errors['metadata'][] = ucfirst($metaData_ApiResponse['json_error']['message']); 
+                        return $this->sendErrorResponse('Validation Error', 422, "validation_error", $errors);
+                    }
+                }
+                //End Update Metadata
+    
+                if(count($updateRecords) > 0){
+                    $data[$index] = array_merge($data[$index], $updateRecords);
+                
+                    file_put_contents($this->filePath, json_encode($data));
+                }
+                
+                return $this->sendSuccessResponse(trans('messages.curd.update_record'));
+            }
+
+        }catch (\Exception $e) {
+            //   dd('Error in UserController::submitMetaDataEditor (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+
+            \Log::channel('iamsystemlog')->error('Error in UserController::submitMetaDataEditor (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+            return $this->sendErrorResponse(trans('messages.error_message'),500);
+        }
     }
 }

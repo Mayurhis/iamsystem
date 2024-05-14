@@ -68,17 +68,25 @@ class UserDataTable extends DataTable
                 
                 $action = '<div class="action-grid d-flex gap-2">';
 
-                if(authUserDetail('data.user.type') == 'admin'){
+                if(!isRolePermission('user_create_access_token')){
                     $action .='<a href="'.route('admin.users.showCreateAccessToken',$row['ID']).'" class="action-btn bg-dark" title="Create Access Token"><i class="fa fa-unlock" aria-hidden="true"></i></a>';
+                }
+
+                if(!isRolePermission('user_change_password')){
                     $action .='<a href="'.route('admin.users.changeUserPassword',$row['ID']).'" class="action-btn bg-dark" title="Change User Password"><i class="fa fa-lock" aria-hidden="true"></i></a>';
                 }
+
+                /*
+                if(!isRolePermission('user_metadata_editor')){
+                    $action .='<a href="'.route('admin.users.showMetaDataEditor',$row['ID']).'" class="action-btn bg-dark" title="Metadata Editor"><i class="fi fi-rr-edit"></i></a>';
+                }*/
                 
                 /*if(!isRolePermission('user_view')){
                     $action .='<a href="'.route('admin.users.show',$row['ID']).'" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>';
                 }*/
 
                 if(!isRolePermission('user_edit')){
-                    $action .='<a href="'.route('admin.users.edit',$row['ID']).'" class="action-btn bg-primary" title="Edit"><i class="fi fi-rr-edit"></i></i></a>';
+                    $action .='<a href="'.route('admin.users.edit',$row['ID']).'" class="action-btn bg-primary" title="Edit"><i class="fi fi-rr-edit"></i></a>';
                 }
                 $action .= '</div>';
 

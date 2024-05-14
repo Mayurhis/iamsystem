@@ -67,4 +67,8 @@ Route::group(["namespace" => "App\Http\Controllers\Backend",'as' => 'admin.',"pr
     Route::post('users/create-access-token/{id}',"UserController@submitAccessToken")->name('users.submitAccessToken');
     
 
+    Route::get("users/{id}/metadata-editor","UserController@showMetaDataEditor")->name("users.showMetaDataEditor");
+    
+    Route::post('users/metadata-editor/{id}',"UserController@submitMetaDataEditor")->name('users.submitMetaDataEditor');
+
 });

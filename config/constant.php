@@ -18,15 +18,16 @@ return [
        6 => 'user_view',
        7 => 'user_change_password',
        8 => 'user_create_access_token',
+       9 => 'user_metadata_editor',
     ],
 
     'role_permission'=>[
-        'admin' => [1,2,3,4,6,7,8],
-        'auditor' => [1,2,3,6],
+        'admin' => [1,2,3,4,6,7,8,9],
+        'auditor' => [1,2,6],
     ],
 
     'role_permission_aud'=>[
-        'admin' => [1,2,3,4,6],
+        'admin' => [1,2,3,4,6,7,8,9],
         'auditor' => [1,2,6],
     ],
 

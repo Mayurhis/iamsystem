@@ -2,15 +2,18 @@
 
     $(document).ready(function(){
 
-        $('#role').select2({
-            theme:'classic',
-            // selectOnClose: true,
-            placeholder:'Please Select Role',
-            multiple: true,
-            tags: true,
-            tokenSeparators: [',', ' '],
-            // minimumResultsForSearch: Infinity
-        });
+        if ($('#role').length > 0) {
+            $('#role').select2({
+                theme:'classic',
+                // selectOnClose: true,
+                placeholder:'Please Select Role',
+                multiple: true,
+                tags: true,
+                tokenSeparators: [',', ' '],
+                // minimumResultsForSearch: Infinity
+            });
+        }
+       
 
         var passwordRegex = {{ config('constant.password_regex') }};
         $.validator.addMethod("passwordPattern", function(value, element) {

@@ -113,6 +113,14 @@
         window.location.href = "{{ route('logout') }}";
     }
 
+    // Add event listeners for user activity
+    
+    document.addEventListener('mousemove', resetLogoutTimer);
+    document.addEventListener('mousedown', resetLogoutTimer);
+    document.addEventListener('keypress', resetLogoutTimer);
+    document.addEventListener('touchstart', resetLogoutTimer);
+    
+
     // Function to display timeout screen
     function showTimeoutScreen() {
         document.getElementById('timeout-screen').style.display = 'flex';
