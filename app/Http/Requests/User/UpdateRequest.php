@@ -28,7 +28,7 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         
-        $filePath = storage_path('app/users.json');
+        $filePath = public_path('backend/json/users.json');
 
         $users = json_decode(file_get_contents($filePath), true);
 
@@ -114,8 +114,6 @@ class UpdateRequest extends FormRequest
 
         $rules['role.*']   = ['string','regex:/^[a-zA-Z0-9_]+$/'];
         
-        $rules['metadata']   = ['required'];
-
         return $rules;
     }
 

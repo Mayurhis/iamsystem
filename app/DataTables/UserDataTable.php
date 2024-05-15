@@ -76,10 +76,13 @@ class UserDataTable extends DataTable
                     $action .='<a href="'.route('admin.users.changeUserPassword',$row['ID']).'" class="action-btn bg-dark" title="Change User Password"><i class="fa fa-lock" aria-hidden="true"></i></a>';
                 }
 
-                /*
+                
                 if(!isRolePermission('user_metadata_editor')){
-                    $action .='<a href="'.route('admin.users.showMetaDataEditor',$row['ID']).'" class="action-btn bg-dark" title="Metadata Editor"><i class="fi fi-rr-edit"></i></a>';
-                }*/
+
+                    $metaDataIcon = view('components.svg-icons', ['icon' => 'metadata'])->render();
+
+                    $action .='<a href="'.route('admin.users.showMetaDataEditor',$row['ID']).'" class="action-btn bg-dark svg-icon" title="Metadata Editor">'.$metaDataIcon.'</a>';
+                }
                 
                 /*if(!isRolePermission('user_view')){
                     $action .='<a href="'.route('admin.users.show',$row['ID']).'" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>';

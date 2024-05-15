@@ -98,7 +98,7 @@ class UserController extends BaseController
                     'type'          => $apiResponse['response']['data']['user']['type'],
                     'is_confirmed'  => $apiResponse['response']['data']['user']['is_confirmed'],
                     'last_login_at'              => null,
-                    'metadata'                   => $request->metadata ?? null,
+                    'metadata'                   => null,
                     'status'                     => $apiResponse['response']['data']['user']['status'],
                     'access_token'               => $apiResponse['response']['data']['access_token'],
                     'refresh_token'              => $apiResponse['response']['data']['refresh_token'],
@@ -116,10 +116,9 @@ class UserController extends BaseController
 
             if($isUserCreated){
 
-                $updatedFields = $this->updateFormFields($createdUserId,$request->status,$request->role,$request->metadata);
+                $updatedFields = $this->updateFormFields($createdUserId,$request->status,$request->role);
                 $newUser['status'] = $updatedFields['status'] ?? null;
                 $newUser['role'] = $updatedFields['role'] ?? null;
-                $newUser['metadata'] = $updatedFields['metadata'] ?? null;
 
                 $users[] = $newUser;
             
@@ -201,7 +200,7 @@ class UserController extends BaseController
             if ($index !== null) {
 
                 $getUserObject = $data[$index];
-                $updateRecords = $this->updateFormFields($id,$request->status,$request->role,$request->metadata);
+                $updateRecords = $this->updateFormFields($id,$request->status,$request->role);
 
                 if(count($updateRecords) > 0){
                     $data[$index] = array_merge($data[$index], $updateRecords);
@@ -335,14 +334,14 @@ class UserController extends BaseController
            return $this->sendErrorResponse('Invalid Credentials',500);
         
         } catch (\Exception $e) {
-              dd('Error in UserController::submitChangeUserPassword (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+            //   dd('Error in UserController::submitChangeUserPassword (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
 
             \Log::channel('iamsystemlog')->error('Error in UserController::submitAccessToken (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
             return $this->sendErrorResponse(trans('messages.error_message'),500);
         }
     }
 
-    public function updateFormFields($userId,$status,$role,$metaDataJson){
+    public function updateFormFields($userId,$status,$role){
         $updateRecords = [];
 
         //Start Update status 
@@ -371,21 +370,6 @@ class UserController extends BaseController
            }
        }
        //End Update Role
-
-       //Start Update Metadata 
-       $metaData = json_decode($metaDataJson,true);
-       $metaData_ApiResponse = $this->iam->adminUpdateUserMetadata($userId,$metaData);
-       if($metaData_ApiResponse['code'] == 200){
-           $updateRecords['metadata'] = $metaDataJson;
-       }else if(isset($metaData_ApiResponse['json_error'])){
-
-           if(isset($metaData_ApiResponse['json_error']['message'])){
-               $errors['metadata'][] = ucfirst($metaData_ApiResponse['json_error']['message']); 
-               return $this->sendErrorResponse('Validation Error', 422, "validation_error", $errors);
-           }
-       }
-       //End Update Metadata
-
 
        return $updateRecords;
     }
@@ -428,7 +412,7 @@ class UserController extends BaseController
                 //Start Update Metadata 
                 $metaDataJson = $request->metadata;
                 $metaData = json_decode($metaDataJson,true);
-                $metaData_ApiResponse = $this->iam->adminUpdateUserMetadata($userId,$metaData);
+                $metaData_ApiResponse = $this->iam->adminUpdateUserMetadata($id,$metaData);
                 if($metaData_ApiResponse['code'] == 200){
                     $updateRecords['metadata'] = $metaDataJson;
                 }else if(isset($metaData_ApiResponse['json_error'])){

@@ -2777,7 +2777,7 @@ select[readonly="readonly"] ~ .select2-container {
     height: 100%;
     object-fit: cover;
     }
-    .avatar {
+    .sleep-wrapper .avatar {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -2787,7 +2787,7 @@ select[readonly="readonly"] ~ .select2-container {
     align-items: center;
     text-align: center;
     }
-    .avatar__icon {
+    .sleep-wrapper .avatar__icon {
     width: 200px;
     height: 200px;
     background-color: #98cf00b8;
@@ -2897,6 +2897,20 @@ select[readonly="readonly"] ~ .select2-container {
     }
 /* end  */
 
+table.dataTable>thead>tr>th, table.dataTable>thead>tr>td{
+    white-space: nowrap;
+}
+
+.svg-icon svg {
+    stroke: var(--primary);
+}
+.svg-icon:hover svg{
+    stroke: var(--white-color);
+}
+
+table.dataTable thead>tr>th.sorting:before, table.dataTable thead>tr>th.sorting:after {
+    right: -5px;
+}
 /* Responsive  */
 
 @media(max-width:1499px){

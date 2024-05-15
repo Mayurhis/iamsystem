@@ -79,10 +79,6 @@
                'role[]':{
                 required: true,
                },
-                'metadata':{
-                required: true,
-                isValidJSON: true
-               }
            },
            messages: {
                required: "This field is required.",

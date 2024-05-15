@@ -128,21 +128,6 @@
         </div>
     </div>
     
-     <div class="col-12">
-        <div class="form-group">
-             @php
-               $metadata = '';
-               if(isset($user)){
-                 if($user['metadata']){
-                    $metadata = isset($user['metadata']['wallets']) ? json_encode($user['metadata']['wallets']) :json_encode($user['metadata']);
-                 }
-               }
-             @endphp
-            <label>@lang('cruds.user.fields.metadata')<span class="text-danger">*</span></label>
-            <textarea type="text" name="metadata" id="metadata" class="form-control valid editable" row="4" placeholder="Enter Metadata" autocomplete="off">{{ $metadata ?? ''}}</textarea>
-        </div>
-    </div>
-    
 
 </div>
 
