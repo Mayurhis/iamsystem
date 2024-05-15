@@ -17,7 +17,7 @@
             <div class="dash-right-area">
                 <div class="mobile-header d-md-none">
                     <div class="mob-logo">
-                        <a href="javascript:void(0);" title="logo"><h3 class="text-white">{{ config('app.name') }}</h3></a>
+                        <a href="{{ route('admin.dashboard') }}" title="logo"><h3 class="text-white">{{ config('app.name') }}</h3></a>
                     </div>
                     <div class="humberger-mobile d-flex">
                         <div class="dropdown user-dropdown">
@@ -53,7 +53,8 @@
                             </div>
                         </div>
                         <div class="humberger-icon">
-                            <img src="{{ asset('backend/images/humberger-icon.svg') }}" alt="humberger-icon">
+                            <!-- <img src="{{ asset('backend/images/humberger-icon.svg') }}" alt="humberger-icon"> -->
+                            <div class="hamburger" id="hamburger"><span class="line"></span><span class="line"></span><span class="line"></span></div>
                         </div>
                     </div>
                 </div>

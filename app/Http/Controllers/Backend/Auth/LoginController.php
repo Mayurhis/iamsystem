@@ -95,7 +95,7 @@ class LoginController extends BaseController
             }
 
         } catch(\Exception $e){
-            // dd($e->getMessage().'->'.$e->getLine());
+            dd($e->getMessage().'->'.$e->getLine());
             \Log::channel('iamsystemlog')->error('Error in LoginController::login (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
             return redirect()->back()->with('error',trans('messages.error_message'));
         }

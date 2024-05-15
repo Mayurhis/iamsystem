@@ -50,6 +50,7 @@ trait IAMRequestTrait
             $response = ['status' => true, 'code' => 200, 'message' => 'success', 'response' => json_decode($body, true)];
         } catch (ConnectException|ClientException|Exception $e) {
             $response = ['status' => false, 'code' => $e->getCode(), 'message' => $this->getIAMError($e->getMessage()), 'data' => []];
+            
         }
         Log::channel('iamsystemlog')->info('IAMPostRequestWithAccessToken response = ' . print_r($response, true));
         return $response;
@@ -142,7 +143,7 @@ trait IAMRequestTrait
      * @param $message
      * @return array|string
      */
-    public function getIAMError($message): array|string
+    public function getIAMError($message)
     {
         $startIndex = strpos($message, '{');
         $endIndex = strpos($message, '}');
@@ -150,7 +151,15 @@ trait IAMRequestTrait
             $json = substr($message, $startIndex, $endIndex);
             $decoded = json_decode($json, true);
             Log::channel('iamsystemlog')->info('getIAMError decoded = ' . print_r($decoded, true));
-            return $decoded['message'];
+           
+            if(isset($decoded['message'])){
+                  return $decoded['message'];
+            }else if(isset($decoded['data']['message'])){
+                   return $decoded['data']['message'];
+            }else{
+                return [$message];
+            }
+            
         } else {
             return [$message];
         }

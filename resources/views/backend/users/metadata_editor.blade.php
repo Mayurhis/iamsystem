@@ -28,7 +28,7 @@
                                     @php
                                         $metadata = '';
                                         if(isset($user)){
-                                            if($user['metadata']){
+                                           if(isset($user['metadata'])){
                                                 $metadata = isset($user['metadata']['wallets']) ? json_encode($user['metadata']['wallets']) :json_encode($user['metadata']);
                                             }
                                         }

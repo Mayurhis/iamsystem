@@ -2671,10 +2671,12 @@ select[readonly="readonly"] ~ .select2-container {
 /* Profile-end  */
 
   .select2-container--classic .select2-selection--multiple .select2-selection__rendered{
-    padding: 0 5px;
+    padding: 0 10px !important;
     display: flex !important;
+    flex-wrap: wrap;
+    row-gap: 5px;
     align-items: center !important;
-    height: 60px;
+    min-height: 60px;
   }
 
   .select2-container--classic .select2-selection--multiple .select2-selection__choice{
@@ -2702,11 +2704,12 @@ select[readonly="readonly"] ~ .select2-container {
     text-align: left;
     font-size: 16px !important;
     margin: 0 !important;
+    padding-left: 5px !important;
   }
 
-  .select2-container--classic .select2-search--inline .select2-search__field::placeholder{
+  /* .select2-container--classic .select2-search--inline .select2-search__field::placeholder{
     padding-left: 15px;
-  }
+  } */
 
   .select2-container--classic.select2-container--open .select2-dropdown{
     border-color: var(--primary) !important;
@@ -2996,6 +2999,32 @@ table.dataTable thead>tr>th.sorting:before, table.dataTable thead>tr>th.sorting:
 
 @media screen and (max-width: 767px){
 
+    /* bar  */
+    .hamburger .line {
+        width: 30px;
+        height: 2px;
+        background-color: var(--white-color);
+        display: block;
+        margin: 8px auto;
+        -webkit-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+    }
+    .hamburger .line {
+        margin: 7px auto;
+        width: 25px;
+    }
+    .dash-section.sidebar-open #hamburger .line:nth-child(2) {
+        opacity: 0;
+    }
+    .dash-section.sidebar-open #hamburger .line:nth-child(3) {
+        transform: translateY(-11px) rotate(-45deg);
+    }
+    .dash-section.sidebar-open #hamburger .line:first-child {
+        transform: translateY(7px) rotate(45deg);
+    }
+    /* end  */
+
     .user-dropdown .dropdown-toggle .arrow-icon svg{
         margin-top: -3px;
     }
@@ -3095,6 +3124,7 @@ table.dataTable thead>tr>th.sorting:before, table.dataTable thead>tr>th.sorting:
         margin-top: 5rem;
         padding-left: 1rem;
         padding-right: 1rem;
+        min-height: calc(100vh - 80px);
     }
     .dashboard-blog .nav-area{
         left: -300px;
@@ -3161,6 +3191,10 @@ table.dataTable thead>tr>th.sorting:before, table.dataTable thead>tr>th.sorting:
 
 @media screen and (max-width: 575px){
 
+    form#addUserForm .row .col-6 {
+        width: 100%;
+    }
+
     .login-wrapper .form_wrapper{
         padding: 30px 20px;
     }
@@ -3182,7 +3216,7 @@ table.dataTable thead>tr>th.sorting:before, table.dataTable thead>tr>th.sorting:
     }
     
     .brand-listing .table-subtitle {
-        margin-bottom: 20px;
+        margin-bottom: 0;
         font-size: 18px;
     }
 
