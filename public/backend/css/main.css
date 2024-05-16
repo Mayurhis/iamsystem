@@ -2918,6 +2918,14 @@ table.dataTable thead>tr>th.sorting:before, table.dataTable thead>tr>th.sorting:
 }
 /* Responsive  */
 
+.table-logout{
+    stroke: var(--primary);
+}
+
+.action-btn:hover .table-logout path{
+    stroke: var(--white-color);
+}
+
 @media(max-width:1499px){
     .coming-soon h3{
         font-size: 70px;

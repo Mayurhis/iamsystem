@@ -98,8 +98,9 @@
                'language':{
                 required: true,
                },
-                'role[]':{
+               'role':{
                 required: true,
+                rolePattern:true
                },
            },
            messages: {

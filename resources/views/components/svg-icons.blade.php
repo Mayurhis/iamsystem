@@ -36,6 +36,15 @@
         </defs>
         </svg>
     @break
+    @case('user_logout')
+    
+    <svg width="22" class="table-logout" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8.25 19.25H4.58333C4.0971 19.25 3.63079 19.0568 3.28697 18.713C2.94315 18.3692 2.75 17.9029 2.75 17.4167V4.58333C2.75 4.0971 2.94315 3.63079 3.28697 3.28697C3.63079 2.94315 4.0971 2.75 4.58333 2.75H8.25" stroke="#96bc12" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14.6665 15.5832L19.2498 10.9998L14.6665 6.4165" stroke="#96bc12" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M19.25 11H8.25" stroke="#96bc12" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    
+    @break
         
         <!-- Default case if no matching icon is provided -->
 @endswitch

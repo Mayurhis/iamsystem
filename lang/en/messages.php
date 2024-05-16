@@ -37,6 +37,7 @@ return [
     'register_success'  =>  'Your account created successfully! Please wait for the approval!',
     'login_success'     =>  'You have logged in successfully!',
     'logout_success'    =>  'Logged out successfully!',
+    'user_logout_success'    =>  'User logged out successfully!',
     'warning_select_record' => 'Please select at least one record',
     'required_role'         => "User with the specified email doesn't have the required role.",
     
@@ -64,10 +65,16 @@ return [
             'text' => 'You will be logged out!',
             'confirmButtonText' => 'Yes, log me out!',
             'cancelButtonText'  => 'No',
+        ],
+        'user_logout' =>[
+            'text' => 'You want to logout :username!',
+            'confirmButtonText' => 'Yes, log out!',
+            'cancelButtonText'  => 'No',
         ]
     ],
 
     'password_regex' => 'The password must contain uppercase letters A-Z, lowercase letters a-z, digits 0-9 and symbols -_!@#$%&*',
     'username_regex' => 'The username must only contain letters, numbers, and underscores.',
+    'role_regex' => 'The role must only contain letters',
     'dev_working' => 'Thank you for your submission! To proceed, we require access to an API',
 ];

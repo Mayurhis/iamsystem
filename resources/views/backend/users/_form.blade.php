@@ -116,15 +116,7 @@
     <div class="col-6">
         <div class="form-group">
             <label>@lang('cruds.user.fields.role')<span class="text-danger">*</span></label>
-            <select  class="form-control editable" name="role[]" id="role" multiple="multiple">
-                @if(isset($user))
-                    @foreach(explode(',',$user['role']) as $role)
-                    @if(!empty($role))
-                        <option value="{{$role}}" selected>{{ ucwords($role) }}</option>
-                    @endif
-                    @endforeach
-                @endif
-            </select>
+            <input type="text" name="role" id="role" class="form-control editable" value="{{ isset($user) ? isset($user['role']) ? $user['role'] : '' :'' }}">
         </div>
     </div>
     

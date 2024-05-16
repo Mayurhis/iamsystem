@@ -2,17 +2,15 @@
 
     $(document).ready(function(){
 
-        if ($('#role').length > 0) {
+       /* if ($('#role').length > 0) {
             $('#role').select2({
                 theme:'classic',
-                // selectOnClose: true,
                 placeholder:'Please Select Role',
                 multiple: true,
                 tags: true,
                 tokenSeparators: [',', ' '],
-                // minimumResultsForSearch: Infinity
             });
-        }
+        }*/
        
 
         var passwordRegex = {{ config('constant.password_regex') }};
@@ -28,6 +26,15 @@
             return true;
            }
        }, "{{ trans('messages.username_regex')}}");
+
+       var roleRegex = /^[a-zA-Z]+$/;
+       $.validator.addMethod("rolePattern", function(value, element) {
+           if(value != ''){
+            return roleRegex.test(value);
+           }else{
+            return true;
+           }
+       }, "{{ trans('messages.role_regex')}}");
        
 
        $.validator.addMethod("isValidJSON", function(value, element) {

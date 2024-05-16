@@ -2,6 +2,7 @@
 @section('title', 'Metadata Editor')
 
 @section('custom_CSS')
+
 @endsection
 
 @section('headerTitle','Metadata Editor')
@@ -35,7 +36,7 @@
                                     @endphp
 
                                     <label>@lang('cruds.user.fields.metadata')<span class="text-danger">*</span></label>
-                                    <textarea type="text" name="metadata" id="metadata" class="form-control valid editable" height="200px;" placeholder="Enter Metadata" autocomplete="off">{{ $metadata ?? ''}}</textarea>
+                                    <textarea type="text" name="metadata" id="metadata" class="form-control valid editable"  placeholder="Enter Metadata" autocomplete="off">{{ $metadata ?? ''}}</textarea>
                                 </div>
                             </div>
                             
@@ -57,13 +58,18 @@
 @endsection
 
 @section('custom_JS')
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="{{ asset('backend/js/assets/jquery.validate.min.js') }}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/json-colorizer/0.1.10/jsonColorizer.min.js"></script>
 
 @parent
 <script type="text/javascript">
 
+    // prettifyAndColorizeJSON();
+    
+  
     $(document).ready(function () {
-   
+
        $("#metadataEditorForm").validate({
            errorElement: 'span',
            errorClass: 'validation-error-block error',
@@ -141,7 +147,29 @@
                       
     });
 
-    
+
+    function prettifyAndColorizeJSON() {
+        var textarea = document.getElementById("metadata");
+        var jsonString = textarea.value;
+        
+        try {
+            // Parse the JSON string
+            var jsonData = JSON.parse(jsonString);
+            // Prettify the JSON string
+            var prettyJsonString = JSON.stringify(jsonData, null, 4);
+            // Apply color formatting
+            var colorizedJsonString = jsonColorizer.colorize(prettyJsonString);
+            // Update the textarea with colorized JSON
+            textarea.value = colorizedJsonString;
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+        }
+    }
+
+    var metadataTextarea = document.getElementById("metadata");
+    metadataTextarea.addEventListener("input", prettifyAndColorizeJSON);
+
+   
 </script>
 
 @include('backend.users.partials.comman_js')

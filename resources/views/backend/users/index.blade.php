@@ -47,14 +47,38 @@
     
         e.preventDefault();
         var rowId = $(this).attr('id');
-        
-        //  console.log('hello',rowId);
          
         var url = "{{ route('admin.users.show', ':rowId') }}";
         url = url.replace(':rowId', rowId);
         
         window.location.href = url;
        
+    });
+    @endif
+
+    @if(!isRolePermission('user_force_logout'))
+    $(document).on('click','#userForceLogout',function(event){
+        event.preventDefault();
+
+        var username = $(this).attr('data-username');
+        var url = $(this).attr('href');
+
+        Swal.fire({
+            title: "{{ trans('messages.areYouSure') }}",
+            text: "{{ trans('messages.conifrmSweetAlert.user_logout.text',['username'=>':username']) }}".replace(':username', username),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: "{{ trans('messages.conifrmSweetAlert.user_logout.confirmButtonText') }}",
+            cancelButtonText: "{{ trans('messages.conifrmSweetAlert.user_logout.cancelButtonText') }}",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                loaderShow();
+                window.location.href = url; 
+            }
+        });
+
     });
     @endif
     

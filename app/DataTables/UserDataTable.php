@@ -62,8 +62,7 @@ class UserDataTable extends DataTable
                 return $row['last_login_at'] ? convertDateTimeFormat($row['last_login_at']) : '';
             })
             
-           
-            
+        
             ->addColumn('action', function ($row) {
                 
                 $action = '<div class="action-grid d-flex gap-2">';
@@ -84,13 +83,19 @@ class UserDataTable extends DataTable
                     $action .='<a href="'.route('admin.users.showMetaDataEditor',$row['ID']).'" class="action-btn bg-dark svg-icon" title="Metadata Editor">'.$metaDataIcon.'</a>';
                 }
                 
-                /*if(!isRolePermission('user_view')){
-                    $action .='<a href="'.route('admin.users.show',$row['ID']).'" class="action-btn bg-dark" title="View"><i class="fi fi-rr-eye"></i></i></a>';
-                }*/
 
                 if(!isRolePermission('user_edit')){
                     $action .='<a href="'.route('admin.users.edit',$row['ID']).'" class="action-btn bg-primary" title="Edit"><i class="fi fi-rr-edit"></i></a>';
                 }
+
+                if(!isRolePermission('user_force_logout')){
+
+                    $userForceLogoutIcon = view('components.svg-icons', ['icon' => 'user_logout'])->render();
+
+                    $action .='<a href="'.route('admin.users.userForceLogout',$row['ID']).'" class="action-btn bg-primary svg-icon" id="userForceLogout" data-username="'.$row['username'].'" title="User Force Logout">'.$userForceLogoutIcon.'</a>';
+                }
+
+                
                 $action .= '</div>';
 
                 return $action;

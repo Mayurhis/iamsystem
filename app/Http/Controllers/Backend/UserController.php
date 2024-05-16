@@ -71,7 +71,7 @@ class UserController extends BaseController
 
             $insertRecords = [
                 'aud'           => $request->aud,
-                'role'          => implode(',',$request->role),
+                'role'          => $request->role,
                 'email'         => $request->email,
                 'password'      => $request->password,
                 'language'      => strtolower($request->language),
@@ -358,10 +358,9 @@ class UserController extends BaseController
        //End Update status
 
        //Start Update Role
-       $userRole = implode(',',$role);
-       $role_ApiResponse = $this->iam->adminUpdateUserRole($userId,$userRole);
+       $role_ApiResponse = $this->iam->adminUpdateUserRole($userId,$role);
        if($role_ApiResponse['code'] == 200){
-           $updateRecords['role']     = $userRole;
+           $updateRecords['role']     = $role;
        }else if(isset($role_ApiResponse['json_error'])){
 
            if(isset($role_ApiResponse['json_error']['message'])){
@@ -439,5 +438,26 @@ class UserController extends BaseController
             \Log::channel('iamsystemlog')->error('Error in UserController::submitMetaDataEditor (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
             return $this->sendErrorResponse(trans('messages.error_message'),500);
         }
+    }
+
+    public function userForceLogout($id){
+        abort_if(isRolePermission('user_force_logout'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        try{          
+            $apiResponse = $this->iam->adminUserForcelogout($id);
+
+            if($apiResponse['code'] == 200){
+                return redirect()->back()->with('success',trans('messages.user_logout_success'));
+            }else{
+                return redirect()->back()->with('error',trans('messages.error_message'));
+            }
+
+        }catch (\Exception $e) {
+            //   dd('Error in UserController::userForceLogout (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+
+            \Log::channel('iamsystemlog')->error('Error in UserController::userForceLogout (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+            return redirect()->back()->with('error',trans('messages.error_message'));
+        }
+
     }
 }

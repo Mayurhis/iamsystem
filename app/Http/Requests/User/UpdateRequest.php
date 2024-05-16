@@ -106,13 +106,8 @@ class UpdateRequest extends FormRequest
 
         $rules['confirmed']   = ['required'];
         $rules['language']   = ['required'];
-        
-        $rules['role']   = [
-            'required',
-            'array',
-        ];
 
-        $rules['role.*']   = ['string','regex:/^[a-zA-Z0-9_]+$/'];
+        $rules['role']   = ['string','regex:/^[a-zA-Z]+$/'];
         
         return $rules;
     }

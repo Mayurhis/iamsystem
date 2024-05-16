@@ -92,4 +92,10 @@ class IAMHttpService
         $apiUrl = '/user/'.$userId.'/password/';
         return $this->IAMPutRequest($apiUrl ,$updatePassword);
     }
+
+    public function adminUserForcelogout($userId): array
+    {
+        $apiUrl = '/logout/'.$userId;
+        return $this->IAMGetRequest($apiUrl);
+    }
 }

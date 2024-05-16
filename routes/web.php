@@ -71,4 +71,6 @@ Route::group(["namespace" => "App\Http\Controllers\Backend",'as' => 'admin.',"pr
     
     Route::post('users/metadata-editor/{id}',"UserController@submitMetaDataEditor")->name('users.submitMetaDataEditor');
 
+    Route::get('users/force-logout/{id}',"UserController@userForceLogout")->name('users.userForceLogout');
+
 });
