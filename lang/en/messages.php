@@ -53,7 +53,8 @@ return [
     'record_updated_successfully'   => 'Record updated successfully',
     'record_deleted_successfully'   => 'Record deleted successfully',
     'password_updated_successfully' => 'Password updated successfully',
-    'updated_successfully'          => ':module_name updated successfully',
+
+    'updated_successfully'          => ':module_name updated successfully!',
 
 
     'account_deactivate'            => 'Your account has been deactivated. Please contact the admin.',

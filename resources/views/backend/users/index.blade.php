@@ -35,6 +35,12 @@
 
 @section('custom_JS')
 @parent
+<script>
+    var datatableUrl  =  "{{ route('admin.users.index') }}";
+    var statusOptions  =  @json(config('constant.userStatus'));
+    var typeOptions  =  @json(config('constant.userType'));
+
+</script>
 {!! $dataTable->scripts() !!}
 
 <script type="text/javascript">
@@ -82,5 +88,8 @@
     });
     @endif
     
+    function capitalizeFirstChar(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 </script>
 @endsection

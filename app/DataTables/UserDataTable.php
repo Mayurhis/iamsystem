@@ -9,14 +9,15 @@ use Illuminate\Support\Facades\Gate;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Support\Str;
+use App\Services\IAMHttpService;
 
 class UserDataTable extends DataTable
 {
-    private $filePath;
-    
+    Private $iam;
+
     public function __construct()
     {
-        $this->filePath = public_path('backend/json/users.json');
+        $this->iam = new IAMHttpService();
     }
 
     public function dataTable($query)
@@ -50,7 +51,9 @@ class UserDataTable extends DataTable
             })
             
             ->editColumn('metadata',function($row){
-                return  $row['metadata'] ? Str::limit($row['metadata'], 50) : '';
+
+                return  isset($row['metadata']) ? $row['metadata'] ? Str::limit(json_encode($row['metadata'],true), 50) : '' : '';
+
             })
             ->editColumn('created_at',function($row){
                 return convertDateTimeFormat($row['created_at']);
@@ -59,7 +62,7 @@ class UserDataTable extends DataTable
                 return $row['updated_at'] ? convertDateTimeFormat($row['updated_at']) : '';
             })
             ->editColumn('last_login_at',function($row){
-                return $row['last_login_at'] ? convertDateTimeFormat($row['last_login_at']) : '';
+                return isset($row['last_login_at']) ? convertDateTimeFormat($row['last_login_at']) : '';
             })
             
         
@@ -105,14 +108,116 @@ class UserDataTable extends DataTable
 
     public function query()
     {
-        $users = json_decode(file_get_contents($this->filePath), true);
+        $filterParameters = [];
 
         $audString = authUserDetail('data.user.aud');
+        if($audString){
+            $filterParameters['aud'] = $audString;
+        }
+       
+        $offset = $this->request()->get('start');
+        if($audString){
+            $filterParameters['offset'] = $offset;
+        }
 
-        if($audString && authUserDetail('data.user.type') == 'auditor'){
-            $users = array_filter($users, function($user) use ($audString) {
-                return isset($user['aud']) && $user['aud'] == $audString;
-            });
+        $limit = $this->request()->get('length');
+        if($limit){
+            $filterParameters['limit'] = $limit;
+        }
+
+        $columns = $this->request()->get('columns');
+
+        //Start Sort by
+        $orders = $this->request()->get('order');
+        if(count($orders) > 0){
+            $sortArr = [];
+            foreach ($orders as $keyIndex => $order) {
+
+                $columnIndex = (int)$order['column'];
+                $columnName = $columns[$columnIndex]['data'];
+
+                $sortDir = ($order['dir'] == 'asc') ? '+' : '-';
+
+                $sortArr[$keyIndex] = $sortDir.$columnName;
+            }
+
+            if(count($sortArr) > 0){
+                $filterParameters['sort'] = implode(',',$sortArr);
+            }
+        }
+        //End Sort by
+
+        //Start Search Box
+        
+        /*
+        foreach ($columns as $column) {
+            $data = $column['data'];
+            $searchValue = $column['search']['value'] ?? '';
+
+            if ($searchValue) {
+                if($data == 'is_confirmed'){
+                    $filterParameters[$data] = strtolower($searchValue) == 'yes' ? true : false;
+                }else{
+                    $filterParameters[$data] = $searchValue;
+                }
+               
+            }
+        }*/
+
+        //End Search Box
+
+
+        //Start Column Search Parameter
+
+        if($this->request()->get('email')){
+            $filterParameters['email'] = $this->request()->get('email');
+        }
+
+        if($this->request()->get('username')){
+            $filterParameters['username'] = $this->request()->get('username');
+        }
+
+        if($this->request()->get('status')){
+            $filterParameters['status'] = $this->request()->get('status');
+        }
+
+        if($this->request()->get('is_confirmed')){
+            $filterParameters['is_confirmed'] = strtolower($searchValue) == 'yes' ? true : false;
+        }
+
+        if($this->request()->get('language')){
+            $filterParameters['language'] = $this->request()->get('language');
+        }
+
+        if($this->request()->get('aud')){
+            $filterParameters['aud'] = $this->request()->get('aud');
+        }
+
+        if($this->request()->get('metadata')){
+            $filterParameters['metadata'] = $this->request()->get('metadata');
+        }
+
+        if($this->request()->get('created_at')){
+            $filterParameters['created_at'] = Carbon::parse($this->request()->get('created_at'))->format('Y-m-d');
+        }
+
+        if($this->request()->get('updated_at')){
+            $filterParameters['updated_at'] = Carbon::parse($this->request()->get('updated_at'))->format('Y-m-d');
+        }
+
+        if($this->request()->get('last_login_at')){
+            $filterParameters['last_login_at'] = Carbon::parse($this->request()->get('last_login_at'))->format('Y-m-d');
+        }
+
+        //End Column search Parameter
+
+        // dd(  $filterParameters );
+
+       $users = [];
+       $apiResponse =  $this->iam->adminUserList($filterParameters);
+
+        if($apiResponse['code'] == 200){
+            $users = $apiResponse['response']['data']['users'];
         }
 
         return collect($users);
@@ -132,17 +237,141 @@ class UserDataTable extends DataTable
                         [20, 40, 60, 80, 100]
                     ])
                     ->parameters([
+                            'searching' => false,
                             'initComplete' => "function () {
-                                this.api().columns().every(function () {
-                                    var column = this;
-                                    console.log(column);
-                                    var input = document.createElement(\"input\");
-                                    $(input).appendTo($(column.footer()).empty())
-                                    .on('input', function () {
-                                        column.search($(this).val(), false, false, true).draw();
-                                    });
-                                });
+                                var table = this.api();
+                                let params = {};
+                                if (table.rows().count() > 0) {
+                                    
+                                    if ($(table.table().header()).find('tr').length === 1) {
+                                        var firstRow = $('<tr>').appendTo($(table.table().header()));
+                                        table.columns().every(function () {
+                                            var td = $('<td>').appendTo(firstRow);
+
+                                            var column = this;
+
+                                            var columnIndex = column.index();
+
+                                            if(columnIndex === 0){
+
+                                                var h = document.createElement('span');
+                                                $(h).appendTo(td);
+
+                                            }else if(columnIndex === 3){
+
+                                                var selectList = document.createElement('select');
+                                                selectList.name = 'status';
+                                                selectList.classList.add('form-control');
+
+                                                selectList.style.minWidth  = '150px';
+
+                                                var option1 = document.createElement('option');
+                                                option1.value = '';
+                                                option1.text = 'Please Select';
+                                                selectList.appendChild(option1);
+
+                                                for (var key in statusOptions) {
+                                                    if (statusOptions.hasOwnProperty(key)) {
+                                                        var option = document.createElement('option');
+                                                        option.value = statusOptions[key];
+                                                        option.text = capitalizeFirstChar(statusOptions[key]);
+                                                        selectList.appendChild(option);
+                                                    }
+                                                }
+
+                                                $(selectList).appendTo(td).on('change', function () {
+                                                  
+                                                    params.status = $(this).val();
+                                                   
+                                                    $('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
+                                                });
+
+                                            }else if(columnIndex === 7){
+
+                                                var selectList = document.createElement('select');
+                                                selectList.name = 'type';
+                                                selectList.classList.add('form-control');
+
+                                                selectList.style.minWidth  = '150px';
+
+                                                var option1 = document.createElement('option');
+                                                option1.value = '';
+                                                option1.text = 'Please Select';
+                                                selectList.appendChild(option1);
+
+                                                for (var key in typeOptions) {
+                                                    if (typeOptions.hasOwnProperty(key)) {
+                                                        var option = document.createElement('option');
+                                                        option.value = typeOptions[key];
+                                                        option.text = capitalizeFirstChar(typeOptions[key]);
+                                                        selectList.appendChild(option);
+                                                    }
+                                                }
+
+                                                $(selectList).appendTo(td).on('change', function () {
+                                                    params.type = $(this).val();
+                                                   
+                                                    $('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
+                                                });
+
+                                            }else if(columnIndex === 12){
+
+                                                var h = document.createElement('span');
+                                                $(h).appendTo(td);
+                                                
+                                            }else{
+                                           
+                                                var input = document.createElement('input');
+                                                input.style.minWidth  = '150px';
+                                                input.classList.add('form-control');
+                                                $(input).appendTo(td)
+                                                    .on('input', function () {
+
+                                                        if(columnIndex == 1){
+                                                            params.email = $(this).val();
+                                                        }
+
+                                                        if(columnIndex == 2){
+                                                            params.username = $(this).val();
+                                                        }
+
+                                                        if(columnIndex == 4){
+                                                            params.is_confirmed = $(this).val();
+                                                        }
+
+                                                        if(columnIndex == 5){
+                                                            params.language = $(this).val();
+                                                        }
+
+                                                        if(columnIndex == 6){
+                                                            params.aud = $(this).val();
+                                                        }
+
+                                                        if(columnIndex == 8){
+                                                            params.metadata = $(this).val();
+                                                        }
+
+                                                        if(columnIndex == 9){
+                                                            params.created_at = $(this).val();
+                                                        }
+
+                                                        if(columnIndex == 10){
+                                                            params.updated_at = $(this).val();
+                                                        }
+
+                                                        if(columnIndex == 10){
+                                                            params.last_login_at = $(this).val();
+                                                        }
+                                                   
+                                                        $('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
+                                                    });
+                                            }
+                                            
+                                        });
+                                    }
+                                }
                             }",
+                            
                     ]);
     }
   

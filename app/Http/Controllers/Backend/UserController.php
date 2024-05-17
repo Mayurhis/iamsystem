@@ -15,13 +15,10 @@ use App\Http\Requests\User\UpdateRequest;
 
 class UserController extends BaseController
 {
-    private $filePath;
-
     public $iam;
 
     public function __construct()
     {
-        $this->filePath = public_path('backend/json/users.json');
         $this->iam = new IAMHttpService();
     }
 
@@ -61,14 +58,7 @@ class UserController extends BaseController
      */
     public function store(StoreRequest $request)
     {
-        
         try{                
-            $users = json_decode(file_get_contents($this->filePath), true);
-
-            // Api
-            $isUserCreated = false;
-            $createdUserId = '';
-
             $insertRecords = [
                 'aud'           => $request->aud,
                 'role'          => $request->role,
@@ -87,49 +77,18 @@ class UserController extends BaseController
             $apiResponse = $this->iam->adminCreateUser($insertRecords);
 
             if ($apiResponse['code'] == 200) {
-                $newUser = [
-                    'ID'            => $apiResponse['response']['data']['user']['ID'],
-                    'aud'           => $apiResponse['response']['data']['user']['aud'],
-                    'role'          => $apiResponse['response']['data']['user']['role'],
-                    'email'         => $apiResponse['response']['data']['user']['email'],
-                    'username'      => $apiResponse['response']['data']['user']['username'],
-                    'password'      => $request->password,
-                    'language'      => strtolower($apiResponse['response']['data']['user']['language']),
-                    'type'          => $apiResponse['response']['data']['user']['type'],
-                    'is_confirmed'  => $apiResponse['response']['data']['user']['is_confirmed'],
-                    'last_login_at'              => null,
-                    'metadata'                   => null,
-                    'status'                     => $apiResponse['response']['data']['user']['status'],
-                    'access_token'               => $apiResponse['response']['data']['access_token'],
-                    'refresh_token'              => $apiResponse['response']['data']['refresh_token'],
-                    'created_at' => $apiResponse['response']['data']['user']['created_at'],
-                    'updated_at' => $apiResponse['response']['data']['user']['updated_at'],
-                    'deleted_at' => $apiResponse['response']['data']['user']['deleted_at'],
-                ];
 
-                $isUserCreated = true;
-                $createdUserId = $apiResponse['response']['data']['user']['ID'];
+                return $this->sendSuccessResponse(trans('messages.curd.add_record'));
                 
             }else if($apiResponse['code'] == 400){
-                return $this->sendErrorResponse(ucwords($apiResponse['message']),400);
-            }
 
-            if($isUserCreated){
+                $message = isset($apiResponse['json_error']) ? isset($apiResponse['json_error']['message']) ? ucwords($apiResponse['json_error']['message']): ucwords($apiResponse['message']) : ucwords($apiResponse['message']);
 
-                $updatedFields = $this->updateFormFields($createdUserId,$request->status,$request->role);
-                $newUser['status'] = $updatedFields['status'] ?? null;
-                $newUser['role'] = $updatedFields['role'] ?? null;
-
-                $users[] = $newUser;
-            
-                file_put_contents($this->filePath, json_encode($users));
-    
-                return $this->sendSuccessResponse(trans('messages.curd.add_record'));
+                return $this->sendErrorResponse($message,400);
 
             }else{
 
                 return $this->sendErrorResponse(trans('messages.error_message'),500);
-
             }
            
             
@@ -191,25 +150,23 @@ class UserController extends BaseController
     {
         try{                
 
-            $data = json_decode(file_get_contents($this->filePath), true);
+            $input = $request->except(['_token','_method']);
 
-            $input = $request->except(['_token','_method','user_id']);
+            $apiResponse = $this->iam->adminUpdateUser($id,$input);
 
-            $index = findIndexById($data, $id);
-
-            if ($index !== null) {
-
-                $getUserObject = $data[$index];
-                $updateRecords = $this->updateFormFields($id,$request->status,$request->role);
-
-                if(count($updateRecords) > 0){
-                    $data[$index] = array_merge($data[$index], $updateRecords);
-                
-                    file_put_contents($this->filePath, json_encode($data));
-                }
-                
+            if ($apiResponse['code'] == 200) {
 
                 return $this->sendSuccessResponse(trans('messages.curd.update_record'));
+                
+            }else if($apiResponse['code'] == 400){
+
+                $message = isset($apiResponse['json_error']) ? isset($apiResponse['json_error']['message']) ? ucwords($apiResponse['json_error']['message']): ucwords($apiResponse['message']) : ucwords($apiResponse['message']);
+                
+                return $this->sendErrorResponse($message,400);
+
+            }else{
+
+                return $this->sendErrorResponse(trans('messages.error_message'),500);
             }
 
         } catch (\Exception $e) {
@@ -257,33 +214,17 @@ class UserController extends BaseController
         
         try{                
 
-            $data = json_decode(file_get_contents($this->filePath), true);
+            //Start Update Password 
+            $updatePassword['password'] = $request->password;
+            $apiResponse = $this->iam->adminUpdateUserPassword($id,$updatePassword);
 
-            $input = $request->except(['_token','_method','user_id']);
-
-            $index = findIndexById($data, $id);
-
-            if ($index !== null) {
-
-                //Start Update Password 
-                $updatePassword['password'] = $request->password;
-                $apiResponse = $this->iam->adminUpdateUserPassword($id,$updatePassword);
-
-                if($apiResponse['code'] == 200){
-                    $input['password']   = $updatePassword['password'];
-
-                    $data[$index] = array_merge($data[$index], $input);
-                
-                    file_put_contents($this->filePath, json_encode($data));
-    
-                    return $this->sendSuccessResponse('User Password Updated Successfully!');
-                }
-               //End Update Password
-
-               return $this->sendErrorResponse(trans('messages.error_message'),500);
-             
+            if($apiResponse['code'] == 200){
+                return $this->sendSuccessResponse(trans('messages.updated_successfully',['module_name'=>'User password']));
             }
+            //End Update Password
 
+            return $this->sendErrorResponse(trans('messages.error_message'),500);
+             
         } catch (\Exception $e) {
                //   dd('Error in UserController::submitChangeUserPassword (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
 
@@ -295,13 +236,12 @@ class UserController extends BaseController
     
     public function showCreateAccessToken($id){
         abort_if(isRolePermission('user_create_access_token'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $data = json_decode(file_get_contents($this->filePath), true);
-        
-        $index = findIndexById($data, $id);
 
-        if ($index !== null) {
+        $apiResponse =  $this->iam->adminFindUserById($id);
 
-            $user = $data[$index] ?? null;
+        if($apiResponse['code'] == 200){
+
+            $user = $apiResponse['response']['data']['user'];
 
             return view('backend.users.create_access_token', compact('user'));
         }else{
@@ -310,7 +250,6 @@ class UserController extends BaseController
     }
     
     public function submitAccessToken(Request $request, $id){
-        
         
         $credentialsOnly = $request->validate([
             'email'    => ['required','email','regex:/^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$/i'],
@@ -397,40 +336,28 @@ class UserController extends BaseController
 
         try{
 
-            $data = json_decode(file_get_contents($this->filePath), true);
+            $input = $request->except(['_token','_method']);
+    
+            //Start Update Metadata 
+            $metaDataJson = $request->metadata;
 
-            $input = $request->except(['_token','_method','user_id']);
-    
-            $index = findIndexById($data, $id);
-    
-            if ($index !== null) {
-    
-                $getUserObject = $data[$index];
-                $updateRecords = [];
+            $metaData = json_decode($metaDataJson,true);
 
-                //Start Update Metadata 
-                $metaDataJson = $request->metadata;
-                $metaData = json_decode($metaDataJson,true);
-                $metaData_ApiResponse = $this->iam->adminUpdateUserMetadata($id,$metaData);
-                if($metaData_ApiResponse['code'] == 200){
-                    $updateRecords['metadata'] = $metaDataJson;
-                }else if(isset($metaData_ApiResponse['json_error'])){
+            $metaData_ApiResponse = $this->iam->adminUpdateUserMetadata($id,$metaData);
 
-                    if(isset($metaData_ApiResponse['json_error']['message'])){
-                        $errors['metadata'][] = ucfirst($metaData_ApiResponse['json_error']['message']); 
-                        return $this->sendErrorResponse('Validation Error', 422, "validation_error", $errors);
-                    }
-                }
-                //End Update Metadata
-    
-                if(count($updateRecords) > 0){
-                    $data[$index] = array_merge($data[$index], $updateRecords);
-                
-                    file_put_contents($this->filePath, json_encode($data));
-                }
-                
+            if($metaData_ApiResponse['code'] == 200){
+
                 return $this->sendSuccessResponse(trans('messages.curd.update_record'));
+                
+            }else if(isset($metaData_ApiResponse['json_error'])){
+
+                if(isset($metaData_ApiResponse['json_error']['message'])){
+                    $errors['metadata'][] = ucfirst($metaData_ApiResponse['json_error']['message']); 
+                    return $this->sendErrorResponse('Validation Error', 422, "validation_error", $errors);
+                }
             }
+            //End Update Metadata
+    
 
         }catch (\Exception $e) {
             //   dd('Error in UserController::submitMetaDataEditor (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());

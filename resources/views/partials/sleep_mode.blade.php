@@ -6,7 +6,7 @@
       <div class="avatar">
          <div class="avatar__icon"><img src="{{ asset('backend/images/userlogo.svg') }}" alt="@lang('User')"></div>
          <div class="avatar__content">
-            <h5 class="avatar__title">User</h5>
+            <h5 class="avatar__title">{{ authUserDetail('data.user.username') }}</h5>
             <button class="sleep__button" type="submit">Continue</button>
          </div>
       </div>

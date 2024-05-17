@@ -69,6 +69,12 @@ class IAMHttpService
         return $this->IAMPostRequest('/users', $formData);
     }
 
+    public function adminUpdateUser($userId,$formData): array
+    {
+        $apiUrl = '/user/'.$userId;
+        return $this->IAMPutRequest($apiUrl, $formData);
+    }
+
     public function adminUpdateUserMetadata($userId,$formData): array
     {
         $apiUrl = '/user/'.$userId.'/metadata/wallets';
@@ -96,6 +102,14 @@ class IAMHttpService
     public function adminUserForcelogout($userId): array
     {
         $apiUrl = '/logout/'.$userId;
+        return $this->IAMGetRequest($apiUrl);
+    }
+
+    public function adminUserList($paramters=[]): array{
+        $queryString = count($paramters) > 0 ? '?'.http_build_query($paramters) : '';
+      
+        $apiUrl = '/users'.$queryString;
+      
         return $this->IAMGetRequest($apiUrl);
     }
 }

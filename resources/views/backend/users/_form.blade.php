@@ -125,7 +125,7 @@
 
 <div class="grid-btn float-end">
     @if(isset($user))
-        <input type="hidden" name="user_id"  value="{{ $user['ID'] ?? ''}}">
+    
         <button type="button" class="btn btn-dark btn-regular text-white editBtn">@lang('global.edit')</button>
         <a href="{{ route('admin.users.index') }}" class="btn btn-regular btn-secondary backBtn">@lang('global.back')</a>
         
