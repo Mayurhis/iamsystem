@@ -11,6 +11,8 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Support\Str;
 use App\Services\IAMHttpService;
 
+use Carbon\Carbon;
+
 class UserDataTable extends DataTable
 {
     Private $iam;
@@ -197,15 +199,15 @@ class UserDataTable extends DataTable
             $filterParameters['metadata'] = $this->request()->get('metadata');
         }
 
-        if($this->request()->get('created_at')){
+        if (Carbon::hasFormat($this->request()->get('created_at'), 'd-m-Y')) {
             $filterParameters['created_at'] = Carbon::parse($this->request()->get('created_at'))->format('Y-m-d');
         }
 
-        if($this->request()->get('updated_at')){
+        if (Carbon::hasFormat($this->request()->get('updated_at'), 'd-m-Y')) {
             $filterParameters['updated_at'] = Carbon::parse($this->request()->get('updated_at'))->format('Y-m-d');
         }
 
-        if($this->request()->get('last_login_at')){
+        if (Carbon::hasFormat($this->request()->get('last_login_at'), 'd-m-Y')) {
             $filterParameters['last_login_at'] = Carbon::parse($this->request()->get('last_login_at'))->format('Y-m-d');
         }
 
