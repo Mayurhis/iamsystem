@@ -2926,6 +2926,42 @@ table.dataTable thead>tr>th.sorting:before, table.dataTable thead>tr>th.sorting:
     stroke: var(--white-color);
 }
 
+div#users-table_length {
+    position: sticky;
+    left: 1px;
+}
+
+.dataTables_wrapper .dataTables_filter{
+    position: sticky;
+    right: 1px;
+}
+
+table#users-table {
+    display: block;
+    overflow: auto;
+}
+
+table::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 0;
+	background-color: #F5F5F5;
+}
+
+table::-webkit-scrollbar
+{
+	width: 7px;
+    height: 7px;
+	background-color: #F5F5F5;
+}
+
+table::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #9b9b9b83;
+}
+
 @media(max-width:1499px){
     .coming-soon h3{
         font-size: 70px;

@@ -23,7 +23,7 @@
                             @endif
                         </div>
                         <div class="table-responsive">
-                            {{$dataTable->table(['class' => 'table', 'style' => 'width:100%;'])}}
+                            {{$dataTable->table(['class' => 'table', 'style' => 'width:100%;'],true)}}
                         </div>
                     </div>
                 </div>

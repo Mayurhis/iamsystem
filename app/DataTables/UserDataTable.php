@@ -130,6 +130,19 @@ class UserDataTable extends DataTable
                     ->lengthMenu([
                         [20, 40, 60, 80, 100],
                         [20, 40, 60, 80, 100]
+                    ])
+                    ->parameters([
+                            'initComplete' => "function () {
+                                this.api().columns().every(function () {
+                                    var column = this;
+                                    console.log(column);
+                                    var input = document.createElement(\"input\");
+                                    $(input).appendTo($(column.footer()).empty())
+                                    .on('input', function () {
+                                        column.search($(this).val(), false, false, true).draw();
+                                    });
+                                });
+                            }",
                     ]);
     }
   
