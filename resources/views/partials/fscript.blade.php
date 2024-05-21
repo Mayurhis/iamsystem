@@ -191,5 +191,9 @@
     return formattedTime;
 }
 
+    function capitalizeFirstChar(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
 </script>
 {{-- Start Activity Timeout Js--}}

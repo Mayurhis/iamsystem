@@ -23,7 +23,7 @@
                             @endif
                         </div>
                         <div class="table-responsive">
-                            {{$dataTable->table(['class' => 'table', 'style' => 'width:100%;'],true)}}
+                            {{$dataTable->table(['class' => 'table', 'style' => 'width:100%;'])}}
                         </div>
                     </div>
                 </div>
@@ -88,8 +88,6 @@
     });
     @endif
     
-    function capitalizeFirstChar(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
+   
 </script>
 @endsection

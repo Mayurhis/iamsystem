@@ -107,7 +107,7 @@
             <select  class="form-control editable" name="language" id="language">
                 <option value="">Select Language</option>
                 @foreach($languages as $language)
-                    <option value="{{$language->code}}" {{ $language->code == $selectedLang ? 'selected' : ''}}>{{ strtoupper($language->code) }}</option>
+                    <option value="{{$language->code}}" {{ $language->code == $selectedLang ? 'selected' : ''}}>{{ ucwords($language->name) }}</option>
                 @endforeach
             </select>
         </div>
@@ -116,7 +116,7 @@
     <div class="col-6">
         <div class="form-group">
             <label>@lang('cruds.user.fields.role')<span class="text-danger">*</span></label>
-            <input type="text" name="role" id="role" class="form-control editable" value="{{ isset($user) ? isset($user['role']) ? $user['role'] : '' :'' }}">
+            <input type="text" name="role" id="role" class="form-control editable" placeholder="Enter Role" value="{{ isset($user) ? isset($user['role']) ? $user['role'] : '' :'' }}">
         </div>
     </div>
     
