@@ -3,6 +3,27 @@
 
 @section('custom_CSS')
 
+    <link rel="stylesheet" href="{{ asset('backend/css/json-editor/codemirror.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/css/json-editor/monokai.min.css') }}">
+
+<style>
+    .cm-s-default .cm-keyword{
+        color: #a11 !important;
+    }
+    .cm-s-default .cm-string .cm-property {
+        color: #a11 !important;
+    }
+    .cm-s-default .cm-string {
+        color: green !important;
+    }
+    .cm-number {
+        color: orange !important;
+    }
+    .cm-bracket {
+        color: black !important;
+    }
+
+</style>
 @endsection
 
 @section('headerTitle','Metadata Editor')
@@ -36,7 +57,7 @@
                                     @endphp
 
                                     <label>@lang('cruds.user.fields.metadata')<span class="text-danger">*</span></label>
-                                    <textarea type="text" name="metadata" id="metadata" class="form-control valid editable"  placeholder="Enter Metadata" autocomplete="off">{{ $metadata ?? ''}}</textarea>
+                                    <textarea type="text" name="metadata" id="metadata" class="form-control valid editable"  placeholder="Enter Metadata" autocomplete="off" style="height:300px;">{{ $metadata ?? ''}}</textarea>
                                 </div>
                             </div>
                             
@@ -60,13 +81,9 @@
 @section('custom_JS')
 <script src="{{ asset('backend/js/assets/jquery.validate.min.js') }}"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/json-colorizer/0.1.10/jsonColorizer.min.js"></script>
-
 @parent
 <script type="text/javascript">
 
-    // prettifyAndColorizeJSON();
-    
   
     $(document).ready(function () {
 
@@ -147,29 +164,36 @@
                       
     });
 
+  
+</script>
 
-    function prettifyAndColorizeJSON() {
-        var textarea = document.getElementById("metadata");
-        var jsonString = textarea.value;
-        
+<script src="{{ asset('backend/js/json-editor/codemirror.min.js') }}"></script>
+<script src="{{ asset('backend/js/json-editor/javascript.min.js') }}"></script>
+
+<script>
+    beautifyJson();
+
+    // Initialize CodeMirror on the textarea
+    var editor = CodeMirror.fromTextArea(document.getElementById('metadata'), {
+        mode: { name: "javascript", json: true },
+        theme: "default",
+        lineNumbers: true,
+        autoCloseBrackets: true,
+        matchBrackets: true,
+        styleActiveLine: true
+    });
+
+    function beautifyJson() {
+        let jsonString = document.getElementById('metadata').value;
         try {
-            // Parse the JSON string
-            var jsonData = JSON.parse(jsonString);
-            // Prettify the JSON string
-            var prettyJsonString = JSON.stringify(jsonData, null, 4);
-            // Apply color formatting
-            var colorizedJsonString = jsonColorizer.colorize(prettyJsonString);
-            // Update the textarea with colorized JSON
-            textarea.value = colorizedJsonString;
-        } catch (error) {
-            console.error("Error parsing JSON:", error);
+            let json = JSON.parse(jsonString);
+            let beautifiedJson = JSON.stringify(json, null, 2);
+            // editor.setValue(beautifiedJson);
+        } catch (e) {
+            console.error('Error parsing JSON:', e);
+            // alert('Invalid JSON');
         }
     }
-
-    var metadataTextarea = document.getElementById("metadata");
-    metadataTextarea.addEventListener("input", prettifyAndColorizeJSON);
-
-   
 </script>
 
 @include('backend.users.partials.comman_js')
