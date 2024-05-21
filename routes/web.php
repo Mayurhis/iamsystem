@@ -5,6 +5,7 @@ use  App\Http\Controllers\Backend\Auth\LoginController;
 use  App\Http\Controllers\Backend\Auth\TwoFactorAuthController;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,7 +40,6 @@ Route::group(['middleware' => ['check2fa.status']], function () {
     Route::post("admin/2fa/resend-code", [TwoFactorAuthController::class, 'resendVerificationCode'])->name("admin.2fa.resendcode");
 
 });
-
     
 
 Route::group(["namespace" => "App\Http\Controllers\Backend",'as' => 'admin.',"prefix" => "admin" ,'middleware' => ['IsUserLoggedIn','isAccessTokenExpire','jwt.verify','auth.2fa']],function(){

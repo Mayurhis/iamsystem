@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::group(["namespace" => "App\Http\Controllers\Api", "prefix" => "v1", 'as' => 'api.'],function(){
+    Route::get('health', "HealthCheckController@index")->name('health.check');
+});

@@ -240,6 +240,9 @@ class UserDataTable extends DataTable
                     ])
                     ->parameters([
                             'searching' => false,
+                            'drawCallback' => 'function(settings) {
+                                $("#users-table").addClass("table-loaded");
+                            }',
                             'initComplete' => "function () {
                                 var table = this.api();
                                 let params = {};

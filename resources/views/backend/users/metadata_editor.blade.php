@@ -6,24 +6,6 @@
     <link rel="stylesheet" href="{{ asset('backend/css/json-editor/codemirror.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/css/json-editor/monokai.min.css') }}">
 
-<style>
-    .cm-s-default .cm-keyword{
-        color: #a11 !important;
-    }
-    .cm-s-default .cm-string .cm-property {
-        color: #a11 !important;
-    }
-    .cm-s-default .cm-string {
-        color: green !important;
-    }
-    .cm-number {
-        color: orange !important;
-    }
-    .cm-bracket {
-        color: black !important;
-    }
-
-</style>
 @endsection
 
 @section('headerTitle','Metadata Editor')
@@ -45,13 +27,18 @@
                         @csrf
                         <div class="row">
                             <div class="col-12">
-                                <div class="form-group">
-
+                                <div class="form-group meta-editor-wrapper">
                                     @php
                                         $metadata = '';
                                         if(isset($user)){
                                            if(isset($user['metadata'])){
+
+                                               if(count($user['metadata']) > 0){
+
                                                 $metadata = isset($user['metadata']['wallets']) ? json_encode($user['metadata']['wallets']) :json_encode($user['metadata']);
+
+                                               }
+                                                
                                             }
                                         }
                                     @endphp
@@ -79,15 +66,30 @@
 @endsection
 
 @section('custom_JS')
+
 <script src="{{ asset('backend/js/assets/jquery.validate.min.js') }}"></script>
+<script src="{{ asset('backend/js/json-editor/codemirror.min.js') }}"></script>
+<script src="{{ asset('backend/js/json-editor/javascript.min.js') }}"></script>
 
 @parent
 <script type="text/javascript">
 
-  
+    // Initialize CodeMirror on the textarea
+    var editor = CodeMirror.fromTextArea(document.getElementById('metadata'), {
+        mode: { name: "javascript", json: true },
+        theme: "default",
+        lineNumbers: true,
+        autoCloseBrackets: true,
+        matchBrackets: true,
+        styleActiveLine: true
+    });
+
     $(document).ready(function () {
 
+        beautifyJson();
+
        $("#metadataEditorForm").validate({
+           ignore: [],
            errorElement: 'span',
            errorClass: 'validation-error-block error',
            rules: {
@@ -98,9 +100,9 @@
            },
            errorPlacement: function(error, element) {
                 if ($(element).attr('type') === 'password') {
-                    error.insertAfter(element.parent('div'));
+                    error.insertAfter(element.siblings('div .CodeMirror'));
                 } else {
-                    error.insertAfter(element);
+                    error.insertAfter(element.siblings('div .CodeMirror'));
                 }
             },
        });
@@ -112,6 +114,8 @@
         e.preventDefault();
 
         if ($(this).valid()) {
+            editor.save();
+
             loaderShow();
 
             $('.validation-error-block').remove();
@@ -150,7 +154,7 @@
 
                             errorLabelTitle = '<span class="validation-error-block error">'+item[0]+'</sapn>';
                         
-                            $(errorLabelTitle).insertAfter("#"+key);
+                            $(errorLabelTitle).insertAfter($("#"+key).siblings('div .CodeMirror'));
                                         
                         });
                     }
@@ -167,28 +171,19 @@
   
 </script>
 
-<script src="{{ asset('backend/js/json-editor/codemirror.min.js') }}"></script>
-<script src="{{ asset('backend/js/json-editor/javascript.min.js') }}"></script>
 
 <script>
-    beautifyJson();
-
-    // Initialize CodeMirror on the textarea
-    var editor = CodeMirror.fromTextArea(document.getElementById('metadata'), {
-        mode: { name: "javascript", json: true },
-        theme: "default",
-        lineNumbers: true,
-        autoCloseBrackets: true,
-        matchBrackets: true,
-        styleActiveLine: true
-    });
 
     function beautifyJson() {
         let jsonString = document.getElementById('metadata').value;
         try {
+           if(jsonString){
+
             let json = JSON.parse(jsonString);
             let beautifiedJson = JSON.stringify(json, null, 2);
-            // editor.setValue(beautifiedJson);
+            editor.setValue(beautifiedJson);
+
+           }
         } catch (e) {
             console.error('Error parsing JSON:', e);
             // alert('Invalid JSON');

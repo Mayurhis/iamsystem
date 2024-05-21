@@ -2962,6 +2962,48 @@ table::-webkit-scrollbar-thumb
 	background-color: #9b9b9b83;
 }
 
+.meta-editor-wrapper{
+    margin-top: 1rem;
+}
+
+.meta-editor-wrapper label{
+    margin-bottom: 1rem !important;
+}
+
+.CodeMirror{
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+.cm-s-default .cm-keyword{
+    color: #a11 !important;
+}
+.cm-s-default .cm-string .cm-property {
+    color: #a11 !important;
+}
+.cm-string.cm-property {
+    color: var(--primary) !important;
+}
+.cm-number {
+    color: orange !important;
+}
+.cm-bracket {
+    color: black !important;
+}
+
+div#users-table_wrapper div#users-table_length {
+    margin-bottom: 10px;
+}
+
+table#users-table {
+    overflow: auto;
+}
+
+.table-loaded{
+    display: flow-root;
+}
+
 @media(max-width:1499px){
     .coming-soon h3{
         font-size: 70px;
