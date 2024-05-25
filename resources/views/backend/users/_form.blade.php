@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-6">
         <div class="form-group">
-            <label> @lang('cruds.user.fields.aud')<span class="text-danger">*</span></label>
+            <label> @lang('cruds.user.fields.aud')</label>
             <input type="text" name="aud" id="aud" value="{{ $user['aud'] ?? ''}}" class="form-control valid editable" placeholder="Enter Audience" autocomplete="off"> 
         </div>        
     </div>
@@ -37,7 +37,7 @@
                 <i class="fa fa-eye-slash text-dark" id="togglePassword" style="margin-left: -30px; cursor: pointer;"></i>
             </div>
             <div class="text-end d-flex justify-content-end">
-                <button type="button" class="btn btn-primary mt-3"  data-bs-toggle="modal" data-bs-target="#generatePasswordModal">@lang('global.suggest_password')</button>
+                <button type="button" class="btn btn-primary mt-3"  id="suggestPasswordBtn">@lang('global.suggest_password')</button>
             </div>
         </div>
     </div>

@@ -280,6 +280,10 @@ h6{
     color: var(--secondary);
 }
 
+.card-form .form-group label span.text-danger {
+    padding-left: 1px;
+}
+
 .dob-fields{
     max-width: 500px;
     margin: 0 auto;
@@ -2998,10 +3002,41 @@ div#users-table_wrapper div#users-table_length {
 
 table#users-table {
     overflow: auto;
+    height: 100%;
+    max-height: calc(100vh - 300px);
+}
+
+table#users-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    background-color: #ffffff;
 }
 
 .table-loaded{
     display: flow-root;
+}
+
+.empty-metadata {
+    background-color: #e3e3e3 !important;
+}
+
+.empty-metadata:hover{
+    background-color: #a8a8a8 !important;
+    border-color: #a8a8a8 !important;
+}
+
+.empty-metadata.svg-icon svg{
+    stroke: #a8a8a8 !important;
+}
+
+.empty-metadata.svg-icon:hover svg{
+    stroke: var(--white-color) !important; 
+}
+
+div.dataTables_processing{
+    z-index: 999;
+    top:70px;
 }
 
 @media(max-width:1499px){

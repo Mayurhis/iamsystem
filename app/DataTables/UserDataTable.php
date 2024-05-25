@@ -2,16 +2,16 @@
 
 namespace App\DataTables;
 
-use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Services\DataTable;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Illuminate\Support\Facades\Gate;
-use Yajra\DataTables\EloquentDataTable;
-use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Services\IAMHttpService;
+use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\Gate;
+use Yajra\DataTables\EloquentDataTable;
+use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
-use Carbon\Carbon;
 
 class UserDataTable extends DataTable
 {
@@ -53,18 +53,34 @@ class UserDataTable extends DataTable
             })
             
             ->editColumn('metadata',function($row){
+                $metadata_action = '';
+                if(!isRolePermission('user_metadata_editor')){
+                    $metaDataIcon = view('components.svg-icons', ['icon' => 'metadata'])->render();
+                    $addclass = '';
+                    if(isset($row['metadata'])){
 
-                return  isset($row['metadata']) ? $row['metadata'] ? Str::limit(json_encode($row['metadata'],true), 50) : '' : '';
+                        if(empty($row['metadata']) || is_null($row['metadata'])){
+                            
+                            $addclass = 'empty-metadata';
+                        }
+                    }else{
+                        $addclass = 'empty-metadata';
+                    }
+
+                    $metadata_action ='<a href="'.route('admin.users.showMetaDataEditor',$row['ID']).'" class="action-btn bg-dark svg-icon '.$addclass.'" title="Metadata Editor">'.$metaDataIcon.'</a>';
+                   
+                }
+                return  $metadata_action;
 
             })
             ->editColumn('created_at',function($row){
-                return convertDateTimeFormat($row['created_at']);
+                return convertDateTimeFormat($row['created_at'],'datetime');
             })
             ->editColumn('updated_at',function($row){
-                return $row['updated_at'] ? convertDateTimeFormat($row['updated_at']) : '';
+                return $row['updated_at'] ? convertDateTimeFormat($row['updated_at'],'datetime') : '';
             })
             ->editColumn('last_login_at',function($row){
-                return isset($row['last_login_at']) ? convertDateTimeFormat($row['last_login_at']) : '';
+                return isset($row['last_login_at']) ? convertDateTimeFormat($row['last_login_at'],'datetime') : '';
             })
             
         
@@ -78,14 +94,6 @@ class UserDataTable extends DataTable
 
                 if(!isRolePermission('user_change_password')){
                     $action .='<a href="'.route('admin.users.changeUserPassword',$row['ID']).'" class="action-btn bg-dark" title="Change User Password"><i class="fa fa-lock" aria-hidden="true"></i></a>';
-                }
-
-                
-                if(!isRolePermission('user_metadata_editor')){
-
-                    $metaDataIcon = view('components.svg-icons', ['icon' => 'metadata'])->render();
-
-                    $action .='<a href="'.route('admin.users.showMetaDataEditor',$row['ID']).'" class="action-btn bg-dark svg-icon" title="Metadata Editor">'.$metaDataIcon.'</a>';
                 }
                 
 
@@ -104,7 +112,8 @@ class UserDataTable extends DataTable
                 $action .= '</div>';
 
                 return $action;
-            });
+            })
+            ->rawColumns(['action', 'metadata']);
     }
     
 
@@ -118,7 +127,8 @@ class UserDataTable extends DataTable
         }
        
         $offset = $this->request()->get('start');
-        if($audString){
+        if($offset){
+            dd($offset);
             $filterParameters['offset'] = $offset;
         }
 
@@ -199,16 +209,16 @@ class UserDataTable extends DataTable
             $filterParameters['metadata'] = $this->request()->get('metadata');
         }
 
-        if (Carbon::hasFormat($this->request()->get('created_at'), 'd-m-Y')) {
-            $filterParameters['created_at'] = Carbon::parse($this->request()->get('created_at'))->format('Y-m-d');
+        if (Carbon::hasFormat($this->request()->get('created_at'), 'd-m-Y H:i')) {
+            $filterParameters['created_at'] = Carbon::parse($this->request()->get('created_at'))->format('Y-m-d H:i');
         }
 
-        if (Carbon::hasFormat($this->request()->get('updated_at'), 'd-m-Y')) {
-            $filterParameters['updated_at'] = Carbon::parse($this->request()->get('updated_at'))->format('Y-m-d');
+        if (Carbon::hasFormat($this->request()->get('updated_at'), 'd-m-Y H:i')) {
+            $filterParameters['updated_at'] = Carbon::parse($this->request()->get('updated_at'))->format('Y-m-d H:i');
         }
 
-        if (Carbon::hasFormat($this->request()->get('last_login_at'), 'd-m-Y')) {
-            $filterParameters['last_login_at'] = Carbon::parse($this->request()->get('last_login_at'))->format('Y-m-d');
+        if (Carbon::hasFormat($this->request()->get('last_login_at'), 'd-m-Y H:i')) {
+            $filterParameters['last_login_at'] = Carbon::parse($this->request()->get('last_login_at'))->format('Y-m-d H:i');
         }
 
         //End Column search Parameter
@@ -231,7 +241,7 @@ class UserDataTable extends DataTable
                     ->setTableId('users-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    //->dom('Bfrtip')
+                    ->dom('lfrt')
                     ->orderBy(1)                    
                     ->selectStyleSingle()
                     ->lengthMenu([
@@ -239,6 +249,7 @@ class UserDataTable extends DataTable
                         [20, 40, 60, 80, 100]
                     ])
                     ->parameters([
+
                             'searching' => false,
                             'drawCallback' => 'function(settings) {
                                 $("#users-table").addClass("table-loaded");
@@ -266,13 +277,13 @@ class UserDataTable extends DataTable
 
                                                 var selectList = document.createElement('select');
                                                 selectList.name = 'status';
-                                                selectList.classList.add('form-control');
+                                                selectList.classList.add('form-control','filterInput');
 
-                                                selectList.style.minWidth  = '150px';
+                                                selectList.style.minWidth  = '75px';
 
                                                 var option1 = document.createElement('option');
                                                 option1.value = '';
-                                                option1.text = 'Please Select';
+                                                option1.text = 'Select';
                                                 selectList.appendChild(option1);
 
                                                 for (var key in statusOptions) {
@@ -288,20 +299,20 @@ class UserDataTable extends DataTable
                                                   
                                                     params.status = $(this).val();
                                                    
-                                                    $('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
+                                                    //$('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
                                                 });
 
                                             }else if(columnIndex === 7){
 
                                                 var selectList = document.createElement('select');
                                                 selectList.name = 'type';
-                                                selectList.classList.add('form-control');
+                                                selectList.classList.add('form-control','filterInput');
 
-                                                selectList.style.minWidth  = '150px';
+                                                selectList.style.minWidth  = '85px';
 
                                                 var option1 = document.createElement('option');
                                                 option1.value = '';
-                                                option1.text = 'Please Select';
+                                                option1.text = 'Select';
                                                 selectList.appendChild(option1);
 
                                                 for (var key in typeOptions) {
@@ -316,19 +327,56 @@ class UserDataTable extends DataTable
                                                 $(selectList).appendTo(td).on('change', function () {
                                                     params.type = $(this).val();
                                                    
-                                                    $('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
+                                                    //$('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
                                                 });
 
                                             }else if(columnIndex === 12){
 
-                                                var h = document.createElement('span');
-                                                $(h).appendTo(td);
+                                                var submitBtn = document.createElement('button');
+                                                submitBtn.name = 'Submit';
+                                                submitBtn.classList.add('btn', 'btn-dark','filter-submit-btn');
+                                                submitBtn.innerText = 'Submit';
+                                        
+                                                submitBtn.addEventListener('click', function() {
+                                                    //console.log('Button clicked!',params);
+                                                    $('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
+                                                });
+
+                                                $(submitBtn).appendTo(td);
+
+                                                var resetBtn = document.createElement('button');
+                                                resetBtn.name = 'Reset';
+                                                resetBtn.classList.add('btn', 'btn-secondary','filter-reset-btn');
+                                                resetBtn.innerText = 'Reset';
+            
+                                                resetBtn.addEventListener('click', function() {
+
+                                                    //console.log('Reset button clicked!');
+
+                                                    document.querySelectorAll('.filterInput').forEach(function(element) {
+                                                        if (element.tagName.toLowerCase() === 'input' && element.type === 'text') {
+                                                            element.value = '';
+                                                        } else if (element.tagName.toLowerCase() === 'select') {
+                                                            element.selectedIndex = '';
+                                                        }
+                                                    });
+
+                                                    params = {}; 
+
+                                                    $('#users-table').DataTable().ajax.url(datatableUrl).draw();
+                                                });
+
+                                                $(resetBtn).appendTo(td);
                                                 
-                                            }else{
-                                           
+                                            }else if(columnIndex != 8){
+                                               
                                                 var input = document.createElement('input');
-                                                input.style.minWidth  = '150px';
-                                                input.classList.add('form-control');
+
+                                                if((columnIndex != 4) && (columnIndex != 5)){
+                                                    input.style.minWidth  = '100px';
+                                                }
+
+                                                input.classList.add('form-control','filterInput');
                                                 $(input).appendTo(td)
                                                     .on('input', function () {
 
@@ -352,9 +400,6 @@ class UserDataTable extends DataTable
                                                             params.aud = $(this).val();
                                                         }
 
-                                                        if(columnIndex == 8){
-                                                            params.metadata = $(this).val();
-                                                        }
 
                                                         if(columnIndex == 9){
                                                             params.created_at = $(this).val();
@@ -368,10 +413,9 @@ class UserDataTable extends DataTable
                                                             params.last_login_at = $(this).val();
                                                         }
                                                    
-                                                        $('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
+                                                       // $('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
                                                     });
                                             }
-                                            
                                         });
                                     }
                                 }
@@ -400,7 +444,7 @@ class UserDataTable extends DataTable
         }
         
         
-        $columns[] = Column::make('metadata')->title(trans('cruds.user.fields.metadata'));
+        $columns[] = Column::make('metadata')->title(trans('cruds.user.fields.metadata'))->exportable(false)->printable(false)->addClass('text-center');
         
         $columns[] = Column::make('created_at')->title(trans('cruds.user.fields.created_at'));
         $columns[] = Column::make('updated_at')->title(trans('cruds.user.fields.updated_at'));

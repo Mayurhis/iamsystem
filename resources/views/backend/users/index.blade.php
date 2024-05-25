@@ -88,6 +88,33 @@
     });
     @endif
     
+
+
+    // var table = $('#users-table').DataTable();
+    
+    $('#users-table').on('scroll', function() {
+
+        if(($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight)) {
+
+            console.log('loading more records...');
+
+           /* var info = table.page.info();
+            var nextPageStart = info.recordsDisplay;
+
+            console.log('nextPageStart',nextPageStart,'length',info.length);
+            
+            $.ajax({
+                url: "{{ route('admin.users.index') }}",
+                method: 'GET',
+                data: { start: nextPageStart, length: info.length },
+                success: function(data) {
+                    table.rows.add(data.data).draw(false);
+                },
+                error: function() {
+                }
+            });*/
+        }
+    });
    
 </script>
 @endsection

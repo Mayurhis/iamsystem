@@ -51,7 +51,6 @@
            errorElement: 'span',
            errorClass: 'validation-error-block error',
            rules: {
-               'aud': "required",
                'email': {
                    required: true,
                 //   email: true

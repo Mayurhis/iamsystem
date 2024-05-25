@@ -11,18 +11,22 @@
     
     $(document).ready(function(){
 
+        $('#suggestPasswordBtn').click(function(e){
+            e.preventDefault();
+
+            $('#generatePasswordModal').modal('show');
+
+            var genPassword = generatePassword();
+            $('#generatePasswordModal').find('#generate_password').val(genPassword);
+        });
+        
+
         $(document).on('click','#suggestPassword',function(e){
             e.preventDefault();
             var suggestPassword = generatePassword();
             
-            if(suggestPassword != ''){
-                $('#copyButton').prop('disabled', false);
-            }else{
-                $('#copyButton').prop('disabled', true);
-            }
-            
-            
-            $('#generate_password').val(suggestPassword);
+            $('#generatePasswordModal').find('#generate_password').val(suggestPassword);
+
         });
         
         $("#copyButton").click(function(){

@@ -27,59 +27,27 @@ class StoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $filePath = public_path('backend/json/users.json');
-
-        $users = json_decode(file_get_contents($filePath), true);
-
-        $isEmailExists = false;
-        $isUsernameExists = false;
-        if($users){
-            foreach ($users as $user) {
-                if (($user['email'] == $this->email)) {
-                    $isEmailExists = true;
-                    break;
-                }
-                if (($user['username'] == $this->username)) {
-                    $isUsernameExists = true;
-                    break;
-                }
-            }
-        }
+        
         
         $rules = [];
 
-        $rules['aud']         = ['required'];
+        $rules['aud']         = [];
         
         if ($this->type === 'system' || $this->type === 'machine') {
             $rules['email']       = [
                 'required',
                  new TypeEmailRule,
-                function ($attribute, $value, $fail) use ($isEmailExists) {
-                    if ($isEmailExists) {
-                        $fail('The email has already been taken.');
-                    }
-                }
             ];
         }else{
              $rules['email']       = [
                 'required',
                 'email',
                 'regex:/^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$/i',
-                function ($attribute, $value, $fail) use ($isEmailExists) {
-                    if ($isEmailExists) {
-                        $fail('The email has already been taken.');
-                    }
-                }
             ];
         }
        
         $rules['username']    = [
             'nullable',
-            function ($attribute, $value, $fail) use ($isUsernameExists) {
-                if ($isUsernameExists) {
-                    $fail('The username has already been taken.');
-                }
-            },
             new ValidUsername
         ];
 

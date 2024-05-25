@@ -106,7 +106,7 @@
                                                         <i class="togglePassword fa fa-eye-slash" style="margin-left: -30px; cursor: pointer;"></i>
                                                     </div>
                                                     <div class="text-end d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#generatePasswordModal">@lang('global.suggest_password')</button>
+                                                        <button type="button" class="btn btn-primary mt-3" id="suggestPasswordBtn">@lang('global.suggest_password')</button>
                                                     </div>
                                                     @error('new_password')
                                                     <span class="validation-error-block error">
@@ -590,15 +590,6 @@
             });
         });
     });
-
-
-    $(document).on('click','#suggestPassword',function(e){
-        e.preventDefault();
-        var suggestPassword = generatePassword();
-        $('#new_password').val(suggestPassword);
-    });
-
-
 
 </script>
 @endsection

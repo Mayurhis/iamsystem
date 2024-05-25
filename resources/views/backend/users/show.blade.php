@@ -86,21 +86,21 @@
                     <div class="mb-3">
                         <div class="name">
                             <h4>@lang('cruds.user.fields.last_login_at')</h4>
-                            <span>{{ isset($user['last_login_at']) && (!is_null($user['last_login_at'])) ? convertDateTimeFormat($user['last_login_at']) : '' }}</span>
+                            <span>{{ isset($user['last_login_at']) && (!is_null($user['last_login_at'])) ? convertDateTimeFormat($user['last_login_at'],'datetime') : '' }}</span>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <div class="name">
                             <h4>@lang('cruds.user.fields.created_at')</h4>
-                            <span>{{ $user['created_at'] ? convertDateTimeFormat($user['created_at']) : '' }}</span>
+                            <span>{{ $user['created_at'] ? convertDateTimeFormat($user['created_at'],'datetime') : '' }}</span>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <div class="name">
                             <h4>@lang('cruds.user.fields.updated_at')</h4>
-                            <span>{{ $user['updated_at'] ? convertDateTimeFormat($user['updated_at']) : '' }}</span>
+                            <span>{{ $user['updated_at'] ? convertDateTimeFormat($user['updated_at'],'datetime') : '' }}</span>
                         </div>
                     </div>
 
