@@ -3039,6 +3039,14 @@ div.dataTables_processing{
     top:70px;
 }
 
+td button.btn.btn-secondary.filter-reset-btn {
+    margin-left: 10px;
+}
+
+button.btn.btn-dark.filter-submit-btn:hover{
+    background-color: var(--black-color);
+}
+
 @media(max-width:1499px){
     .coming-soon h3{
         font-size: 70px;

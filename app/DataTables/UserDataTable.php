@@ -182,11 +182,11 @@ class UserDataTable extends DataTable
         //Start Column Search Parameter
 
         if($this->request()->get('email')){
-            $filterParameters['email'] = $this->request()->get('email');
+            $filterParameters['email[like]'] = $this->request()->get('email').'*';
         }
 
         if($this->request()->get('username')){
-            $filterParameters['username'] = $this->request()->get('username');
+            $filterParameters['username[like]'] = '*'.$this->request()->get('username').'*';
         }
 
         if($this->request()->get('status')){
@@ -198,27 +198,28 @@ class UserDataTable extends DataTable
         }
 
         if($this->request()->get('language')){
-            $filterParameters['language'] = $this->request()->get('language');
+            $filterParameters['language[like]'] = $this->request()->get('language').'*';
         }
 
         if($this->request()->get('aud')){
-            $filterParameters['aud'] = $this->request()->get('aud');
+            $filterParameters['aud[like]'] = $this->request()->get('aud').'*';
         }
 
         if($this->request()->get('metadata')){
             $filterParameters['metadata'] = $this->request()->get('metadata');
         }
 
-        if (Carbon::hasFormat($this->request()->get('created_at'), 'd-m-Y H:i')) {
-            $filterParameters['created_at'] = Carbon::parse($this->request()->get('created_at'))->format('Y-m-d H:i');
+        //if (Carbon::hasFormat($this->request()->get('created_at'), 'd-m-Y H:i')) {
+        if ($this->request()->get('created_at')) {
+            $filterParameters['created_at[lte]'] = Carbon::parse($this->request()->get('created_at'))->format('Y-m-d H:i');
         }
 
-        if (Carbon::hasFormat($this->request()->get('updated_at'), 'd-m-Y H:i')) {
-            $filterParameters['updated_at'] = Carbon::parse($this->request()->get('updated_at'))->format('Y-m-d H:i');
+        if ($this->request()->get('updated_at')) {
+            $filterParameters['updated_at[lte]'] = Carbon::parse($this->request()->get('updated_at'))->format('Y-m-d H:i');
         }
 
-        if (Carbon::hasFormat($this->request()->get('last_login_at'), 'd-m-Y H:i')) {
-            $filterParameters['last_login_at'] = Carbon::parse($this->request()->get('last_login_at'))->format('Y-m-d H:i');
+        if ($this->request()->get('last_login_at')) {
+            $filterParameters['last_login_at[lte]'] = Carbon::parse($this->request()->get('last_login_at'))->format('Y-m-d H:i');
         }
 
         //End Column search Parameter
