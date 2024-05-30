@@ -117,10 +117,10 @@
 @section('custom_JS')
 @parent
 <script>
-    var datatableUrl  =  "{{ route('admin.users.index') }}";
+   var datatableUrl  =  "{{ route('admin.users.index') }}";
     var statusOptions  =  @json(config('constant.userStatus'));
     var typeOptions  =  @json(config('constant.userType'));
-
+    var nextPageStart = 20;
 </script>
 {!! $dataTable->scripts() !!}
 
@@ -144,6 +144,94 @@
        
     });
     @endif
+
+    $(document).ready(function(){
+        $('select[name="users-table_length"]').on('change', function() {
+            var length = $(this).val();
+
+            $('#users-table tr .appened').remove();
+
+            nextPageStart = length;
+
+            $('#users-table').scrollTop(0);
+           
+        });
+    });
+   
+
+    var loading = false;
+   
+    $('#users-table').on('scroll', function() {
+
+        var scrollBody = $(this);
+
+        if (scrollBody.scrollTop() + scrollBody.innerHeight() >= scrollBody[0].scrollHeight - 50 && !loading) {
+
+            console.log('loading more records...');
+            loading = true;
+
+            const table = $('#users-table').DataTable();
+
+            var info = table.page.info();
+
+            var order = table.order();
+            var columns = table.columns()[0];
+          
+            // console.log('info',info);
+
+            var initialStart = info.recordsDisplay;
+           
+
+            var rowsLength = document.querySelector('#users-table tbody').rows.length;
+            nextPageStart = rowsLength;
+
+           
+            var columnNames = [];
+            $('#users-table thead th').each(function() {
+                var columnName = $(this).text().toLowerCase().replace(/\s+/g, '_');
+                columnNames.push(columnName);
+            });
+
+           var filterParam = {
+                initialStart:initialStart,
+                start: nextPageStart,
+                length: info.length,
+                columnNames:columnNames,
+           };
+
+           if($('.filter-submit-btn').hasClass('submited')){
+
+                filterParam.email = $('#ft-dt-email').val();
+                filterParam.username = $('#ft-dt-username').val();
+                filterParam.status = $('#ft-dt-status').val();
+                filterParam.is_confirmed = $('#ft-dt-is_confirmed').val();
+                filterParam.language = $('#ft-dt-language').val();
+                filterParam.aud = $('#ft-dt-aud').val();
+                filterParam.type = $('#ft-dt-type').val();
+                filterParam.created_at = $('#ft-dt-created_at').val();
+                filterParam.updated_at = $('#ft-dt-updated_at').val();
+                filterParam.last_login_at = $('#ft-dt-last_login_at').val();
+           }
+           
+        //    console.log(filterParam);
+
+            $.ajax({
+                url: "{{ route('admin.users.getData') }}",
+                data: filterParam,
+                success: function(response) {
+                    // console.log(response);
+                   
+                    // nextPageStart = response.offset;
+                    $('#users-table tbody').append(response.htmlView);
+                    loading = false;
+                },
+                error: function() {
+                    loading = false;
+                }
+            });
+        }
+    });
+
     
 </script>
 @endsection

@@ -1,7 +1,7 @@
 @if($getRecords)
   @foreach($getRecords as $key=>$row)
 
-    <tr id="{{ $row['ID'] }}" class="clickRow {{($key%2 == 0) ? 'even' : 'odd' }} ">
+    <tr id="{{ $row['ID'] }}" class="clickRow {{($key%2 == 0) ? 'even' : 'odd' }} appened">
 
         <td>{{ $offset + (int)($key+1)}}</td>
         <td class="sorting_1">{{ $row['email'] }}</td>

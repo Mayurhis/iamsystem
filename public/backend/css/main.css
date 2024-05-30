@@ -3047,6 +3047,11 @@ button.btn.btn-dark.filter-submit-btn:hover{
     background-color: var(--black-color);
 }
 
+.filterInput{
+    background-position: 92%;
+    font-size: 14px;
+}
+
 @media(max-width:1499px){
     .coming-soon h3{
         font-size: 70px;

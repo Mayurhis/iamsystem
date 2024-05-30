@@ -67,7 +67,7 @@ class UserDataTable extends DataTable
                         $addclass = 'empty-metadata';
                     }
 
-                    $metadata_action ='<a href="'.route('admin.users.showMetaDataEditor',$row['ID']).'" class="action-btn bg-dark svg-icon '.$addclass.'" title="Metadata Editor">'.$metaDataIcon.'</a>';
+                    $metadata_action ='<div class="action-grid metadata-grid"><a href="'.route('admin.users.showMetaDataEditor',$row['ID']).'" class="action-btn bg-dark svg-icon '.$addclass.'" title="Metadata Editor">'.$metaDataIcon.'</a></div>';
                    
                 }
                 return  $metadata_action;
@@ -185,7 +185,7 @@ class UserDataTable extends DataTable
                                                 selectList.name = 'status';
                                                 selectList.classList.add('form-control','filterInput');
                                                 selectList.id = 'ft-dt-status';
-                                                selectList.style.minWidth  = '75px';
+                                                selectList.style.minWidth  = '100px';
 
                                                 var option1 = document.createElement('option');
                                                 option1.value = '';
@@ -208,13 +208,43 @@ class UserDataTable extends DataTable
                                                     //$('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
                                                 });
 
+                                            }else if(columnIndex === 4){
+
+                                                var selectList = document.createElement('select');
+                                                selectList.name = 'is_confirmed';
+                                                selectList.classList.add('form-control','filterInput');
+                                                selectList.id = 'ft-dt-is_confirmed';
+                                                selectList.style.minWidth  = '75px';
+
+                                                var option1 = document.createElement('option');
+                                                option1.value = '';
+                                                option1.text = 'Select';
+                                                selectList.appendChild(option1);
+
+                                                var option2 = document.createElement('option');
+                                                option2.value = 'yes';
+                                                option2.text = capitalizeFirstChar('yes');
+                                                selectList.appendChild(option2);
+
+                                                var option3 = document.createElement('option');
+                                                option3.value = 'no';
+                                                option3.text = capitalizeFirstChar('no');
+                                                selectList.appendChild(option3);
+
+                                                $(selectList).appendTo(td).on('change', function () {
+                                                  
+                                                    params.is_confirmed = $(this).val();
+                                                   
+                                                    //$('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
+                                                });
+
                                             }else if(columnIndex === 7){
 
                                                 var selectList = document.createElement('select');
                                                 selectList.name = 'type';
                                                 selectList.classList.add('form-control','filterInput');
                                                 selectList.id = 'ft-dt-type';
-                                                selectList.style.minWidth  = '85px';
+                                                selectList.style.minWidth  = '100px';
 
                                                 var option1 = document.createElement('option');
                                                 option1.value = '';
@@ -246,6 +276,8 @@ class UserDataTable extends DataTable
                                                 submitBtn.addEventListener('click', function() {
                                                     //console.log('Button clicked!',params);
                                                     $('.filter-submit-btn').addClass('submited');
+
+                                                    $('#users-table').scrollTop(0);
                                                     $('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
                                                 });
 
@@ -271,6 +303,8 @@ class UserDataTable extends DataTable
 
                                                     params = {}; 
 
+                                                    $('#users-table').scrollTop(0);
+
                                                     $('#users-table').DataTable().ajax.url(datatableUrl).draw();
                                                 });
 
@@ -291,10 +325,6 @@ class UserDataTable extends DataTable
 
                                                 if(columnIndex == 2){
                                                     input.id = 'ft-dt-username';
-                                                }
-
-                                                if(columnIndex == 4){
-                                                    input.id = 'ft-dt-is_confirmed';
                                                 }
 
                                                 if(columnIndex == 5){
@@ -328,10 +358,6 @@ class UserDataTable extends DataTable
 
                                                         if(columnIndex == 2){
                                                             params.username = $(this).val();
-                                                        }
-
-                                                        if(columnIndex == 4){
-                                                            params.is_confirmed = $(this).val();
                                                         }
 
                                                         if(columnIndex == 5){
@@ -387,7 +413,7 @@ class UserDataTable extends DataTable
         }
         
         
-        $columns[] = Column::make('metadata')->title(trans('cruds.user.fields.metadata'))->exportable(false)->printable(false)->addClass('text-center');
+        $columns[] = Column::make('metadata')->title(trans('cruds.user.fields.metadata'))->orderable(false)->exportable(false)->printable(false)->addClass('text-center');
         
         $columns[] = Column::make('created_at')->title(trans('cruds.user.fields.created_at'));
         $columns[] = Column::make('updated_at')->title(trans('cruds.user.fields.updated_at'));
@@ -505,16 +531,21 @@ class UserDataTable extends DataTable
             $filterParameters['metadata'] = $this->request()->get('metadata');
         }
 
+        if($this->request()->get('type')){
+            $filterParameters['type[in]'] = $this->request()->get('type');
+        }
+
         if ($this->request()->get('created_at')) {
-            $filterParameters['created_at[lte]'] = Carbon::parse($this->request()->get('created_at'))->format('Y-m-d H:i');
+            $filterParameters['created_at'] = $this->request()->get('created_at');
         }
 
         if ($this->request()->get('updated_at')) {
-            $filterParameters['updated_at[lte]'] = Carbon::parse($this->request()->get('updated_at'))->format('Y-m-d H:i');
+            $filterParameters['updated_at'] = $this->request()->get('updated_at');
         }
 
+        // if (Carbon::hasFormat($this->request()->get('last_login_at'), 'd-m-Y')) {
         if ($this->request()->get('last_login_at')) {
-            $filterParameters['last_login_at[lte]'] = Carbon::parse($this->request()->get('last_login_at'))->format('Y-m-d H:i');
+            $filterParameters['last_login_at'] = $this->request()->get('last_login_at');
         }
 
         //End Column search Parameter

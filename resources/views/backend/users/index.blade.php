@@ -39,6 +39,7 @@
     var datatableUrl  =  "{{ route('admin.users.index') }}";
     var statusOptions  =  @json(config('constant.userStatus'));
     var typeOptions  =  @json(config('constant.userType'));
+    var nextPageStart = 20;
 
 </script>
 {!! $dataTable->scripts() !!}
@@ -88,9 +89,22 @@
     });
     @endif
     
+    $(document).ready(function(){
+        $('select[name="users-table_length"]').on('change', function() {
+            var length = $(this).val();
+
+            $('#users-table tr .appened').remove();
+
+            nextPageStart = length;
+
+            $('#users-table').scrollTop(0);
+           
+        });
+    });
+   
+
     var loading = false;
-    var nextPageStart = 20;
-    var assignFlag = true;
+   
     $('#users-table').on('scroll', function() {
 
         var scrollBody = $(this);
@@ -104,14 +118,18 @@
 
             var info = table.page.info();
 
-            var initialStart = info.recordsDisplay;
-            if(assignFlag){
-                nextPageStart = info.recordsDisplay;
-            }
-
             var order = table.order();
             var columns = table.columns()[0];
           
+            // console.log('info',info);
+
+            var initialStart = info.recordsDisplay;
+           
+
+            var rowsLength = document.querySelector('#users-table tbody').rows.length;
+            nextPageStart = rowsLength;
+
+           
             var columnNames = [];
             $('#users-table thead th').each(function() {
                 var columnName = $(this).text().toLowerCase().replace(/\s+/g, '_');
@@ -126,7 +144,7 @@
            };
 
            if($('.filter-submit-btn').hasClass('submited')){
-                filterParam.start = initialStart;
+
                 filterParam.email = $('#ft-dt-email').val();
                 filterParam.username = $('#ft-dt-username').val();
                 filterParam.status = $('#ft-dt-status').val();
@@ -146,8 +164,8 @@
                 data: filterParam,
                 success: function(response) {
                     // console.log(response);
-                    assignFlag = false;
-                    nextPageStart = response.offset;
+                   
+                    // nextPageStart = response.offset;
                     $('#users-table tbody').append(response.htmlView);
                     loading = false;
                 },

@@ -127,16 +127,22 @@ class UserController extends BaseController
                 //     $filterParameters['metadata'] = $request->metadata;
                 // }
 
+                if($request->type){
+                    $filterParameters['type[in]'] = $request->type;
+                }
+
                 if ($request->created_at) {
-                    $filterParameters['created_at[lte]'] = Carbon::parse($request->created_at)->format('Y-m-d H:i');
+                    // $filterParameters['created_at[lte]'] = Carbon::parse($request->created_at)->format('Y-m-d H:i');
+                    $filterParameters['created_at'] = $request->created_at;
+
                 }
 
                 if ($request->updated_at) {
-                    $filterParameters['updated_at[lte]'] = Carbon::parse($request->updated_at)->format('Y-m-d H:i');
+                    $filterParameters['updated_at'] = $request->updated_at;
                 }
 
                 if ($request->last_login_at) {
-                    $filterParameters['last_login_at[lte]'] = Carbon::parse($request->last_login_at)->format('Y-m-d H:i');
+                    $filterParameters['last_login_at'] = $request->last_login_at;
                 }
 
                 //End Column search Parameter
