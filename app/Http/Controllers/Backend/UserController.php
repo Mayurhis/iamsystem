@@ -203,7 +203,7 @@ class UserController extends BaseController
                 'email'         => $request->email,
                 'password'      => $request->password,
                 'language'      => strtolower($request->language),
-                'is_confirmed'  => $request->confirmed ? true : false,
+                'IsConfirmed'  => $request->confirmed ? true : false,
                 'type'          => $request->type,
                 'metadata'      => json_decode($request->metadata,true),
             ];
@@ -211,6 +211,8 @@ class UserController extends BaseController
             if($request->username){
                 $insertRecords['username'] = $request->username;
             }
+
+            // dd($insertRecords);
 
             $apiResponse = $this->iam->adminCreateUser($insertRecords);
 
@@ -220,7 +222,20 @@ class UserController extends BaseController
                 
             }else if($apiResponse['code'] == 400){
 
-                $message = isset($apiResponse['json_error']) ? isset($apiResponse['json_error']['message']) ? ucwords($apiResponse['json_error']['message']): ucwords($apiResponse['message']) : ucwords($apiResponse['message']);
+                // dd($apiResponse);
+                
+                $message = trans('messages.error_message');
+                if(isset($apiResponse['json_error'])){
+
+                    if(isset($apiResponse['json_error']['message'])){
+                        $message = $apiResponse['json_error']['message'];
+                    }else{
+                        $message =  isset($apiResponse['message']) ? $apiResponse['message'] : trans('messages.error_message');
+                    }
+
+                }else{
+                    $message =  isset($apiResponse['message']) ? $apiResponse['message'] : trans('messages.error_message');
+                }
 
                 return $this->sendErrorResponse($message,400);
 
