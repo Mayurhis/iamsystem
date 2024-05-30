@@ -25,18 +25,150 @@ class UserController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index(UserDataTable $dataTable)
+    public function index(Request $request,UserDataTable $dataTable)
     {
         abort_if(isRolePermission('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         try{
-          
+
             return $dataTable->render('backend.users.index');
 
         }catch (\Exception $e) {    
             return abort(500);
         }
      
+    }
+
+    public function getData(Request $request)
+    {
+        abort_if(isRolePermission('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        try{
+          
+            if ($request->ajax()) {
+
+                $nextStartRecord = 0;
+                $filterParameters = [];
+                
+                $audString = authUserDetail('data.user.aud');
+                if($audString){
+                    $filterParameters['aud'] = $audString;
+                }
+
+                $offset = $request->start;
+                if($offset){
+                    $nextStartRecord = $offset;
+                    $filterParameters['offset'] = $offset;
+                }
+
+             
+                $limit = $request->length;
+                if($limit){
+                    $filterParameters['limit'] = $limit;
+                }
+
+              
+                $columns = $request->columnNames;
+
+                //Start Sort by
+                $orders = $request->order;
+                if($orders){
+                    if(count($orders) > 0){
+                        $sortArr = [];
+                        foreach ($orders as $keyIndex => $order) {
+    
+                            $columnIndex = (int)$order['column'];
+
+                            if($columns[$columnIndex] == 'audience'){
+                                $columnName = 'aud';
+                            }else{
+                                $columnName = $columns[$columnIndex];
+                            }
+    
+                            $sortDir = ($order['dir'] == 'asc') ? '+' : '-';
+    
+                            $sortArr[$keyIndex] = $sortDir.$columnName;
+                        }
+    
+                        if(count($sortArr) > 0){
+                            $filterParameters['sort'] = implode(',',$sortArr);
+                        }
+                    }
+                }
+                //End Sort by
+
+                //Start Column Search Parameter
+
+                if($request->email){
+                    $filterParameters['email[like]'] = $request->email.'*';
+                }
+
+                if($request->username){
+                    $filterParameters['username[like]'] = '*'.$request->username.'*';
+                }
+
+                if($request->status){
+                    $filterParameters['status'] = $request->status;
+                }
+
+                if($request->is_confirmed){
+                    $filterParameters['is_confirmed'] = strtolower($request->is_confirmed) == 'yes' ? true : false;
+                }
+
+                if($request->language){
+                    $filterParameters['language[like]'] = $request->language.'*';
+                }
+
+                if($request->aud){
+                    $filterParameters['aud[like]'] = $request->aud.'*';
+                }
+
+                // if($request->metadata){
+                //     $filterParameters['metadata'] = $request->metadata;
+                // }
+
+                if ($request->created_at) {
+                    $filterParameters['created_at[lte]'] = Carbon::parse($request->created_at)->format('Y-m-d H:i');
+                }
+
+                if ($request->updated_at) {
+                    $filterParameters['updated_at[lte]'] = Carbon::parse($request->updated_at)->format('Y-m-d H:i');
+                }
+
+                if ($request->last_login_at) {
+                    $filterParameters['last_login_at[lte]'] = Carbon::parse($request->last_login_at)->format('Y-m-d H:i');
+                }
+
+                //End Column search Parameter
+
+                // dd($filterParameters);
+                
+                $users = [];
+                $apiResponse =  $this->iam->adminUserList($filterParameters);
+
+                if($apiResponse['code'] == 200){
+                    $users = $apiResponse['response']['data']['users'];
+                    if($users){
+                        $nextStartRecord = (int)$request->initialStart + (int)$offset;
+                    }
+                }
+
+                $getRecords = collect($users);
+
+                $viewHtml = view('backend.users.partials.user-table-records',compact('getRecords','offset','orders'))->render();
+                
+                return response()->json(['success' => true, 'htmlView' => $viewHtml,'offset'=>$nextStartRecord],200);               
+            }
+
+           
+        }catch (\Exception $e) {    
+
+            dd($e->getCode() .'='.$e->getMessage() . ' at line ' . $e->getLine());
+
+            \Log::channel('iamsystemlog')->error('Error in UserController::getData (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
+            return $this->sendErrorResponse(trans('messages.error_message'),500);
+        }
+      
     }
 
     /**
@@ -280,37 +412,6 @@ class UserController extends BaseController
         }
     }
 
-    public function updateFormFields($userId,$status,$role){
-        $updateRecords = [];
-
-        //Start Update status 
-        $status_ApiResponse = $this->iam->adminUpdateUserStatus($userId,$status);
-        if($status_ApiResponse['code'] == 200){
-           $updateRecords['status']   = $status;
-        }else if(isset($status_ApiResponse['json_error'])){
-
-           if(isset($status_ApiResponse['json_error']['message'])){
-               $errors['status'][] = ucfirst($status_ApiResponse['json_error']['message']); 
-               return $this->sendErrorResponse('Validation Error', 422, "validation_error", $errors);
-           }
-       }
-       //End Update status
-
-       //Start Update Role
-       $role_ApiResponse = $this->iam->adminUpdateUserRole($userId,$role);
-       if($role_ApiResponse['code'] == 200){
-           $updateRecords['role']     = $role;
-       }else if(isset($role_ApiResponse['json_error'])){
-
-           if(isset($role_ApiResponse['json_error']['message'])){
-               $errors['role'][] = ucfirst($role_ApiResponse['json_error']['message']); 
-               return $this->sendErrorResponse('Validation Error', 422, "validation_error", $errors);
-           }
-       }
-       //End Update Role
-
-       return $updateRecords;
-    }
 
 
     public function showMetaDataEditor($id){

@@ -11,7 +11,7 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-
+use Illuminate\Http\JsonResponse;
 
 class UserDataTable extends DataTable
 {
@@ -119,111 +119,7 @@ class UserDataTable extends DataTable
 
     public function query()
     {
-        $filterParameters = [];
-
-        $audString = authUserDetail('data.user.aud');
-        if($audString){
-            $filterParameters['aud'] = $audString;
-        }
-       
-        $offset = $this->request()->get('start');
-        if($offset){
-            dd($offset);
-            $filterParameters['offset'] = $offset;
-        }
-
-        $limit = $this->request()->get('length');
-        if($limit){
-            $filterParameters['limit'] = $limit;
-        }
-
-        $columns = $this->request()->get('columns');
-
-        //Start Sort by
-        $orders = $this->request()->get('order');
-        if(count($orders) > 0){
-            $sortArr = [];
-            foreach ($orders as $keyIndex => $order) {
-
-                $columnIndex = (int)$order['column'];
-                $columnName = $columns[$columnIndex]['data'];
-
-                $sortDir = ($order['dir'] == 'asc') ? '+' : '-';
-
-                $sortArr[$keyIndex] = $sortDir.$columnName;
-            }
-
-            if(count($sortArr) > 0){
-                $filterParameters['sort'] = implode(',',$sortArr);
-            }
-        }
-        //End Sort by
-
-        //Start Search Box
-        
-        /*
-        foreach ($columns as $column) {
-            $data = $column['data'];
-            $searchValue = $column['search']['value'] ?? '';
-
-            if ($searchValue) {
-                if($data == 'is_confirmed'){
-                    $filterParameters[$data] = strtolower($searchValue) == 'yes' ? true : false;
-                }else{
-                    $filterParameters[$data] = $searchValue;
-                }
-               
-            }
-        }*/
-
-        //End Search Box
-
-
-        //Start Column Search Parameter
-
-        if($this->request()->get('email')){
-            $filterParameters['email[like]'] = $this->request()->get('email').'*';
-        }
-
-        if($this->request()->get('username')){
-            $filterParameters['username[like]'] = '*'.$this->request()->get('username').'*';
-        }
-
-        if($this->request()->get('status')){
-            $filterParameters['status'] = $this->request()->get('status');
-        }
-
-        if($this->request()->get('is_confirmed')){
-            $filterParameters['is_confirmed'] = strtolower($searchValue) == 'yes' ? true : false;
-        }
-
-        if($this->request()->get('language')){
-            $filterParameters['language[like]'] = $this->request()->get('language').'*';
-        }
-
-        if($this->request()->get('aud')){
-            $filterParameters['aud[like]'] = $this->request()->get('aud').'*';
-        }
-
-        if($this->request()->get('metadata')){
-            $filterParameters['metadata'] = $this->request()->get('metadata');
-        }
-
-        //if (Carbon::hasFormat($this->request()->get('created_at'), 'd-m-Y H:i')) {
-        if ($this->request()->get('created_at')) {
-            $filterParameters['created_at[lte]'] = Carbon::parse($this->request()->get('created_at'))->format('Y-m-d H:i');
-        }
-
-        if ($this->request()->get('updated_at')) {
-            $filterParameters['updated_at[lte]'] = Carbon::parse($this->request()->get('updated_at'))->format('Y-m-d H:i');
-        }
-
-        if ($this->request()->get('last_login_at')) {
-            $filterParameters['last_login_at[lte]'] = Carbon::parse($this->request()->get('last_login_at'))->format('Y-m-d H:i');
-        }
-
-        //End Column search Parameter
-
+        $filterParameters = $this->handleParams();
         // dd(  $filterParameters );
 
        $users = [];
@@ -235,6 +131,7 @@ class UserDataTable extends DataTable
 
         return collect($users);
     }
+
 
     public function html() : HtmlBuilder
     {
@@ -250,13 +147,21 @@ class UserDataTable extends DataTable
                         [20, 40, 60, 80, 100]
                     ])
                     ->parameters([
-
+                            // 'scrollY' => 600,
+                            'deferRender' => true,
+                            'scroller'=>[
+                                'loadingIndicator'=> true
+                            ],
                             'searching' => false,
                             'drawCallback' => 'function(settings) {
                                 $("#users-table").addClass("table-loaded");
                             }',
                             'initComplete' => "function () {
+                                
                                 var table = this.api();
+
+                                //table.row(1).scrollTo();
+
                                 let params = {};
                                 if (table.rows().count() > 0) {
                                     
@@ -279,7 +184,7 @@ class UserDataTable extends DataTable
                                                 var selectList = document.createElement('select');
                                                 selectList.name = 'status';
                                                 selectList.classList.add('form-control','filterInput');
-
+                                                selectList.id = 'ft-dt-status';
                                                 selectList.style.minWidth  = '75px';
 
                                                 var option1 = document.createElement('option');
@@ -308,7 +213,7 @@ class UserDataTable extends DataTable
                                                 var selectList = document.createElement('select');
                                                 selectList.name = 'type';
                                                 selectList.classList.add('form-control','filterInput');
-
+                                                selectList.id = 'ft-dt-type';
                                                 selectList.style.minWidth  = '85px';
 
                                                 var option1 = document.createElement('option');
@@ -340,6 +245,7 @@ class UserDataTable extends DataTable
                                         
                                                 submitBtn.addEventListener('click', function() {
                                                     //console.log('Button clicked!',params);
+                                                    $('.filter-submit-btn').addClass('submited');
                                                     $('#users-table').DataTable().ajax.url(datatableUrl+'?'+$.param(params)).draw();
                                                 });
 
@@ -355,6 +261,7 @@ class UserDataTable extends DataTable
                                                     //console.log('Reset button clicked!');
 
                                                     document.querySelectorAll('.filterInput').forEach(function(element) {
+                                                        $('.filter-submit-btn').removeClass('submited');
                                                         if (element.tagName.toLowerCase() === 'input' && element.type === 'text') {
                                                             element.value = '';
                                                         } else if (element.tagName.toLowerCase() === 'select') {
@@ -378,6 +285,40 @@ class UserDataTable extends DataTable
                                                 }
 
                                                 input.classList.add('form-control','filterInput');
+                                                if(columnIndex == 1){
+                                                    input.id = 'ft-dt-email';
+                                                }
+
+                                                if(columnIndex == 2){
+                                                    input.id = 'ft-dt-username';
+                                                }
+
+                                                if(columnIndex == 4){
+                                                    input.id = 'ft-dt-is_confirmed';
+                                                }
+
+                                                if(columnIndex == 5){
+                                                    input.id = 'ft-dt-language';
+                                                }
+
+                                                if(columnIndex == 6){
+                                                    input.id = 'ft-dt-aud';
+                                                }
+
+
+                                                if(columnIndex == 9){
+                                                    input.id = 'ft-dt-created_at';
+                                                }
+
+                                                if(columnIndex == 10){
+                                                    input.id = 'ft-dt-updated_at';
+                                                }
+
+                                                if(columnIndex == 11){
+                                                    input.id = 'ft-dt-last_login_at';
+                                                }
+                                                
+
                                                 $(input).appendTo(td)
                                                     .on('input', function () {
 
@@ -420,6 +361,7 @@ class UserDataTable extends DataTable
                                         });
                                     }
                                 }
+
                             }",
                             
                     ]);
@@ -465,4 +407,120 @@ class UserDataTable extends DataTable
     {
         return 'users_' . date('YmdHis');
     }
+
+
+    public function handleParams()
+    {
+        
+        $filterParameters = [];
+
+        // dd($this->request()->get('start'));
+        
+        $audString = authUserDetail('data.user.aud');
+        if($audString){
+            $filterParameters['aud'] = $audString;
+        }
+       
+        $offset = $this->request()->get('start');
+        if($offset){
+            $filterParameters['offset'] = $offset;
+        }
+
+        $limit = $this->request()->get('length');
+        if($limit){
+            $filterParameters['limit'] = $limit;
+        }
+
+        $columns = $this->request()->get('columns');
+
+        //Start Sort by
+        $orders = $this->request()->get('order');
+        if($orders){
+            if(count($orders) > 0){
+                $sortArr = [];
+                foreach ($orders as $keyIndex => $order) {
+
+                    $columnIndex = (int)$order['column'];
+                    $columnName = $columns[$columnIndex]['data'];
+
+                    $sortDir = ($order['dir'] == 'asc') ? '+' : '-';
+
+                    $sortArr[$keyIndex] = $sortDir.$columnName;
+                }
+
+                if(count($sortArr) > 0){
+                    $filterParameters['sort'] = implode(',',$sortArr);
+                }
+            }
+        }
+        //End Sort by
+
+        //Start Search Box
+        
+        /*
+        foreach ($columns as $column) {
+            $data = $column['data'];
+            $searchValue = $column['search']['value'] ?? '';
+
+            if ($searchValue) {
+                if($data == 'is_confirmed'){
+                    $filterParameters[$data] = strtolower($searchValue) == 'yes' ? true : false;
+                }else{
+                    $filterParameters[$data] = $searchValue;
+                }
+               
+            }
+        }*/
+
+        //End Search Box
+
+
+        //Start Column Search Parameter
+
+        if($this->request()->get('email')){
+            $filterParameters['email[like]'] = $this->request()->get('email').'*';
+        }
+
+        if($this->request()->get('username')){
+            $filterParameters['username[like]'] = '*'.$this->request()->get('username').'*';
+        }
+
+        if($this->request()->get('status')){
+            $filterParameters['status'] = $this->request()->get('status');
+        }
+
+        if($this->request()->get('is_confirmed')){
+            $filterParameters['is_confirmed'] = strtolower($this->request()->get('is_confirmed')) == 'yes' ? true : false;
+        }
+
+        if($this->request()->get('language')){
+            $filterParameters['language[like]'] = $this->request()->get('language').'*';
+        }
+
+        if($this->request()->get('aud')){
+            $filterParameters['aud[like]'] = $this->request()->get('aud').'*';
+        }
+
+        if($this->request()->get('metadata')){
+            $filterParameters['metadata'] = $this->request()->get('metadata');
+        }
+
+        if ($this->request()->get('created_at')) {
+            $filterParameters['created_at[lte]'] = Carbon::parse($this->request()->get('created_at'))->format('Y-m-d H:i');
+        }
+
+        if ($this->request()->get('updated_at')) {
+            $filterParameters['updated_at[lte]'] = Carbon::parse($this->request()->get('updated_at'))->format('Y-m-d H:i');
+        }
+
+        if ($this->request()->get('last_login_at')) {
+            $filterParameters['last_login_at[lte]'] = Carbon::parse($this->request()->get('last_login_at'))->format('Y-m-d H:i');
+        }
+
+        //End Column search Parameter
+
+
+        return $filterParameters;
+    }
+    
 }

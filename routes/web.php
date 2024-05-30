@@ -55,8 +55,10 @@ Route::group(["namespace" => "App\Http\Controllers\Backend",'as' => 'admin.',"pr
     
     Route::post('update-useranme',"ProfileController@updateUsername")->name('updateUsername');
 
+    Route::get("users/getdata","UserController@getData")->name("users.getData");
+
     Route::resource('users',UserController::class);
-    
+
     Route::get("users/{id}/change-user-password","UserController@changeUserPassword")->name("users.changeUserPassword");
     
     Route::post('users/change-user-password/{id}',"UserController@submitChangeUserPassword")->name('users.submitChangeUserPassword');

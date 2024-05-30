@@ -88,31 +88,73 @@
     });
     @endif
     
-
-
-    // var table = $('#users-table').DataTable();
-    
+    var loading = false;
+    var nextPageStart = 20;
+    var assignFlag = true;
     $('#users-table').on('scroll', function() {
 
-        if(($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight)) {
+        var scrollBody = $(this);
+
+        if (scrollBody.scrollTop() + scrollBody.innerHeight() >= scrollBody[0].scrollHeight - 50 && !loading) {
 
             console.log('loading more records...');
+            loading = true;
 
-           /* var info = table.page.info();
-            var nextPageStart = info.recordsDisplay;
+            const table = $('#users-table').DataTable();
 
-            console.log('nextPageStart',nextPageStart,'length',info.length);
-            
+            var info = table.page.info();
+
+            var initialStart = info.recordsDisplay;
+            if(assignFlag){
+                nextPageStart = info.recordsDisplay;
+            }
+
+            var order = table.order();
+            var columns = table.columns()[0];
+          
+            var columnNames = [];
+            $('#users-table thead th').each(function() {
+                var columnName = $(this).text().toLowerCase().replace(/\s+/g, '_');
+                columnNames.push(columnName);
+            });
+
+           var filterParam = {
+                initialStart:initialStart,
+                start: nextPageStart,
+                length: info.length,
+                columnNames:columnNames,
+           };
+
+           if($('.filter-submit-btn').hasClass('submited')){
+                filterParam.start = initialStart;
+                filterParam.email = $('#ft-dt-email').val();
+                filterParam.username = $('#ft-dt-username').val();
+                filterParam.status = $('#ft-dt-status').val();
+                filterParam.is_confirmed = $('#ft-dt-is_confirmed').val();
+                filterParam.language = $('#ft-dt-language').val();
+                filterParam.aud = $('#ft-dt-aud').val();
+                filterParam.type = $('#ft-dt-type').val();
+                filterParam.created_at = $('#ft-dt-created_at').val();
+                filterParam.updated_at = $('#ft-dt-updated_at').val();
+                filterParam.last_login_at = $('#ft-dt-last_login_at').val();
+           }
+           
+        //    console.log(filterParam);
+
             $.ajax({
-                url: "{{ route('admin.users.index') }}",
-                method: 'GET',
-                data: { start: nextPageStart, length: info.length },
-                success: function(data) {
-                    table.rows.add(data.data).draw(false);
+                url: "{{ route('admin.users.getData') }}",
+                data: filterParam,
+                success: function(response) {
+                    // console.log(response);
+                    assignFlag = false;
+                    nextPageStart = response.offset;
+                    $('#users-table tbody').append(response.htmlView);
+                    loading = false;
                 },
                 error: function() {
+                    loading = false;
                 }
-            });*/
+            });
         }
     });
    
