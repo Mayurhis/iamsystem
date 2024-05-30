@@ -105,6 +105,7 @@
                         </div>
                         <div class="table-responsive">
                             {{$dataTable->table(['class' => 'table', 'style' => 'width:100%;'])}}
+                            <div id="loadmore-data" class="dataTables_processing loadmore-wrap" style="display: none;"><div><div></div><div></div><div></div><div></div></div></div>
                         </div>
                     </div>
                 </div>
@@ -167,9 +168,10 @@
 
         if (scrollBody.scrollTop() + scrollBody.innerHeight() >= scrollBody[0].scrollHeight - 50 && !loading) {
 
-            console.log('loading more records...');
+            // console.log('loading more records...');
             loading = true;
 
+            $('#loadmore-data').show();
             const table = $('#users-table').DataTable();
 
             var info = table.page.info();
@@ -220,7 +222,7 @@
                 data: filterParam,
                 success: function(response) {
                     // console.log(response);
-                   
+                    $('#loadmore-data').hide();
                     // nextPageStart = response.offset;
                     $('#users-table tbody').append(response.htmlView);
                     loading = false;

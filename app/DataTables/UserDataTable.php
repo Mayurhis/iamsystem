@@ -314,8 +314,13 @@ class UserDataTable extends DataTable
                                                
                                                 var input = document.createElement('input');
 
-                                                if((columnIndex != 4) && (columnIndex != 5)){
+                                                if((columnIndex != 4) && (columnIndex != 5) && (columnIndex != 9) && (columnIndex != 10) && (columnIndex != 11)){
                                                     input.style.minWidth  = '100px';
+                                                }
+
+                                                if(columnIndex == 9 || columnIndex == 10 || columnIndex == 11){
+                                                    input.placeholder = 'YYYY-MM-DD';
+                                                    input.style.minWidth  = '117px';
                                                 }
 
                                                 input.classList.add('form-control','filterInput');
@@ -377,7 +382,7 @@ class UserDataTable extends DataTable
                                                             params.updated_at = $(this).val();
                                                         }
 
-                                                        if(columnIndex == 10){
+                                                        if(columnIndex == 11){
                                                             params.last_login_at = $(this).val();
                                                         }
                                                    
@@ -416,7 +421,7 @@ class UserDataTable extends DataTable
         $columns[] = Column::make('metadata')->title(trans('cruds.user.fields.metadata'))->orderable(false)->exportable(false)->printable(false)->addClass('text-center');
         
         $columns[] = Column::make('created_at')->title(trans('cruds.user.fields.created_at'));
-        $columns[] = Column::make('updated_at')->title(trans('cruds.user.fields.updated_at'));
+        $columns[] = Column::make('updated_at')->title(trans('cruds.user.fields.updated_at'))->orderable(false);
         $columns[] = Column::make('last_login_at')->title(trans('cruds.user.fields.last_login_at'));
 
         if(authUserDetail('data.user.type') == 'admin'){
@@ -472,6 +477,7 @@ class UserDataTable extends DataTable
                     $sortDir = ($order['dir'] == 'asc') ? '+' : '-';
 
                     $sortArr[$keyIndex] = $sortDir.$columnName;
+                   
                 }
 
                 if(count($sortArr) > 0){
@@ -550,6 +556,7 @@ class UserDataTable extends DataTable
 
         //End Column search Parameter
 
+        // dd($filterParameters);
 
         return $filterParameters;
     }

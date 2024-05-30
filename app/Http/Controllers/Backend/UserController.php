@@ -169,7 +169,7 @@ class UserController extends BaseController
            
         }catch (\Exception $e) {    
 
-            dd($e->getCode() .'='.$e->getMessage() . ' at line ' . $e->getLine());
+            // dd($e->getCode() .'='.$e->getMessage() . ' at line ' . $e->getLine());
 
             \Log::channel('iamsystemlog')->error('Error in UserController::getData (' . $e->getCode() . '): ' . $e->getMessage() . ' at line ' . $e->getLine());
             return $this->sendErrorResponse(trans('messages.error_message'),500);

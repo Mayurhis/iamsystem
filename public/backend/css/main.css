@@ -3052,6 +3052,16 @@ button.btn.btn-dark.filter-submit-btn:hover{
     font-size: 14px;
 }
 
+div.dataTables_processing>div:last-child>div{
+    background: rgb(150 188 18);
+}
+div#loadmore-data {
+    position: absolute;
+    bottom: 20px;
+    z-index: 999;
+    top: auto;
+}
+
 @media(max-width:1499px){
     .coming-soon h3{
         font-size: 70px;
